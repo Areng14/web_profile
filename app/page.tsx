@@ -15,7 +15,7 @@ export default function Home() {
             }}
           >
             <Avatar sx={{ bgcolor: deepOrange[500], width: 350, height: 350 }}>
-              A
+              Areng
             </Avatar>
           </Grid2>
           <Grid2
