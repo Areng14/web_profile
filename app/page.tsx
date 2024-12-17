@@ -1,35 +1,74 @@
-import { Avatar, Box, Container, Grid2, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Container,
+  Divider,
+  Grid2,
+  Typography,
+} from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 
 export default function Home() {
   return (
-    <div>
-      <Container maxWidth="md">
-        <Grid2 container spacing={6} marginY={8} paddingRight={15}>
+    <Box sx={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
+      <Container maxWidth="lg">
+        <Grid2
+          container
+          spacing={6}
+          sx={{
+            py: { xs: 4, md: 8 },
+            alignItems: "center",
+          }}
+        >
+          {/* Avatar Section */}
           <Grid2
-            size={{ md: 6, xs: 12 }}
+            size={{ xs: 12, md: 6 }}
             sx={{
               display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
+              justifyContent: { xs: "center", md: "flex-end" },
+              px: { xs: 2, md: 4 },
             }}
           >
-            <Avatar sx={{ bgcolor: deepOrange[500], width: 350, height: 350 }}>
+            <Avatar
+              sx={{
+                bgcolor: deepOrange[500],
+                width: { xs: 200, sm: 280, md: 350 },
+                height: { xs: 200, sm: 280, md: 350 },
+              }}
+            >
               Areng
             </Avatar>
           </Grid2>
+
+          {/* Text Content Section */}
           <Grid2
-            size={{ md: 6, xs: 12 }}
-            sx={{ display: "flex", justifyContent: "flex-start" }}
-            marginTop={6}
+            size={{ xs: 12, md: 6 }}
+            sx={{
+              display: "flex",
+              justifyContent: { xs: "center", md: "flex-start" },
+              textAlign: { xs: "center", md: "left" },
+              px: { xs: 2, md: 4 },
+            }}
           >
             <Box>
-              <Typography variant="h2">
+              <Typography
+                variant="h2"
+                sx={{
+                  fontSize: { xs: "2rem", sm: "2.5rem", md: "3.75rem" },
+                  mb: 2,
+                  wordBreak: "break-word",
+                }}
+              >
                 Areng
                 <br />
                 Teanpakdeeprasat
               </Typography>
-              <Typography>
+              <Typography
+                sx={{
+                  fontSize: { xs: "1rem", md: "1.1rem" },
+                  maxWidth: { xs: "100%", md: "90%" },
+                }}
+              >
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua,
                 facilitating seamless solutions for diverse clients.
@@ -38,6 +77,6 @@ export default function Home() {
           </Grid2>
         </Grid2>
       </Container>
-    </div>
+    </Box>
   );
 }
