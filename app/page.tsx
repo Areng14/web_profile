@@ -1,11 +1,4 @@
-import {
-  Avatar,
-  Box,
-  Container,
-  Divider,
-  Grid2,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Container, Grid2, Typography } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 
 export default function Home() {
