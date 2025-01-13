@@ -3,9 +3,41 @@ import { deepOrange } from "@mui/material/colors";
 import ResponsiveAppBar from "./components/ResponsiveNavbar";
 
 export default function Home() {
+
+  const randomBgImage = () => {
+    return `/misc/mainslide/img${Math.floor(Math.random() * 4) + 1}.png`;
+  }
+
   return (
     <Box>
-      <Box sx={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
+      <Box
+        sx={{ minHeight: "100vh", display: "flex", alignItems: "center"}}>
+        
+        <Box
+        component="img"
+        src={randomBgImage()}
+        alt="Background"
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover", // Ensures the image covers the entire area
+          zIndex: -1, // Sends the image behind the content
+        }}
+        />
+        <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent black
+          zIndex: -1, // Sends the image behind the content
+        }}
+        />
 
         <Container maxWidth="lg">
           <Grid2
