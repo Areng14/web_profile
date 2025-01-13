@@ -13,7 +13,6 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Image } from "@mui/icons-material";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 const pages = [
   {
@@ -23,8 +22,8 @@ const pages = [
   },
   {
     "id": 2,
-    "name": "Experiencies",
-    "url": "/experiencies",
+    "name": "Experiences",
+    "url": "/experiences",
   },
   {
     "id": 3,
@@ -44,8 +43,6 @@ function ResponsiveAppBar() {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
-  const router = useRouter();
 
   return (
     <AppBar position="static" sx={{ background: "#303338" }}>
@@ -109,9 +106,10 @@ function ResponsiveAppBar() {
               {pages.map((page) => (
                 <MenuItem key={page.id} onClick={() => {
                   handleCloseNavMenu();
-                  router.push(page.url);
                 }}>
-                  <Typography sx={{ textAlign: "center" }}>{page.name}</Typography>
+                  <Link href={page.url}>
+                    <Typography sx={{ textAlign: "center" }}>{page.name}</Typography>
+                  </Link>
                 </MenuItem>
               ))}
             </Menu>
@@ -152,8 +150,8 @@ function ResponsiveAppBar() {
                 key={page.id}
                 onClick={() => {
                   handleCloseNavMenu();
-                  router.push(page.url);
                 }}
+                href={page.url}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page.name}
