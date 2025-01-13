@@ -12,6 +12,8 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Image } from "@mui/icons-material";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 const pages = [
   {
@@ -42,6 +44,9 @@ function ResponsiveAppBar() {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+
+  const router = useRouter();
+
   return (
     <AppBar position="static" sx={{ background: "#303338" }}>
       <Container maxWidth="xl">
@@ -59,8 +64,8 @@ function ResponsiveAppBar() {
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component={Link}
+            href="./"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -102,13 +107,27 @@ function ResponsiveAppBar() {
               sx={{ display: { xs: "block", md: "none" } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.id} onClick={handleCloseNavMenu}>
+                <MenuItem key={page.id} onClick={() => {
+                  handleCloseNavMenu();
+                  router.push(page.url);
+                }}>
                   <Typography sx={{ textAlign: "center" }}>{page.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+
+          {/* Small screens */}
+          <Box
+            component="img"
+            src="icon.png"
+            alt="App Logo"
+            sx={{
+              display: { xs: "flex", md: "none" },
+              height: "32px",
+              marginRight: 2,
+            }}
+          />          
           <Typography
             variant="h5"
             noWrap
@@ -125,13 +144,16 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            ARENG
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page.id}
-                onClick={handleCloseNavMenu}
+                onClick={() => {
+                  handleCloseNavMenu();
+                  router.push(page.url);
+                }}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page.name}
