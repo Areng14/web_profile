@@ -5,7 +5,6 @@ import ResponsiveAppBar from "./components/ResponsiveNavbar";
 export default function Home() {
   return (
     <Box>
-      <ResponsiveAppBar />
       <Box sx={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
 
         <Container maxWidth="lg">

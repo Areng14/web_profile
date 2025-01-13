@@ -12,7 +12,23 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 
-const pages = ["Projects", "Experiencies", "Contact Me"];
+const pages = [
+  {
+    "id": 1,
+    "name": "Projects",
+    "url": "/projects",
+  },
+  {
+    "id": 2,
+    "name": "Experiencies",
+    "url": "/experiencies",
+  },
+  {
+    "id": 3,
+    "name": "Contact Me",
+    "url": "/contact",
+  },
+]
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -76,8 +92,8 @@ function ResponsiveAppBar() {
               sx={{ display: { xs: "block", md: "none" } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: "center" }}>{page}</Typography>
+                <MenuItem key={page.id} onClick={handleCloseNavMenu}>
+                  <Typography sx={{ textAlign: "center" }}>{page.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -104,11 +120,11 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.id}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                {page.name}
               </Button>
             ))}
           </Box>
