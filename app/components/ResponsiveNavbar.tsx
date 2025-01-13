@@ -11,6 +11,7 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import { Image } from "@mui/icons-material";
 
 const pages = [
   {
@@ -45,7 +46,16 @@ function ResponsiveAppBar() {
     <AppBar position="static" sx={{ background: "#303338" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <Box
+            component="img"
+            src="icon.png"
+            alt="App Logo"
+            sx={{
+              display: { xs: "none", md: "flex" },
+              height: "32px",
+              marginRight: 2,
+            }}
+          />
           <Typography
             variant="h6"
             noWrap
@@ -61,7 +71,7 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            ARENG
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
