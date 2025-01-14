@@ -22,8 +22,8 @@ const pages = [
   },
   {
     "id": 2,
-    "name": "Experiences",
-    "url": "/experiences",
+    "name": "Skills",
+    "url": "/skills",
   },
   {
     "id": 3,
@@ -45,7 +45,7 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static" sx={{ background: "#303338" }}>
+    <AppBar position="fixed" sx={{ background: "#303338" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box
