@@ -16,8 +16,11 @@ export default function Home() {
   return (
     <Box>
       <Box sx={{ minHeight: "100vh", display: "flex", alignItems: "center"}}>
-        <ImageSlider imgs={images} />
-        <Container maxWidth={false} sx={{ maxWidth: "1600px" }}>
+        <ImageSlider imgs={images}/>
+        <Container maxWidth={false} sx={{ maxWidth: "1600px", minWidth: {
+          xs: "500px",
+          md: "1600px",
+        }}}>
           <Grid2
             container
             spacing={6}
