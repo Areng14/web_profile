@@ -1,7 +1,4 @@
-import { Avatar, Box, Container, Grid2, Typography } from "@mui/material";
-import { deepOrange } from "@mui/material/colors";
-import ResponsiveAppBar from "./components/ResponsiveNavbar";
-import { useState } from "react";
+import { Box, Container, Grid2, Typography } from "@mui/material";
 import ImageSlider from "./components/ImageSlider";
 import SkillCard from "./components/SkillCard";
 
