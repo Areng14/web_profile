@@ -10,6 +10,7 @@ export default function Home() {
     "/misc/mainslide/img1.png",
     "/misc/mainslide/img2.png",
     "/misc/mainslide/img3.png",
+    "/misc/mainslide/img4.png",
   ];
 
   return (
