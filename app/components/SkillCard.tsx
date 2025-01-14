@@ -4,11 +4,12 @@ import React from "react";
 interface SkillCardProps {
     skill: string;
     icon: string;
+    iconangle?: number;
     colors: string[];
     angle?: string;
 }
 
-const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, angle = "45deg" }) => {
+const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, angle = "45deg", iconangle=0}) => {
     return (
         <Box
         sx={{
@@ -18,19 +19,18 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, ang
           }}>
             <Box
                 sx={{
-                position: "absolute",
-                bottom: 0,
-                right: 0,
-                width: "50%",
-                height: "50%",
-
-                transition: "transform 0.3s ease",
-                zIndex: 1  // Add this
+                    position: "absolute",
+                    bottom: "8px",
+                    right: "8px",
+                    width: "75%",
+                    height: "75%",
+                    transition: "transform 0.3s ease",
+                    transform: `rotate(${iconangle}deg)`, // Fixed rotation
+                    zIndex: 1
                 }}
-                
             >
                 <img
-                src={"/misc/mainslide/img1.png"}
+                src={icon}
                 style={{ width: "100%", height: "100%", objectFit: "contain" }}
                 />
             </Box>
@@ -38,7 +38,7 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, ang
                 background: `linear-gradient(${angle}, ${colors.join(", ")})`,
                 padding: 5,
                 borderRadius: 4,
-                height: "512px",
+                height: "576px",
                 position: "relative",
                 display: "flex",
                 flexDirection: "column"
@@ -46,7 +46,7 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, ang
                 <Typography variant="h2" sx={{
                     color: "white",
                     display: "block",
-                    fontWeight: 100,
+                    fontWeight: 550,
                 }}>
                     {skill.toUpperCase()}
                 </Typography>
@@ -59,7 +59,8 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, ang
                         bottom: "32px",
                         "&:hover": {
                             backgroundColor: "#f5f5f5"
-                        }
+                        },
+                        zIndex: 1
                     }}
                 >
                     Learn More
