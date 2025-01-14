@@ -16,7 +16,7 @@ export default function Home() {
     <Box>
       <Box sx={{ minHeight: "100vh", display: "flex", alignItems: "center"}}>
         <ImageSlider imgs={images} />
-        <Container maxWidth="lg">
+        <Container maxWidth={false} sx={{ maxWidth: "1600px" }}>
           <Grid2
             container
             spacing={6}
@@ -25,26 +25,6 @@ export default function Home() {
               alignItems: "center",
             }}
           >
-            {/* Avatar Section */}
-            <Grid2
-              size={{ xs: 12, md: 6 }}
-              sx={{
-                display: "flex",
-                justifyContent: { xs: "center", md: "flex-end" },
-                px: { xs: 2, md: 4 },
-              }}
-            >
-              <Avatar
-                sx={{
-                  bgcolor: deepOrange[500],
-                  width: { xs: 200, sm: 280, md: 350 },
-                  height: { xs: 200, sm: 280, md: 350 },
-                }}
-              >
-                Areng
-              </Avatar>
-            </Grid2>
-
             {/* Text Content Section */}
             <Grid2
               size={{ xs: 12, md: 6 }}
@@ -52,15 +32,15 @@ export default function Home() {
                 display: "flex",
                 justifyContent: { xs: "center", md: "flex-start" },
                 textAlign: { xs: "center", md: "left" },
-                px: { xs: 2, md: 4 },
+                px: { xs: 4, md: 6 },
               }}
             >
               <Box>
                 <Typography
                   variant="h2"
                   sx={{
-                    fontSize: { xs: "2rem", sm: "2.5rem", md: "3.75rem" },
-                    mb: 2,
+                    fontSize: { xs: "2rem", sm: "2.5rem", md: "5rem" },
+                    mb: 5,
                     wordBreak: "break-word",
                   }}
                 >
