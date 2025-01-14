@@ -62,28 +62,25 @@ export default function Home() {
       </Box>
 
       {/* Skills */}
-      <Box sx={{ paddingTop: 32 }}>
+      <Box sx={{ paddingTop: 16}}>
         <Container maxWidth={false} sx={{ maxWidth: "1600px"}}>       
             <Typography variant="h1" sx={{fontWeight: 700}}>
               Skills
             </Typography>
-            <Grid2 container spacing={6} sx={{ paddingTop: 6 }}>
-              {/* React */}
-              <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
-                <SkillCard
-                skill="React"
-                colors={["rgb(80, 179, 207)", "rgb(0, 98, 123)"]}
-                angle="45deg"
-                icon={"/misc/skills/react.svg"}
-                iconangle={45}/>         
-              </Grid2>
+
+            {/* Languages */}
+            <Typography variant="h2" sx={{fontWeight: 500, paddingTop: 6}}>
+              Languages
+            </Typography>
+            <Grid2 container spacing={4} sx={{ paddingTop: 4 }}>
               {/* Python */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
                 <SkillCard
                 skill="Python"
                 colors={["rgb(22, 167, 105)", "rgb(17, 133, 159)", "rgb(6, 99, 198)"]}
                 angle="45deg"
-                icon={"/misc/skills/python.svg"}/>              
+                icon={"/misc/skills/python.svg"}
+                endpoint="https://www.python.org"/>              
               </Grid2>
               {/* Javascript */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
@@ -91,7 +88,8 @@ export default function Home() {
                 skill="JavaScript"
                 colors={["rgb(210, 116, 1)", "rgb(202, 131, 0)", "rgb(186, 159, 2)"]}
                 angle="45deg"
-                icon={"/misc/skills/js.svg"}/>              
+                icon={"/misc/skills/js.svg"}
+                endpoint="https://en.wikipedia.org/wiki/JavaScript"/>              
               </Grid2>
               {/* Java */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
@@ -99,7 +97,8 @@ export default function Home() {
                 skill="Java"
                 colors={["rgb(1, 51, 79)","rgb(0, 116, 183)","rgb(72, 153, 188)"]}
                 angle="45deg"
-                icon={"/misc/skills/java.svg"}/>              
+                icon={"/misc/skills/java.svg"}
+                endpoint="https://www.oracle.com/java/"/>              
               </Grid2>
               {/* Swift */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
@@ -107,7 +106,59 @@ export default function Home() {
                 skill="Swift"
                 colors={["rgb(212, 47, 39)", "rgb(209, 81, 49)", "rgb(212, 124, 0)"]}
                 angle="45deg"
-                icon={"/misc/skills/swift.svg"}/>              
+                icon={"/misc/skills/swift.svg"}
+                endpoint="https://developer.apple.com/swift/"/>              
+              </Grid2>
+            </Grid2>
+
+            {/* Frameworks */}
+            <Typography variant="h2" sx={{fontWeight: 500, paddingTop: 8}}>
+              Frameworks
+            </Typography>
+            <Grid2 container spacing={4} sx={{ paddingTop: 4 }}>
+              {/* React */}
+              <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
+                <SkillCard
+                skill="React"
+                colors={["rgb(80, 179, 207)", "rgb(0, 98, 123)"]}
+                angle="45deg"
+                icon={"/misc/skills/react.svg"}
+                iconangle={45}
+                endpoint="https://react.dev"/>         
+              </Grid2>
+              {/* Electron */}
+              <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
+                <SkillCard
+                skill="Electron"
+                colors={["rgb(159, 234, 249)", "rgb(71, 132, 143)", "rgb(47, 84, 150)"]}
+                angle="45deg"
+                icon={"/misc/skills/electron.svg"}
+                endpoint="https://www.electronjs.org"/>         
+              </Grid2>
+              {/* NodeJS */}
+              <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
+                <SkillCard
+                skill="Node.JS"
+                colors={["rgb(40, 123, 40)", "rgb(47, 152, 47)", "rgb(72, 177, 72)"]}
+                angle="45deg"
+                icon={"/misc/skills/nodejs.svg"}
+                endpoint="https://nodejs.org/en"/>         
+              </Grid2>
+            </Grid2>
+
+            {/* Design */}
+            <Typography variant="h2" sx={{fontWeight: 500, paddingTop: 8}}>
+              Design Tools
+            </Typography>
+            <Grid2 container spacing={4} sx={{ paddingTop: 4 }}>
+              {/* Illustrator */}
+              <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
+                <SkillCard
+                skill="Adobe Suite"
+                colors={["rgb(217, 31, 75)", "rgb(188, 43, 127)", "rgb(139, 31, 211)"]}
+                angle="45deg"
+                icon={"/misc/skills/adobe.svg"}
+                endpoint="https://www.adobe.com"/>         
               </Grid2>
             </Grid2>
         </Container>

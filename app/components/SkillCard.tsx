@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, Button, Typography } from "@mui/material";
 import React from "react";
 
@@ -7,9 +9,15 @@ interface SkillCardProps {
     iconangle?: number;
     colors: string[];
     angle?: string;
+    endpoint?: string;
 }
 
-const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, angle = "45deg", iconangle=0}) => {
+const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, angle = "45deg", iconangle=0, endpoint}) => {
+    
+    const goToEndpoint = (endpoint: string) => {
+        window.location.href = endpoint;
+    }
+
     return (
         <Box
         sx={{
@@ -62,6 +70,7 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, ang
                         },
                         zIndex: 1
                     }}
+                    onClick={() => goToEndpoint(endpoint)}
                 >
                     Learn More
                 </Button>
