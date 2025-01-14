@@ -27,7 +27,7 @@ const pages = [
   },
   {
     "id": 3,
-    "name": "Contact Me",
+    "name": "Contact",
     "url": "/contact",
   },
 ]

@@ -33,7 +33,7 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, ang
                     width: "75%",
                     height: "75%",
                     transition: "transform 0.3s ease",
-                    transform: `rotate(${iconangle}deg)`, // Fixed rotation
+                    transform: `rotate(${iconangle}deg)`,
                     zIndex: 1
                 }}
             >
@@ -61,16 +61,20 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, ang
                 <Button 
                     variant="contained" 
                     sx={{ 
-                        backgroundColor: "white", 
-                        color: "black",
                         position: "absolute",
-                        bottom: "32px",
+                        bottom: "36px",
+                        fontSize: "1.25rem",
+                        padding: "12px 24px",
+                        borderRadius: 3,
                         "&:hover": {
-                            backgroundColor: "#f5f5f5"
+                            backgroundColor: "rgb(31, 33, 38)",
+                            color: "rgb(162, 169, 180)",
                         },
+                        backgroundColor: "rgb(12, 13, 15)",
+                        color: "rgb(227, 238, 255)",
                         zIndex: 1
                     }}
-                    onClick={() => goToEndpoint(endpoint)}
+                    onClick={() => endpoint && goToEndpoint(endpoint)}
                 >
                     Learn More
                 </Button>
