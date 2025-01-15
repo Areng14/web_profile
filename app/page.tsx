@@ -49,9 +49,9 @@ export default function Home() {
                   maxWidth: { xs: "100%", md: "50%" },
                 }}
               >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua,
-                facilitating seamless solutions for diverse clients.
+                A software developer who makes programs on his freetime,
+                ranging from things that are useless to things that are kinda useful.
+                I try to keep my projects as clean and readable.
               </Typography>
             </Box>
           </Grid2>
