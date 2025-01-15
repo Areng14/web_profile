@@ -82,7 +82,7 @@ export default function Home() {
               {/* Javascript */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
                 <SkillCard
-                skill="JavaScript"
+                skill="JS"
                 colors={["rgb(210, 116, 1)", "rgb(202, 131, 0)", "rgb(186, 159, 2)"]}
                 angle="45deg"
                 icon={"/misc/skills/js.svg"}
