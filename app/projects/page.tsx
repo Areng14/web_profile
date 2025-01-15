@@ -5,10 +5,10 @@ import ProjectCard from "../components/ProjectCard";
 export default function Projects() {
 
   const images = [
-    "/misc/mainslide/img1.png",
-    "/misc/mainslide/img2.png",
-    "/misc/mainslide/img3.png",
-    "/misc/mainslide/img4.png",
+    "/misc/mainslide/img5.png",
+    "/misc/mainslide/img6.png",
+    "/misc/mainslide/img7.png",
+    "/misc/mainslide/img8.png",
   ];
 
   return (
