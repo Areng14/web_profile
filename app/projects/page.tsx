@@ -48,9 +48,8 @@ export default function Projects() {
                 }}
               >
                 {/* TODO: Write projects */}
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua,
-                facilitating seamless solutions for diverse clients.              
+                A collection of programs and scripts that use a variety of languages
+                and libaries. Each project is diffrent and showcases my skills in software.  
               </Typography>
             </Box>
           </Grid2>
