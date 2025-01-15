@@ -60,7 +60,7 @@ export default function Projects() {
       {/* Project List */}
       <Box sx={{ paddingTop: 16}}>
         <Container maxWidth={false} sx={{ maxWidth: "1600px"}}>       
-            <Typography variant="h1" sx={{fontWeight: 700}}>
+            <Typography variant="h1" sx={{fontWeight: 700, fontSize: {xs: '3.5rem',sm: '6rem'}}}>
               Projects
             </Typography>
             <Grid2 container spacing={4} sx={{ paddingTop: 4 }}>
@@ -76,7 +76,7 @@ export default function Projects() {
               {/* TestRunner */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
                 <ProjectCard
-                name={"TestRunner"}
+                name={"TR"}
                 description={
                   "TestRunner is built for testing multiple scripts at a time. Designed for teachers to use to mass grade student assignments. Includes a warning if the script uses weird imports."}
                 image={"/misc/projects/testrunner.png"}
