@@ -40,6 +40,7 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, ang
             >
                 <Image
                 src={icon}
+				 alt=""
                 style={{ width: "100%", height: "100%", objectFit: "contain" }}
                 />
             </Box>
