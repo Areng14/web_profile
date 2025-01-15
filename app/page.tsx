@@ -61,12 +61,12 @@ export default function Home() {
       {/* Skills */}
       <Box sx={{ paddingTop: 16}}>
         <Container maxWidth={false} sx={{ maxWidth: "1600px"}}>       
-            <Typography variant="h1" sx={{fontWeight: 700}}>
+            <Typography variant="h1" sx={{fontWeight: 700, fontSize: {xs: '3.5rem',sm: '6rem'}}}>
               Skills
             </Typography>
 
             {/* Languages */}
-            <Typography variant="h2" sx={{fontWeight: 500, paddingTop: 6}}>
+            <Typography variant="h2" sx={{fontWeight: 500, paddingTop: 6, fontSize: {xs: '3rem',sm: '3.75rem'}}}>
               Languages
             </Typography>
             <Grid2 container spacing={4} sx={{ paddingTop: 4 }}>
@@ -109,7 +109,7 @@ export default function Home() {
             </Grid2>
 
             {/* Frameworks */}
-            <Typography variant="h2" sx={{fontWeight: 500, paddingTop: 8}}>
+            <Typography variant="h2" sx={{fontWeight: 500, paddingTop: 6, fontSize: {xs: '3rem',sm: '3.75rem'}}}>
               Frameworks
             </Typography>
             <Grid2 container spacing={4} sx={{ paddingTop: 4 }}>
@@ -144,7 +144,7 @@ export default function Home() {
             </Grid2>
 
             {/* Design */}
-            <Typography variant="h2" sx={{fontWeight: 500, paddingTop: 8}}>
+            <Typography variant="h2" sx={{fontWeight: 500, paddingTop: 6, fontSize: {xs: '3rem',sm: '3.75rem'}}}>
               Design Tools
             </Typography>
             <Grid2 container spacing={4} sx={{ paddingTop: 4 }}>
