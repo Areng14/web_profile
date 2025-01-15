@@ -37,7 +37,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 position: "relative",
                 overflow: "hidden",
                 borderRadius: 4,
-                backgroundColor: "rgb(40, 46, 55)",
+                backgroundColor: "rgb(23, 27, 32)",
                 height: "576px",
                 display: "flex",
                 flexDirection: "column"
