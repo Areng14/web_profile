@@ -7,16 +7,29 @@ import Image from 'next/image';
 interface ProjectCardProps {
     name: string;
     description: string;
-    image: string;
+    image?: string;
     gitRepo?: string;
+    gradientColors?: string[];
+    gradientAngle?: number;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ name, description, image, gitRepo }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ 
+    name, 
+    description, 
+    image, 
+    gitRepo,
+    gradientColors,
+    gradientAngle = 45
+}) => {
     const goToGitRepo = () => {
         if (gitRepo) {
             window.location.href = `https://github.com/areng14/${gitRepo}`;
         }
     }
+
+    const backgroundStyle = gradientColors ? {
+        background: `linear-gradient(${gradientAngle}deg, ${gradientColors.join(', ')})`
+    } : {};
 
     return (
         <Box
@@ -30,23 +43,26 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ name, description, image, git
                 flexDirection: "column"
             }}
         >
-            {/* Image Container - Top 25% */}
+            {/* Image/Gradient Container - Top 50% */}
             <Box
                 sx={{
                     position: "relative",
                     width: "100%",
                     height: "50%",
-                    overflow: "hidden"
+                    overflow: "hidden",
+                    ...backgroundStyle
                 }}
             >
-                <Image
-                    src={image}
-                    alt={name}
-                    fill
-                    style={{
-                        objectFit: "cover",
-                    }}
-                />
+                {!gradientColors && image && (
+                    <Image
+                        src={image}
+                        alt={name}
+                        fill
+                        style={{
+                            objectFit: "cover",
+                        }}
+                    />
+                )}
             </Box>
             
             {/* Content Container - Bottom 75% */}
