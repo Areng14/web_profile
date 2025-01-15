@@ -141,6 +141,15 @@ export default function Home() {
                 icon={"/misc/skills/electron.svg"}
                 endpoint="https://www.electronjs.org"/>         
               </Grid2>
+              {/* NodeJS */}
+              <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
+                <SkillCard
+                skill="Node.JS"
+                colors={["rgb(40, 123, 40)", "rgb(47, 152, 47)", "rgb(72, 177, 72)"]}
+                angle="45deg"
+                icon={"/misc/skills/nodejs.svg"}
+                endpoint="https://nodejs.org/en"/>         
+              </Grid2>
               {/* NextJS */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
                 <SkillCard
