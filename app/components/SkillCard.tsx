@@ -2,6 +2,7 @@
 
 import { Box, Button, Typography } from "@mui/material";
 import React from "react";
+import Image from 'next/image'
 
 interface SkillCardProps {
     skill: string;
@@ -37,8 +38,9 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, ang
                     zIndex: 1
                 }}
             >
-                <img
+                <Image
                 src={icon}
+				 alt=""
                 style={{ width: "100%", height: "100%", objectFit: "contain" }}
                 />
             </Box>
