@@ -113,7 +113,7 @@ export default function Projects() {
                 gradientColors={["rgb(234, 48, 113)","rgb(193, 69, 255)"]}
                 gradientAngle={45}
                 gitRepo="web_profile"
-                technologies={["TS","React","NextJS"]}/>   
+                technologies={["TypeScript","React","NextJS"]}/>   
               </Grid2>                         
               {/* GraphIMG */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
