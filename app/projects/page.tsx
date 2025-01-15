@@ -70,7 +70,8 @@ export default function Projects() {
                 description={
                   "Beemod Package Editor is a python program that allows users to create and edit packages for BEEMOD, a puzzlemaker mod for Portal 2. BPE v3 allows users to use plugins to extend the functionality of the program."}
                 image={"/misc/projects/bpe.png"}
-                gitRepo="BeePackageEditor"/>              
+                gitRepo="BeePackageEditor"
+                technologies={["Python"]}/>              
               </Grid2>
               {/* TestRunner */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
@@ -79,7 +80,8 @@ export default function Projects() {
                 description={
                   "TestRunner is built for testing multiple scripts at a time. Designed for teachers to use to mass grade student assignments. Includes a warning if the script uses weird imports."}
                 image={"/misc/projects/testrunner.png"}
-                gitRepo="testrunner"/>              
+                gitRepo="testrunner"
+                technologies={["Python","JavaScript"]}/>              
               </Grid2>
               {/* Blank */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
@@ -89,7 +91,8 @@ export default function Projects() {
                   "A image format using only whitespace. [SPACE][TAB][SPACE][TAB][SPACE][TAB] Each increment of whitespace corresponds to an increment in the RGB values. A newline signifies to move on to the next row."}
                 gradientColors={["rgb(48, 98, 234)","rgb(69, 236, 255)"]}
                 gradientAngle={45}
-                gitRepo="blank"/>              
+                gitRepo="blank"
+                technologies={["Python"]}/>              
               </Grid2>
               {/* SCR ATO */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
@@ -98,17 +101,19 @@ export default function Projects() {
                 description={
                   "An macro program that automates the driving of trains in Stepford County Railway. The script uses OCR to read the information on the HUD which the program decides what to press."}
                 image={"/misc/projects/scrato.png"}
-                gitRepo="scr-ato"/>              
+                gitRepo="scr-ato"
+                technologies={["Python"]}/>              
               </Grid2>
               {/* WEB PROFILE */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
                 <ProjectCard
-                name={"WEB PROFILE"}
+                name={"WEBSITE"}
                 description={
                   "This very website. Built using Next.js, React, and Material-UI. The website is responsive and showcases my projects, skills, design knowledge, and contact information."}
                 gradientColors={["rgb(234, 48, 113)","rgb(193, 69, 255)"]}
                 gradientAngle={45}
-                gitRepo="web_profile"/>   
+                gitRepo="web_profile"
+                technologies={["TS","React","NextJS"]}/>   
               </Grid2>                         
               {/* GraphIMG */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
@@ -117,9 +122,10 @@ export default function Projects() {
                 description={
                   "A vector based image format that uses mathematical functions to generate images. The program uses a custom language to define the image."}
                 gradientColors={["rgb(48, 234, 101)","rgb(255, 252, 69)"]}
-                gradientAngle={45}/>  
+                gradientAngle={45}
+                technologies={["Python"]}/>  
               </Grid2>           
-              {/* GraphIMG */}
+              {/* Yapper */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
                 <ProjectCard
                 name={"yapper"}
@@ -127,8 +133,9 @@ export default function Projects() {
                   "A work in progress yapping program. Yapper allows for users to yap to each other. Basically a chat program."
                 }
                 gradientColors={["rgb(234, 141, 48)","rgb(255, 69, 156)"]}
-                gradientAngle={45}/>      
-              </Grid2>      
+                gradientAngle={45}
+                technologies={["JS","Electron"]}/>      
+              </Grid2>   
             </Grid2>                
         </Container>
       </Box>
