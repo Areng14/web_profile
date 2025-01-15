@@ -1,6 +1,6 @@
 import { Box, Container, Grid2, Typography } from "@mui/material";
 import ImageSlider from "../components/ImageSlider";
-import SkillCard from "../components/SkillCard";
+import ProjectCard from "../components/ProjectCard";
 
 export default function Projects() {
 
@@ -69,41 +69,14 @@ export default function Projects() {
               Featured
             </Typography>
             <Grid2 container spacing={4} sx={{ paddingTop: 4 }}>
-              {/* Python */}
+              {/* BeemodPackageEditor */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
-                <SkillCard
-                skill="Python"
-                colors={["rgb(22, 167, 105)", "rgb(17, 133, 159)", "rgb(6, 99, 198)"]}
-                angle="45deg"
-                icon={"/misc/skills/python.svg"}
-                endpoint="https://www.python.org"/>              
-              </Grid2>
-              {/* Javascript */}
-              <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
-                <SkillCard
-                skill="JS"
-                colors={["rgb(210, 116, 1)", "rgb(202, 131, 0)", "rgb(186, 159, 2)"]}
-                angle="45deg"
-                icon={"/misc/skills/js.svg"}
-                endpoint="https://en.wikipedia.org/wiki/JavaScript"/>              
-              </Grid2>
-              {/* Java */}
-              <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
-                <SkillCard
-                skill="Java"
-                colors={["rgb(1, 51, 79)","rgb(0, 116, 183)","rgb(72, 153, 188)"]}
-                angle="45deg"
-                icon={"/misc/skills/java.svg"}
-                endpoint="https://www.oracle.com/java/"/>              
-              </Grid2>
-              {/* Swift */}
-              <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
-                <SkillCard
-                skill="Swift"
-                colors={["rgb(212, 47, 39)", "rgb(209, 81, 49)", "rgb(212, 124, 0)"]}
-                angle="45deg"
-                icon={"/misc/skills/swift.svg"}
-                endpoint="https://developer.apple.com/swift/"/>              
+                <ProjectCard
+                name={"BPE"}
+                description={
+                  "Beemod Package Editor is a python program that allows users to create and edit packages for BEEMOD, a puzzlemaker mod for Portal 2. BPE v3 allows users to use plugins to extend the functionality of the program."}
+                image={"/misc/projects/bpe.png"}
+                gitRepo="BeePackageEditor"/>              
               </Grid2>
             </Grid2>
         </Container>
