@@ -40,8 +40,14 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, ang
             >
                 <Image
                 src={icon}
-				 alt=""
-                style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                alt=""
+                width={500} // Replace 500 with your desired width
+                height={500} // Replace 500 with your desired height
+                style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                }}
                 />
             </Box>
             <Box sx={{
