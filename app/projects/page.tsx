@@ -134,7 +134,7 @@ export default function Projects() {
                 }
                 gradientColors={["rgb(234, 141, 48)","rgb(255, 69, 156)"]}
                 gradientAngle={45}
-                technologies={["JS","Electron"]}/>      
+                technologies={["JavaScript","Electron"]}/>      
               </Grid2>   
             </Grid2>                
         </Container>
