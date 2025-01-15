@@ -109,9 +109,28 @@ export default function Projects() {
                   "This very website. Built using Next.js, React, and Material-UI. The website is responsive and showcases my projects, skills, design knowledge, and contact information."}
                 gradientColors={["rgb(234, 48, 113)","rgb(193, 69, 255)"]}
                 gradientAngle={45}
-                gitRepo="web_profile"/>              
-              </Grid2>
-            </Grid2>
+                gitRepo="web_profile"/>   
+              </Grid2>                         
+              {/* GraphIMG */}
+              <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
+                <ProjectCard
+                name={"Graph IMG"}
+                description={
+                  "A vector based image format that uses mathematical functions to generate images. The program uses a custom language to define the image."}
+                gradientColors={["rgb(48, 234, 101)","rgb(255, 252, 69)"]}
+                gradientAngle={45}/>  
+              </Grid2>           
+              {/* GraphIMG */}
+              <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
+                <ProjectCard
+                name={"yapper"}
+                description={
+                  "A work in progress yapping program. Yapper allows for users to yap to each other. Basically a chat program."
+                }
+                gradientColors={["rgb(234, 141, 48)","rgb(255, 69, 156)"]}
+                gradientAngle={45}/>      
+              </Grid2>      
+            </Grid2>                
         </Container>
       </Box>
     </Box>
