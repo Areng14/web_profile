@@ -60,7 +60,7 @@ export default function Projects() {
       {/* Project List */}
       <Box sx={{ paddingTop: 16}}>
         <Container maxWidth={false} sx={{ maxWidth: "1600px"}}>       
-            <Typography variant="h1" sx={{fontWeight: 700}}>
+            <Typography variant="h1" sx={{fontWeight: 700, fontSize: {xs: '3.5rem',sm: '6rem'}}}>
               Projects
             </Typography>
             <Grid2 container spacing={4} sx={{ paddingTop: 4 }}>
