@@ -37,8 +37,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 position: "relative",
                 overflow: "hidden",
                 borderRadius: 4,
-                backgroundColor: "rgb(23, 27, 32)",
-                height: "576px",
+                width: "100%", 
+                maxWidth: "100%",
+                backgroundColor: "rgb(40, 46, 55)",
+                height: {
+                    xs: "896px",
+                    sm: "576px"
+                },
                 display: "flex",
                 flexDirection: "column"
             }}
