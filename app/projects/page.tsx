@@ -76,7 +76,7 @@ export default function Projects() {
               {/* TestRunner */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
                 <ProjectCard
-                name={"TestRunner"}
+                name={"TR"}
                 description={
                   "TestRunner is built for testing multiple scripts at a time. Designed for teachers to use to mass grade student assignments. Includes a warning if the script uses weird imports."}
                 image={"/misc/projects/testrunner.png"}
