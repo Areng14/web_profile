@@ -27,7 +27,6 @@ export default function ProjectSearch({
   const searchBoxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // If there's a search query in the URL, scroll the search box into view
     if (searchParams.get('search')) {
       searchBoxRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
@@ -39,14 +38,22 @@ export default function ProjectSearch({
       return;
     }
 
-    const searchLower = term.toLowerCase();
-    const filtered = temp_projects.filter(project => 
-      project.name.toLowerCase().includes(searchLower) ||
-      project.description.toLowerCase().includes(searchLower) ||
-      project.technologies.some(tech => 
-        tech.toLowerCase().includes(searchLower)
-      )
-    );
+    const searchWords = term.toLowerCase().split(/\s+/);
+    const filtered = temp_projects.filter(project => {
+      return searchWords.every(word => {
+        // Exact match for technologies
+        const techMatch = project.technologies.some(tech => 
+          tech.toLowerCase() === word
+        );
+        
+        // Partial match for name and description
+        const nameMatch = project.name.toLowerCase().includes(word);
+        const descMatch = project.description.toLowerCase().includes(word);
+        
+        return techMatch || nameMatch || descMatch;
+      });
+    });
+    
     setFilteredProjects(filtered);
   };
 
@@ -58,7 +65,6 @@ export default function ProjectSearch({
 
   const handleKeyPress = (event: React.KeyboardEvent): void => {
     if (event.key === 'Enter') {
-      // Update URL only on Enter
       const params = new URLSearchParams(searchParams.toString());
       if (searchTerm) {
         params.set('search', searchTerm);
@@ -71,7 +77,7 @@ export default function ProjectSearch({
 
   return (
     <>
-      <Box ref={searchBoxRef} sx={{ width: '100%', maxWidth: '42rem', mx: 'auto', mb: 4 }}>
+      <Box ref={searchBoxRef} sx={{ width: '100%', mb: 4 }}>
         <TextField
           fullWidth
           type="text"
@@ -80,25 +86,33 @@ export default function ProjectSearch({
           onChange={handleSearch}
           onKeyDown={handleKeyPress}
           sx={{
-            backgroundColor: 'white',
+            backgroundColor: '#0c0d0f',
             borderRadius: 1,
+            input: {
+              color: 'white',
+              paddingLeft: '14px',
+            },
             '& .MuiOutlinedInput-root': {
               '& fieldset': {
-                borderColor: 'rgba(0, 0, 0, 0.23)',
+                borderColor: 'rgba(255, 255, 255, 0.23)',
               },
               '&:hover fieldset': {
-                borderColor: 'rgba(0, 0, 0, 0.23)',
+                borderColor: 'rgba(255, 255, 255, 0.5)',
               },
               '&.Mui-focused fieldset': {
-                borderColor: 'primary.main',
+                borderColor: 'rgba(255, 255, 255, 0.5)',
               },
+            },
+            '& .MuiInputBase-input::placeholder': {
+              color: 'rgba(255, 255, 255, 0.5)',
+              opacity: 1,
             },
           }}
           slotProps={{
             input: {
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon sx={{ color: 'text.secondary' }} />
+                  <SearchIcon sx={{ color: 'rgba(255, 255, 255, 0.7)' }} />
                 </InputAdornment>
               ),
             },
