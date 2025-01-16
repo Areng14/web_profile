@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Box, IconButton } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 interface ImageSliderProps {
   imgs: string[];
@@ -152,6 +153,57 @@ export default function ImageSlider({ imgs, autoFadeInterval = 5000 }: ImageSlid
           }}
         >
           <ArrowForwardIosIcon />
+        </IconButton>
+      </Box>
+
+      {/* Scroll Down Indicator */}
+      <Box
+        sx={{
+          position: "absolute",
+          bottom: "20px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 1,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          animation: "bounce 2s infinite",
+          "@keyframes bounce": {
+            "0%, 20%, 50%, 80%, 100%": {
+              transform: "translateX(-50%) translateY(0)",
+            },
+            "40%": {
+              transform: "translateX(-50%) translateY(-20px)",
+            },
+            "60%": {
+              transform: "translateX(-50%) translateY(-10px)",
+            },
+          },
+          pointerEvents: "auto",
+          cursor: "pointer",
+        }}
+        onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+      >
+        <Box
+          sx={{
+            color: "white",
+            textAlign: "center",
+            marginBottom: "8px",
+            fontSize: "14px",
+            textTransform: "uppercase",
+            letterSpacing: "1px",
+          }}
+        >
+          Scroll Down
+        </Box>
+        <IconButton
+          sx={{
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            color: "white",
+            "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" },
+          }}
+        >
+          <ExpandMoreIcon />
         </IconButton>
       </Box>
     </>
