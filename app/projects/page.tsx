@@ -2,7 +2,7 @@
 import { Box, Container, Grid2, Typography } from "@mui/material";
 import ImageSlider from "../components/ImageSlider";
 import ProjectSearch from "../components/ProjectSearch";
-import { getProjects, type Project } from './getProjects';
+import { getProjects } from './getProjects';
 
 const images: string[] = [
   "/misc/mainslide/img5.png",
