@@ -15,13 +15,13 @@ import Link from "next/link";
 const pages = [
   {
     "id": 1,
-    "name": "Projects",
-    "url": "/projects",
+    "name": "About",
+    "url": "/about",
   },
   {
     "id": 2,
-    "name": "Skills",
-    "url": "/skills",
+    "name": "Projects",
+    "url": "/projects",
   },
   {
     "id": 3,

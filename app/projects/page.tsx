@@ -1,6 +1,6 @@
 // app/projects/page.tsx
 import { Metadata } from 'next';
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Container, Grid2, Typography } from "@mui/material";
 import ImageSlider from "../components/ImageSlider";
 import ProjectSearch from "../components/ProjectSearch";
 import { getProjects } from './getProjects';
@@ -44,7 +44,7 @@ export default async function Projects({ searchParams }: ProjectsPageProps) {
           maxWidth={false} 
           sx={{ maxWidth: "1600px", minWidth: { xs: "500px", md: "1600px" } }}
         >
-          <Grid
+          <Grid2
             container
             spacing={6}
             sx={{
@@ -76,7 +76,7 @@ export default async function Projects({ searchParams }: ProjectsPageProps) {
                 and libraries. Each project is different and showcases my skills in software.
               </Typography>
             </Box>
-          </Grid>
+          </Grid2>
         </Container>
       </Box>
 
