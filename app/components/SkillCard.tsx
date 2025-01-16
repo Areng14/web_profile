@@ -14,10 +14,6 @@ interface SkillCardProps {
 }
 
 const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, angle = "45deg", iconangle=0, endpoint}) => {
-    
-    const goToEndpoint = (endpoint: string) => {
-        window.location.href = endpoint;
-    }
 
     return (
         <Box

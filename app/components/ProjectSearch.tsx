@@ -4,7 +4,7 @@ import { Box, Grid2, Typography } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useState, useEffect, useRef } from "react";
 import { getProjects, type Project } from '../projects/getProjects';
 import ProjectCard from "../components/ProjectCard";
@@ -20,7 +20,6 @@ export default function ProjectSearch({
   initialProjects,
   initialSearch 
 }: ProjectSearchProps): JSX.Element {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState<string>(initialSearch);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>(initialProjects);
