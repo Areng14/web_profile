@@ -140,14 +140,12 @@ export default function Projects() {
 
             <Grid2 container spacing={4} sx={{ paddingTop: 4 }}>
             {temp_projects.map((project) => (
-              <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
+              <Grid2 key={project.id} size={{ xs: 12, md: 6 , lg: 4}}>
                 <ProjectCard
                   name={project.name}
                   description={project.description}
-                  {...(project.image
-                    ? { image: project.image }
-                    : { gradientColors: project.gradientColors, gradientAngle: project.gradientAngle }
-                  )}
+                  gradientColors= {project.gradientColors}
+                  gradientAngle= {project.gradientAngle}             
                   {...(project.gitRepo
                     ? { gitRepo: project.gitRepo }
                     : {}
