@@ -27,6 +27,7 @@ export default function ProjectSearch({
   const searchBoxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // If there's a search query in the URL, scroll the search box into view
     if (searchParams.get('search')) {
       searchBoxRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
@@ -38,22 +39,14 @@ export default function ProjectSearch({
       return;
     }
 
-    const searchWords = term.toLowerCase().split(/\s+/);
-    const filtered = temp_projects.filter(project => {
-      return searchWords.every(word => {
-        // Exact match for technologies
-        const techMatch = project.technologies.some(tech => 
-          tech.toLowerCase() === word
-        );
-        
-        // Partial match for name and description
-        const nameMatch = project.name.toLowerCase().includes(word);
-        const descMatch = project.description.toLowerCase().includes(word);
-        
-        return techMatch || nameMatch || descMatch;
-      });
-    });
-    
+    const searchLower = term.toLowerCase();
+    const filtered = temp_projects.filter(project => 
+      project.name.toLowerCase().includes(searchLower) ||
+      project.description.toLowerCase().includes(searchLower) ||
+      project.technologies.some(tech => 
+        tech.toLowerCase().includes(searchLower)
+      )
+    );
     setFilteredProjects(filtered);
   };
 
@@ -65,6 +58,7 @@ export default function ProjectSearch({
 
   const handleKeyPress = (event: React.KeyboardEvent): void => {
     if (event.key === 'Enter') {
+      // Update URL only on Enter
       const params = new URLSearchParams(searchParams.toString());
       if (searchTerm) {
         params.set('search', searchTerm);
