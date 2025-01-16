@@ -16,7 +16,7 @@ export interface Project {
         id: 1,
         name: "BPE",
         description: "Beemod Package Editor is a python program that allows users to create and edit packages for BEEMOD, a puzzlemaker mod for Portal 2. BPE v3 allows users to use plugins to extend the functionality of the program.",
-        gradientColors: ["rgb(192, 76, 30)","rgb(175, 48, 48)"],
+        gradientColors: ["rgb(217, 211, 43)","rgb(216, 141, 94)"],
         gradientAngle: 45,
         gitRepo: "BeePackageEditor",
         technologies: ["Python"]

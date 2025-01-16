@@ -63,7 +63,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 borderRadius: 4,
                 width: "100%", 
                 maxWidth: "100%",
-                backgroundColor: "rgb(40, 46, 55)",
+                backgroundColor: "rgb(29, 32, 37)",
                 height: {
                     xs: "896px",
                     sm: "576px"
