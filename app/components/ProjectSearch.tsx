@@ -56,19 +56,6 @@ export default function ProjectSearch({
     filterProjects(value);
   };
 
-  const handleKeyPress = (event: React.KeyboardEvent): void => {
-    if (event.key === 'Enter') {
-      // Update URL only on Enter
-      const params = new URLSearchParams(searchParams.toString());
-      if (searchTerm) {
-        params.set('search', searchTerm);
-      } else {
-        params.delete('search');
-      }
-      router.push(`/projects?${params.toString()}`);
-    }
-  };
-
   return (
     <>
       <Box ref={searchBoxRef} sx={{ width: '100%', mb: 4 }}>
@@ -78,7 +65,6 @@ export default function ProjectSearch({
           placeholder="Search projects by name, description, or technology..."
           value={searchTerm}
           onChange={handleSearch}
-          onKeyDown={handleKeyPress}
           sx={{
             backgroundColor: '#0c0d0f',
             borderRadius: 1,
