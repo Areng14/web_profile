@@ -107,7 +107,7 @@ export default function ImageSlider({ imgs, autoFadeInterval = 5000 }: ImageSlid
             left: 0,
             width: "100vw",
             height: "100vh",
-            backgroundColor: "rgba(0, 0, 0, 0.75)",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
           }}
         />
       </Box>

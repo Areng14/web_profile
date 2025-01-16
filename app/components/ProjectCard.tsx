@@ -151,6 +151,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             <Box
                 sx={{
                     padding: 5,
+                    paddingTop: 2,
                     height: "75%",
                     display: "flex",
                     flexDirection: "column",
@@ -161,6 +162,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     variant="h2" 
                     sx={{
                         color: "white",
+                        paddingTop: 2,
                         fontWeight: 550,
                     }}
                 >

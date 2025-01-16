@@ -17,7 +17,8 @@ export default function Projects() {
       id: 1,
       name: "BPE",
       description: "Beemod Package Editor is a python program that allows users to create and edit packages for BEEMOD, a puzzlemaker mod for Portal 2. BPE v3 allows users to use plugins to extend the functionality of the program.",
-      image: "/misc/projects/bpe.png",
+      gradientColors: ["rgb(192, 76, 30)","rgb(175, 48, 48)"],
+      gradientAngle: 45,
       gitRepo: "BeePackageEditor",
       technologies: ["Python"]
     },
@@ -25,15 +26,15 @@ export default function Projects() {
       id: 2,
       name: "TR",
       description: "TestRunner is built for testing multiple scripts at a time. Designed for teachers to use to mass grade student assignments. Includes a warning if the script uses weird imports.",
-      image: "/misc/projects/testrunner.png",
-      gitRepo: "testrunner",
+      gradientColors: ["rgb(30, 192, 70)","rgb(72, 99, 52)"],
+      gradientAngle: 45,
       technologies: ["Python","JavaScript","Electron","Node.js"]
     },
     {
       id: 3,
       name: "Blank",
       description: "A image format using only whitespace. [SPACE][TAB][SPACE][TAB][SPACE][TAB] Each increment of whitespace corresponds to an increment in the RGB values. A newline signifies to move on to the next row.",
-      gradientColors: ["rgb(48, 98, 234)","rgb(69, 236, 255)"],
+      gradientColors: ["rgb(35, 71, 169)","rgb(45, 151, 163)"],
       gradientAngle: 45,
       gitRepo: "blank",
       technologies: ["Python"]
@@ -42,7 +43,8 @@ export default function Projects() {
       id: 4,
       name: "SCR ATO",
       description: "An macro program that automates the driving of trains in Stepford County Railway. The script uses OCR to read the information on the HUD which the program decides what to press.",
-      image: "/misc/projects/scrato.png",
+      gradientColors: ["rgb(35, 111, 173)","rgb(40, 44, 121)"],
+      gradientAngle: 45,
       gitRepo: "scr-ato",
       technologies: ["Python"]
     },
@@ -50,7 +52,8 @@ export default function Projects() {
       id: 4,
       name: "Graph IMG",
       description: "A vector based image format that uses mathematical functions to generate images. The program uses a custom language to define the image.",
-      image: "/misc/projects/graphimg.png",
+      gradientColors: ["rgb(80, 35, 169)","rgb(155, 45, 163)"],
+      gradientAngle: 45,
       gitRepo: "GraphIMG",
       technologies: ["Python"]
     },
@@ -58,7 +61,7 @@ export default function Projects() {
       id: 5,
       name: "Website",
       description: "This very website. Built using Next.js, React, Material-UI and NodeJS for the backend. The website is responsive and showcases my projects, skills, design knowledge, and contact information.",
-      gradientColors: ["rgb(234, 48, 113)","rgb(193, 69, 255)"],
+      gradientColors: ["rgb(182, 37, 88)","rgb(140, 49, 185)"],
       gradientAngle: 45,
       gitRepo: "web_profile",
       technologies: ["TypeScript","React","Next.js","Node.js"]
@@ -67,7 +70,7 @@ export default function Projects() {
       id: 6,
       name: "Yapper",
       description: "A work in progress yapping program. Yapper allows for users to yap to each other. Basically a chat program.",
-      gradientColors: ["rgb(234, 141, 48)","rgb(255, 69, 156)"],
+      gradientColors: ["rgb(157, 95, 33)","rgb(177, 48, 109)"],
       gradientAngle: 45,
       technologies: ["JavaScript","Electron","Node.js"]
     },
@@ -75,7 +78,7 @@ export default function Projects() {
       id: 7,
       name: "MC SERVER",
       description: "A minecraft minigames server. Game logic coded by me in Java. Games include: KitPVP Duels, Extreme Hide and Seek",
-      gradientColors: ["rgb(0, 238, 255)","rgb(255, 0, 238)"],
+      gradientColors: ["rgb(0, 151, 161)","rgb(164, 0, 153)"],
       gradientAngle: 45,
       technologies: ["Java"]
     },
@@ -132,6 +135,9 @@ export default function Projects() {
             <Typography variant="h1" sx={{fontWeight: 700, fontSize: {xs: '3.5rem',sm: '6rem'}}}>
               Projects
             </Typography>
+
+            {/* Search for project */}
+
             <Grid2 container spacing={4} sx={{ paddingTop: 4 }}>
             {temp_projects.map((project) => (
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
@@ -146,6 +152,7 @@ export default function Projects() {
                     ? { gitRepo: project.gitRepo }
                     : {}
                   )}
+                  technologies={project.technologies}
                 />
               </Grid2>
             ))}
