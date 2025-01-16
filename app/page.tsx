@@ -46,12 +46,12 @@ export default function Home() {
               <Typography
                 sx={{
                   fontSize: { xs: "1rem", md: "1.1rem" },
-                  maxWidth: { xs: "100%", md: "50%" },
+                  maxWidth: { xs: "60%", md: "50%" },
                 }}
               >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua,
-                facilitating seamless solutions for diverse clients.
+                A software developer who makes programs on his freetime,
+                ranging from things that are useless to things that are kinda useful.
+                I try to keep my projects as clean and readable.
               </Typography>
             </Box>
           </Grid2>
@@ -77,7 +77,7 @@ export default function Home() {
                 colors={["rgb(22, 167, 105)", "rgb(17, 133, 159)", "rgb(6, 99, 198)"]}
                 angle="45deg"
                 icon={"/misc/skills/python.svg"}
-                endpoint="https://www.python.org"/>              
+                endpoint="/projects?search=Python"/>              
               </Grid2>
               {/* Javascript */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
@@ -86,7 +86,16 @@ export default function Home() {
                 colors={["rgb(210, 116, 1)", "rgb(202, 131, 0)", "rgb(186, 159, 2)"]}
                 angle="45deg"
                 icon={"/misc/skills/js.svg"}
-                endpoint="https://en.wikipedia.org/wiki/JavaScript"/>              
+                endpoint="/projects?search=JavaScript"/>              
+              </Grid2>
+              {/* Typescript */}
+              <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
+                <SkillCard
+                skill="TS"
+                colors={["rgb(0, 93, 155)", "rgb(35, 112, 154)", "rgb(62, 133, 177)"]}
+                angle="45deg"
+                icon={"/misc/skills/ts.svg"}
+                endpoint="/projects?search=TypeScript"/>              
               </Grid2>
               {/* Typescript */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
@@ -104,7 +113,7 @@ export default function Home() {
                 colors={["rgb(1, 51, 79)","rgb(0, 116, 183)","rgb(72, 153, 188)"]}
                 angle="45deg"
                 icon={"/misc/skills/java.svg"}
-                endpoint="https://www.oracle.com/java/"/>              
+                endpoint="/projects?search=Java"/>              
               </Grid2>
               {/* Swift */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
@@ -113,7 +122,7 @@ export default function Home() {
                 colors={["rgb(212, 47, 39)", "rgb(209, 81, 49)", "rgb(212, 124, 0)"]}
                 angle="45deg"
                 icon={"/misc/skills/swift.svg"}
-                endpoint="https://developer.apple.com/swift/"/>              
+                endpoint="/projects?search=Swift"/>              
               </Grid2>
             </Grid2>
 
@@ -130,7 +139,7 @@ export default function Home() {
                 angle="45deg"
                 icon={"/misc/skills/react.svg"}
                 iconangle={45}
-                endpoint="https://react.dev"/>         
+                endpoint="/projects?search=React"/>         
               </Grid2>
               {/* Electron */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
@@ -139,7 +148,7 @@ export default function Home() {
                 colors={["rgb(159, 234, 249)", "rgb(71, 132, 143)", "rgb(47, 84, 150)"]}
                 angle="45deg"
                 icon={"/misc/skills/electron.svg"}
-                endpoint="https://www.electronjs.org"/>         
+                endpoint="/projects?search=Electron"/>         
               </Grid2>
               {/* NodeJS */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
@@ -148,7 +157,16 @@ export default function Home() {
                 colors={["rgb(40, 123, 40)", "rgb(47, 152, 47)", "rgb(72, 177, 72)"]}
                 angle="45deg"
                 icon={"/misc/skills/nodejs.svg"}
-                endpoint="https://nodejs.org/en"/>         
+                endpoint="/projects?search=Node.JS"/>         
+              </Grid2>
+              {/* NextJS */}
+              <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
+                <SkillCard
+                  skill="Next.JS"
+                  colors={["rgb(0, 0, 0)", "rgb(44, 44, 44)", "rgb(79, 79, 79)"]}
+                  angle="45deg"
+                  icon={"/misc/skills/nextjs.svg"}
+                  endpoint="/projects?search=Next.JS"/>         
               </Grid2>
             </Grid2>
 
@@ -164,7 +182,7 @@ export default function Home() {
                 colors={["rgb(217, 31, 75)", "rgb(188, 43, 127)", "rgb(139, 31, 211)"]}
                 angle="45deg"
                 icon={"/misc/skills/adobe.svg"}
-                endpoint="https://www.adobe.com"/>         
+                endpoint="/projects?search=Adobe"/>         
               </Grid2>
             </Grid2>
         </Container>

@@ -14,10 +14,6 @@ interface SkillCardProps {
 }
 
 const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, angle = "45deg", iconangle=0, endpoint}) => {
-    
-    const goToEndpoint = (endpoint: string) => {
-        window.location.href = endpoint;
-    }
 
     return (
         <Box
@@ -82,9 +78,9 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, ang
                         color: "rgb(227, 238, 255)",
                         zIndex: 1
                     }}
-                    onClick={() => endpoint && goToEndpoint(endpoint)}
+                    href={endpoint}
                 >
-                    Learn More
+                    Find Projects
                 </Button>
             </Box>
         </Box>

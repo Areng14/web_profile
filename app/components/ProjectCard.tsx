@@ -1,8 +1,30 @@
 'use client';
 
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography, Tooltip } from "@mui/material";
 import React from "react";
 import Image from 'next/image';
+
+// Technology tags mapping
+const techLogos: { [key: string]: string } = {
+    // Languages
+    "Python": "/misc/skills/monochrome/python.svg",
+    "JavaScript": "/misc/skills/monochrome/js.svg",
+    "JS": "/misc/skills/monochrome/js.svg",
+    "TypeScript": "/misc/skills/monochrome/ts.svg",
+    "TS": "/misc/skills/monochrome/ts.svg",
+    "Java": "/misc/skills/monochrome/java.svg",
+    "Swift": "/misc/skills/monochrome/swift.svg",
+    
+    // Frameworks
+    "React": "/misc/skills/monochrome/react.svg",
+    "Electron": "/misc/skills/monochrome/electron.svg",
+    "Node.js": "/misc/skills/monochrome/nodejs.svg",
+    "NodeJS": "/misc/skills/monochrome/nodejs.svg",
+    "Node": "/misc/skills/monochrome/nodejs.svg",
+    "Next.js": "/misc/skills/monochrome/nextjs.svg",
+    "NextJS": "/misc/skills/monochrome/nextjs.svg",
+    "Next": "/misc/skills/monochrome/nextjs.svg",
+};
 
 interface ProjectCardProps {
     name: string;
@@ -11,6 +33,7 @@ interface ProjectCardProps {
     gitRepo?: string;
     gradientColors?: string[];
     gradientAngle?: number;
+    technologies?: string[]; // Now just accepts technology names
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ 
@@ -19,7 +42,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     image, 
     gitRepo,
     gradientColors,
-    gradientAngle = 45
+    gradientAngle = 45,
+    technologies = []
 }) => {
     const goToGitRepo = () => {
         if (gitRepo) {
@@ -39,7 +63,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 borderRadius: 4,
                 width: "100%", 
                 maxWidth: "100%",
-                backgroundColor: "rgb(40, 46, 55)",
+                backgroundColor: "rgb(29, 32, 37)",
                 height: {
                     xs: "896px",
                     sm: "576px"
@@ -68,12 +92,66 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                         }}
                     />
                 )}
+                {/* Tags Container */}
+                {technologies.length > 0 && (
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            bottom: 16,
+                            right: 16,
+                            display: "flex",
+                            gap: 2,
+                            flexWrap: "wrap",
+                            justifyContent: "flex-end",
+                            maxWidth: "70%"
+                        }}
+                    >
+                        {technologies.map((tech, index) => (
+                            techLogos[tech] && (
+                                <Tooltip 
+                                    key={index}
+                                    title={tech}
+                                    placement="top"
+                                    arrow
+                                >
+                                    <Box
+                                        sx={{
+                                            position: "relative",
+                                            width: 40,
+                                            height: 40,
+                                            borderRadius: "50%",
+                                            overflow: "hidden",
+                                            backgroundColor: "rgb(220, 222, 231)",
+                                            padding: "6px",
+                                            transition: "transform 0.2s ease-in-out",
+                                            "&:hover": {
+                                                transform: "scale(1.1)",
+                                                cursor: "pointer"
+                                            }
+                                        }}
+                                    >
+                                        <Image
+                                            src={techLogos[tech]}
+                                            alt={tech}
+                                            fill
+                                            style={{
+                                                objectFit: "contain",
+                                                padding: "6px"
+                                            }}
+                                        />
+                                    </Box>
+                                </Tooltip>
+                            )
+                        ))}
+                    </Box>
+                )}
             </Box>
             
             {/* Content Container - Bottom 75% */}
             <Box
                 sx={{
                     padding: 5,
+                    paddingTop: 2,
                     height: "75%",
                     display: "flex",
                     flexDirection: "column",
@@ -84,6 +162,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     variant="h2" 
                     sx={{
                         color: "white",
+                        paddingTop: 2,
                         fontWeight: 550,
                     }}
                 >
