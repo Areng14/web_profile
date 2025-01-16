@@ -27,6 +27,7 @@ export interface Project {
         description: "TestRunner is built for testing multiple scripts at a time. Designed for teachers to use to mass grade student assignments. Includes a warning if the script uses weird imports.",
         gradientColors: ["rgb(30, 192, 70)","rgb(72, 99, 52)"],
         gradientAngle: 45,
+        gitRepo: "TestRunner",
         technologies: ["Python","JavaScript","Electron","Node.js"]
       },
       {
