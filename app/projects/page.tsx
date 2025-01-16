@@ -142,6 +142,10 @@ export default function Projects() {
                     ? { image: project.image }
                     : { gradientColors: project.gradientColors, gradientAngle: project.gradientAngle }
                   )}
+                  {...(project.gitRepo
+                    ? { gitRepo: project.gitRepo }
+                    : {}
+                  )}
                 />
               </Grid2>
             ))}
