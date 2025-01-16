@@ -78,7 +78,7 @@ export default function ProjectSearch({
           placeholder="Search projects by name, description, or technology..."
           value={searchTerm}
           onChange={handleSearch}
-          onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyPress}
           sx={{
             backgroundColor: 'white',
             borderRadius: 1,
