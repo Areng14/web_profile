@@ -82,9 +82,9 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, ang
                         color: "rgb(227, 238, 255)",
                         zIndex: 1
                     }}
-                    onClick={() => endpoint && goToEndpoint(endpoint)}
+                    href={endpoint}
                 >
-                    Learn More
+                    Find Projects
                 </Button>
             </Box>
         </Box>
