@@ -81,7 +81,7 @@ export default function Projects() {
                   "TestRunner is built for testing multiple scripts at a time. Designed for teachers to use to mass grade student assignments. Includes a warning if the script uses weird imports."}
                 image={"/misc/projects/testrunner.png"}
                 gitRepo="testrunner"
-                technologies={["Python","JavaScript"]}/>              
+                technologies={["Python","JavaScript","Electron","Node.js"]}/>              
               </Grid2>
               {/* Blank */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
@@ -104,27 +104,26 @@ export default function Projects() {
                 gitRepo="scr-ato"
                 technologies={["Python"]}/>              
               </Grid2>
-              {/* WEB PROFILE */}
-              <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
-                <ProjectCard
-                name={"WEBSITE"}
-                description={
-                  "This very website. Built using Next.js, React, and Material-UI. The website is responsive and showcases my projects, skills, design knowledge, and contact information."}
-                gradientColors={["rgb(234, 48, 113)","rgb(193, 69, 255)"]}
-                gradientAngle={45}
-                gitRepo="web_profile"
-                technologies={["TypeScript","React","NextJS"]}/>   
-              </Grid2>                         
               {/* GraphIMG */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
                 <ProjectCard
                 name={"Graph IMG"}
                 description={
                   "A vector based image format that uses mathematical functions to generate images. The program uses a custom language to define the image."}
-                gradientColors={["rgb(48, 234, 101)","rgb(255, 252, 69)"]}
-                gradientAngle={45}
+                image={"/misc/projects/graphimg.png"}
                 technologies={["Python"]}/>  
-              </Grid2>           
+              </Grid2>     
+              {/* WEB PROFILE */}
+              <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
+                <ProjectCard
+                name={"WEBSITE"}
+                description={
+                  "This very website. Built using Next.js, React, Material-UI and NodeJS for the backend. The website is responsive and showcases my projects, skills, design knowledge, and contact information."}
+                gradientColors={["rgb(234, 48, 113)","rgb(193, 69, 255)"]}
+                gradientAngle={45}
+                gitRepo="web_profile"
+                technologies={["TypeScript","React","Next.js","Node.js"]}/>   
+              </Grid2>                               
               {/* Yapper */}
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
                 <ProjectCard
@@ -134,7 +133,18 @@ export default function Projects() {
                 }
                 gradientColors={["rgb(234, 141, 48)","rgb(255, 69, 156)"]}
                 gradientAngle={45}
-                technologies={["JavaScript","Electron"]}/>      
+                technologies={["JavaScript","Electron","Node.js"]}/>      
+              </Grid2>   
+              {/* MC SERVER */}
+              <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
+                <ProjectCard
+                name={"MC SERVER"}
+                description={
+                  "A minecraft minigames server. Game logic coded by me in Java. Games include: KitPVP Duels, Extreme Hide and Seek"
+                }
+                gradientColors={["rgb(0, 238, 255)","rgb(255, 0, 238)"]}
+                gradientAngle={45}
+                technologies={["Java"]}/>      
               </Grid2>   
             </Grid2>                
         </Container>
