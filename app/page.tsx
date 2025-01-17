@@ -92,7 +92,7 @@ export default function Home() {
               <Grid2 size={{ xs: 12, md: 6 , lg: 4}}>
                 <SkillCard
                 skill="TS"
-                colors={["rgb(0, 93, 155)", "rgb(35, 112, 154)", "rgb(62, 133, 177)"]}
+                colors={["rgb(3, 90, 148)", "rgb(35, 112, 154)", "rgb(62, 133, 177)"]}
                 angle="45deg"
                 icon={"/misc/skills/ts.svg"}
                 endpoint="/projects?search=TypeScript"/>              
