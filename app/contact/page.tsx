@@ -1,7 +1,7 @@
 // app/projects/page.tsx
 import { Metadata } from 'next';
 import { Box, Container, Grid2, Typography } from "@mui/material";
-import { Email } from '@mui/icons-material';
+import { Email, GitHub } from '@mui/icons-material';
 import ImageSlider from "../components/ImageSlider";
 import ContactCard from '../components/ContactCard';
 
@@ -24,9 +24,23 @@ const contacts = [
   {
     id: 1,
     name: "Email",
-    icon: "/icons/email.svg",
-    description: "Send me an email",
+    icon: <Email sx={{ color: "white", fontSize: 54 }} />,
+    description: "Send me an email at areng@andromedamc.space. I will try to respond as soon as possible.",
     href: "mailto:areng@andromedamc.space"
+  },
+  {
+    id: 2,
+    name: "Discord",
+    iconImage: "/icons/discord.svg",
+    description: "Add me on discord at ArengDev. I am most active on discord",
+    href: "https://discord.com"
+  },
+  {
+    id: 3,
+    name: "GitHub",
+    icon: <GitHub sx={{ color: "white", fontSize: 54 }} />,
+    description: "Check out my GitHub profile for my projects and contributions.",
+    href: "https://github.com/areng14"
   }
 ]
 
@@ -78,16 +92,26 @@ export default function About() {
 
       {/* Content */}
       <Box sx={{ paddingTop: 16 }}>
-        <Container maxWidth={false} sx={{ maxWidth: "1600px", minWidth: { xs: "500px", md: "1600px" } }}>
+        <Container maxWidth="md">
           <Grid2 container spacing={4} sx={{ paddingTop: 4 }}>
             {contacts.map((contact) => (
-              <Grid2 key={contact.id} size={{xs:12, md:6, lg:4}}>
+              <Grid2 
+                key={contact.id} 
+                sx={{ 
+                  width: {
+                    xs: '100%',   // Full width on mobile
+                    md: '50%',    // Two cards per row on medium
+                    lg: '33.33%'  // Three cards per row on large
+                  }
+                }}
+              >
                 <ContactCard
                   name={contact.name}
                   description={contact.description}
                   icon={contact.icon}
+                  iconImage={contact.iconImage}
                   href={contact.href}
-                  gradientColors={["rgb(19, 91, 150)rgb(51, 69, 191), 0)"]}
+                  gradientColors={["rgb(19, 91, 150)", "rgb(51, 69, 191)"]}
                   gradientAngle={45}
                 />
               </Grid2>
