@@ -1,13 +1,14 @@
 'use client';
 
 import { Box, Button, Typography } from "@mui/material";
-import React from "react";
+import React, { ReactElement } from "react";
 import Image from "next/image";
 
 interface ContactCardProps {
   name: string;
   description: string;
-  icon: string;
+  icon?: ReactElement;
+  iconImage?: string;
   href: string;
   gradientColors?: string[];
   gradientAngle?: number;
@@ -17,26 +18,21 @@ const ContactCard: React.FC<ContactCardProps> = ({
   name,
   description,
   icon,
+  iconImage,
   href,
-  gradientColors = ["#1d2025", "#292d33"], // Default fallback gradient
+  gradientColors = ["#1d2025", "#292d33"],
   gradientAngle = 45,
 }) => {
-  const backgroundStyle = {
-    background: `linear-gradient(${gradientAngle}deg, ${gradientColors.join(', ')})`,
-  };
-
   return (
     <Box
       sx={{
         position: "relative",
         overflow: "hidden",
-        borderRadius: 4,
         width: "100%",
         maxWidth: "100%",
-        backgroundColor: "rgb(29, 32, 37)",
         height: {
-          xs: "auto", // Adjust height for better responsiveness
-          sm: "576px",
+          xs: "auto",
+          sm: "300px", // Reduced from 576px
         },
         display: "flex",
         flexDirection: "column",
@@ -47,41 +43,61 @@ const ContactCard: React.FC<ContactCardProps> = ({
         sx={{
           position: "relative",
           width: "100%",
-          height: "50%",
-          ...backgroundStyle,
+          height: "80px", // Reduced from 96px
+          background: `linear-gradient(${gradientAngle}deg, ${gradientColors.join(', ')})`,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          borderTopLeftRadius: 16,
+          borderTopRightRadius: 16,
         }}
       >
         {/* Icon Section */}
         <Box
           sx={{
-            width: 80,
-            height: 80,
+            position: "absolute",
+            top: "50%",
+            left: 16,
+            width: 56,  // Slightly reduced from 64
+            height: 56, // Slightly reduced from 64
             borderRadius: "50%",
-            backgroundColor: "rgb(220, 222, 231)",
+            transform: "translateY(-50%)",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            overflow: "hidden",
           }}
         >
-          <Image src={icon} alt={name} width={80} height={80} />
+          {icon ? (
+            icon
+          ) : iconImage ? (
+            <Image
+              src={iconImage}
+              alt={name}
+              width={48}
+              height={48}
+            />
+          ) : (
+            <Typography sx={{ color: "rgb(150, 150, 150)" }}>No Icon</Typography>
+          )}
         </Box>
       </Box>
 
       {/* Content Container */}
       <Box
         sx={{
-          padding: 3,
-          height: "50%",
+          padding: 2.5, // Reduced from 3
+          flex: 1,
           display: "flex",
           flexDirection: "column",
-          gap: 2,
+          gap: 1.5, // Reduced from 2
+          backgroundColor: "rgb(29, 32, 37)",
+          borderBottomLeftRadius: 16,
+          borderBottomRightRadius: 16,
         }}
       >
         <Typography
-          variant="h5"
+          variant="h6" // Changed from h5 to h6
           sx={{
             color: "white",
             fontWeight: 550,
@@ -89,12 +105,23 @@ const ContactCard: React.FC<ContactCardProps> = ({
         >
           {name.toUpperCase()}
         </Typography>
-        <Typography sx={{ color: "white", flex: 1 }}>{description}</Typography>
+        <Typography 
+          sx={{ 
+            color: "white", 
+            flex: 1,
+            overflow: "auto",
+            fontSize: "0.9rem", // Slightly smaller font
+            marginBottom: 1
+          }}
+        >
+          {description}
+        </Typography>
         <Button
           variant="contained"
+          size="small" // Changed from default to small
           sx={{
-            fontSize: "1rem",
-            padding: "10px 20px",
+            fontSize: "0.9rem",
+            padding: "8px 16px", // Reduced padding
             borderRadius: 3,
             backgroundColor: "rgb(12, 13, 15)",
             color: "rgb(227, 238, 255)",
@@ -102,7 +129,7 @@ const ContactCard: React.FC<ContactCardProps> = ({
               backgroundColor: "rgb(31, 33, 38)",
               color: "rgb(162, 169, 180)",
             },
-            alignSelf: "start", // Proper alignment for the button
+            alignSelf: "start",
           }}
           href={href}
         >
