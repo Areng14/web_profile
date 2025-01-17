@@ -17,10 +17,6 @@ export const generateMetadata = async (): Promise<Metadata> => {
   };
 };
 
-interface ProjectsPageProps {
-  searchParams: Promise<{ search?: string }>;
-}
-
 export default function About() {
   return (
     <Box>
@@ -86,7 +82,7 @@ export default function About() {
                     <br/>
                     My second program was a <Link href="https://github.com/Areng14/Fizzler-Recolor/" color="primary" underline="hover"> Fizzler Recolorer </Link> 
                     for the game Portal 2. It was a program that can recolor
-                    the fizzler in the game. It works by changing the vmt (Valve Material)'s color value to the selected color.
+                    the fizzler in the game. It works by changing the vmt (Valve Material)s color value to the selected color.
                     It didnt have a GUI so you had to use the command line to use it.
                     <br/>
                     <br/>

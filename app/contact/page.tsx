@@ -1,6 +1,6 @@
 // app/projects/page.tsx
 import { Metadata } from 'next';
-import { Box, Container, Grid2, Link, Typography } from "@mui/material";
+import { Box, Container, Grid2, Typography } from "@mui/material";
 import ImageSlider from "../components/ImageSlider";
 
 const images: string[] = [
@@ -16,10 +16,6 @@ export const generateMetadata = async (): Promise<Metadata> => {
     description: 'About me',
   };
 };
-
-interface ProjectsPageProps {
-  searchParams: Promise<{ search?: string }>;
-}
 
 export default function About() {
   return (
