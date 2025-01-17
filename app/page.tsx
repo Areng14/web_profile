@@ -1,6 +1,7 @@
 import { Box, Container, Grid2, Typography } from "@mui/material";
 import ImageSlider from "./components/ImageSlider";
 import SkillCard from "./components/SkillCard";
+import { Email } from "@mui/icons-material";
 
 export default function Home() {
 

@@ -41,7 +41,6 @@ export default function ProjectSearch({
     const searchLower = term.toLowerCase();
     const filtered = temp_projects.filter(project => 
       project.name.toLowerCase().includes(searchLower) ||
-      project.description.toLowerCase().includes(searchLower) ||
       project.technologies.some(tech => 
         tech.toLowerCase().includes(searchLower)
       )
@@ -61,7 +60,7 @@ export default function ProjectSearch({
         <TextField
           fullWidth
           type="text"
-          placeholder="Search projects by name, description, or technology..."
+          placeholder= "Search projects by name or technology..."
           value={searchTerm}
           onChange={handleSearch}
           sx={{

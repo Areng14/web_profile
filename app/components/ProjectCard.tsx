@@ -51,6 +51,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         }
     }
 
+    const searchTech = (tech: string) => {
+        if (technologies.includes(tech)) {
+            window.location.href = `/projects?search=${tech}`;
+        } else {
+            console.error(`Tech ${tech} not found in project ${name}`);
+        }
+    }
+
     const backgroundStyle = gradientColors ? {
         background: `linear-gradient(${gradientAngle}deg, ${gradientColors.join(', ')})`
     } : {};
@@ -110,9 +118,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                             techLogos[tech] && (
                                 <Tooltip 
                                     key={index}
-                                    title={tech}
+                                    title={`Search for ${tech.toLowerCase()}`}
                                     placement="top"
                                     arrow
+                                    onClick={() => searchTech(tech)}
                                 >
                                     <Box
                                         sx={{
