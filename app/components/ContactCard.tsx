@@ -29,13 +29,11 @@ const ContactCard: React.FC<ContactCardProps> = ({
         position: "relative",
         overflow: "hidden",
         width: "100%",
-        maxWidth: "100%",
-        height: {
-          xs: "auto",
-          sm: "300px", // Reduced from 576px
-        },
+        height: "382px", // Fixed height for all breakpoints
         display: "flex",
         flexDirection: "column",
+        backgroundColor: "rgb(29, 32, 37)",
+        borderRadius: 4,
       }}
     >
       {/* Image/Gradient Container */}
@@ -43,13 +41,14 @@ const ContactCard: React.FC<ContactCardProps> = ({
         sx={{
           position: "relative",
           width: "100%",
-          height: "80px", // Reduced from 96px
+          height: "96px",
           background: `linear-gradient(${gradientAngle}deg, ${gradientColors.join(', ')})`,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          borderTopLeftRadius: 16,
-          borderTopRightRadius: 16,
+          borderTopLeftRadius: 'inherit',
+          borderTopRightRadius: 'inherit',
+          flexShrink: 0,
         }}
       >
         {/* Icon Section */}
@@ -58,8 +57,8 @@ const ContactCard: React.FC<ContactCardProps> = ({
             position: "absolute",
             top: "50%",
             left: 16,
-            width: 56,  // Slightly reduced from 64
-            height: 56, // Slightly reduced from 64
+            width: 56,
+            height: 56,
             borderRadius: "50%",
             transform: "translateY(-50%)",
             display: "flex",
@@ -76,6 +75,7 @@ const ContactCard: React.FC<ContactCardProps> = ({
               alt={name}
               width={48}
               height={48}
+              style={{ objectFit: "contain" }}
             />
           ) : (
             <Typography sx={{ color: "rgb(150, 150, 150)" }}>No Icon</Typography>
@@ -86,21 +86,21 @@ const ContactCard: React.FC<ContactCardProps> = ({
       {/* Content Container */}
       <Box
         sx={{
-          padding: 2.5, // Reduced from 3
+          padding: 3,
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          gap: 1.5, // Reduced from 2
-          backgroundColor: "rgb(29, 32, 37)",
-          borderBottomLeftRadius: 16,
-          borderBottomRightRadius: 16,
+          backgroundColor: "inherit",
+          borderBottomLeftRadius: 'inherit',
+          borderBottomRightRadius: 'inherit',
         }}
       >
         <Typography
-          variant="h6" // Changed from h5 to h6
+          variant="h6"
           sx={{
             color: "white",
             fontWeight: 550,
+            mb: 2,
           }}
         >
           {name.toUpperCase()}
@@ -109,22 +109,26 @@ const ContactCard: React.FC<ContactCardProps> = ({
           sx={{ 
             color: "white", 
             flex: 1,
-            overflow: "auto",
-            fontSize: "0.9rem", // Slightly smaller font
-            marginBottom: 1
+            fontSize: "0.9rem",
+            overflow: "hidden",
+            display: '-webkit-box',
+            WebkitBoxOrient: 'vertical',
+            WebkitLineClamp: 4, // Limit to 4 lines
+            textOverflow: 'ellipsis',
           }}
         >
           {description}
         </Typography>
         <Button
           variant="contained"
-          size="small" // Changed from default to small
+          size="small"
           sx={{
             fontSize: "0.9rem",
-            padding: "8px 16px", // Reduced padding
+            padding: "8px 16px",
             borderRadius: 3,
             backgroundColor: "rgb(12, 13, 15)",
             color: "rgb(227, 238, 255)",
+            marginTop: 2,
             "&:hover": {
               backgroundColor: "rgb(31, 33, 38)",
               color: "rgb(162, 169, 180)",
