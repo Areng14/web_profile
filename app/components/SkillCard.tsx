@@ -78,7 +78,7 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, ang
                         color: "rgb(227, 238, 255)",
                         zIndex: 1
                     }}
-                    href={endpoint}
+                    href={`/projects?search=${skill}`}
                 >
                     Find Projects
                 </Button>
