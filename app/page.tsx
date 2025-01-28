@@ -1,9 +1,21 @@
+"use client"
 import { Box, Container, Grid2, Typography } from "@mui/material";
 import ImageSlider from "./components/ImageSlider";
 import SkillCard from "./components/SkillCard";
 import getSkills from "./getSkills";
+import { SKILL_ENDPOINT } from "./api/api_service";
+import React, { useEffect } from "react";
 
 export default function Home() {
+
+  useEffect(() => {
+    fetchSkills();
+  }, []);
+
+  const fetchSkills = async () => {
+    const response = await fetch(SKILL_ENDPOINT.getAllSkills);
+    const data = await response.json();
+  }
 
   const images = [
     "/misc/mainslide/img1.png",
