@@ -10,10 +10,9 @@ interface SkillCardProps {
     iconangle?: number;
     colors: string[];
     angle?: string;
-    endpoint?: string;
 }
 
-const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, angle = "45deg", iconangle=0, endpoint}) => {
+const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, angle = "45deg", iconangle=0}) => {
 
     return (
         <Box
