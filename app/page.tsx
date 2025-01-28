@@ -78,7 +78,6 @@ export default function Home() {
                     colors={skill["colors"]}
                     angle={skill["angle"]}
                     icon={skill["icon"]}
-                    endpoint={`/projects?search=${skill["skill"]}`}
                     />   
                 </Grid2>   
                 ))}
@@ -96,7 +95,6 @@ export default function Home() {
                     colors={skill["colors"]}
                     angle={skill["angle"]}
                     icon={skill["icon"]}     
-                    endpoint={`/projects?search=${skill["skill"]}`}            
                     />   
                 </Grid2>   
                 ))}
@@ -114,7 +112,6 @@ export default function Home() {
                     colors={skill["colors"]}
                     angle={skill["angle"]}
                     icon={skill["icon"]}   
-                    endpoint={`/projects?search=${skill["skill"]}`}              
                     />   
                 </Grid2>   
                 ))}
