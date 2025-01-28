@@ -77,7 +77,8 @@ export default function Home() {
                     skill={skill["skill"]}
                     colors={skill["colors"]}
                     angle={skill["angle"]}
-                    icon={skill["icon"]}                 
+                    icon={skill["icon"]}
+                    endpoint={`/projects?search=${skill["skill"]}`}
                     />   
                 </Grid2>   
                 ))}
