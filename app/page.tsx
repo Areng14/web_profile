@@ -8,7 +8,7 @@ import React, { useEffect, useState } from "react";
 import { Skill } from "./types/skill";
 
 export default function Home() {
-  const [languagesSkill, setLanguagesSkill] = useState<Skill[]>([]);
+  const [skills, setSkills] = useState<Skill[]>([]);
 
   useEffect(() => {
     fetchSkills();
@@ -19,7 +19,7 @@ export default function Home() {
     const data: Skill[] = await response.json();
 
     if (response.ok) {
-      setLanguagesSkill(data.filter((skill) => skill.skillType === "Language"));
+      setSkills(data);
     }
   };
 
@@ -105,7 +105,7 @@ export default function Home() {
             Languages
           </Typography>
           <Grid2 container spacing={4} sx={{ paddingTop: 4 }}>
-            {languagesSkill.map((skill) => (
+            {skills.filter((skill) => skill.skillType === "Language").map((skill) => (
               <Grid2 key={skill.id} size={{ xs: 12, md: 6, lg: 4 }}>
                 <SkillCard
                   skill={skill.skillName}
@@ -115,16 +115,6 @@ export default function Home() {
                 />
               </Grid2>
             ))}
-            {/* {getSkills()["Languages"].map((skill) => (
-                <Grid2 key={crypto.randomUUID()} size={{ xs: 12, md: 6 , lg: 4}}>
-                  <SkillCard
-                    skill={skill["skill"]}
-                    colors={skill["colors"]}
-                    angle={skill["angle"]}
-                    icon={skill["icon"]}
-                    />   
-                </Grid2>   
-                ))} */}
           </Grid2>
 
           {/* Frameworks */}
@@ -139,13 +129,13 @@ export default function Home() {
             Frameworks
           </Typography>
           <Grid2 container spacing={4} sx={{ paddingTop: 4 }}>
-            {getSkills()["Frameworks"].map((skill) => (
-              <Grid2 key={crypto.randomUUID()} size={{ xs: 12, md: 6, lg: 4 }}>
+            {skills.filter((skill) => skill.skillType === "Frameworks").map((skill) => (
+              <Grid2 key={skill.id} size={{ xs: 12, md: 6, lg: 4 }}>
                 <SkillCard
-                  skill={skill["skill"]}
-                  colors={skill["colors"]}
-                  angle={skill["angle"]}
-                  icon={skill["icon"]}
+                  skill={skill.skillName}
+                  colors={skill.gradientColor}
+                  angle={`${skill.gradientAngle}deg`}
+                  icon={skill.icon}
                 />
               </Grid2>
             ))}
@@ -163,13 +153,13 @@ export default function Home() {
             Design Tools
           </Typography>
           <Grid2 container spacing={4} sx={{ paddingTop: 4 }}>
-            {getSkills()["DesignTools"].map((skill) => (
-              <Grid2 key={crypto.randomUUID()} size={{ xs: 12, md: 6, lg: 4 }}>
+            {skills.filter((skill) => skill.skillType === "DesignTools").map((skill) => (
+              <Grid2 key={skill.id} size={{ xs: 12, md: 6, lg: 4 }}>
                 <SkillCard
-                  skill={skill["skill"]}
-                  colors={skill["colors"]}
-                  angle={skill["angle"]}
-                  icon={skill["icon"]}
+                  skill={skill.skillName}
+                  colors={skill.gradientColor}
+                  angle={`${skill.gradientAngle}deg`}
+                  icon={skill.icon}
                 />
               </Grid2>
             ))}
