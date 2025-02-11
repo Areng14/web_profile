@@ -4,9 +4,11 @@ import ImageSlider from "./components/ImageSlider";
 import SkillCard from "./components/SkillCard";
 import getSkills from "./getSkills";
 import { SKILL_ENDPOINT } from "./api/api_service";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { ISkill } from "./types/skillsType";
 
 export default function Home() {
+  const [skill, setSkills] = useState<ISkill[]>([]);
 
   useEffect(() => {
     fetchSkills();
@@ -15,6 +17,7 @@ export default function Home() {
   const fetchSkills = async () => {
     const response = await fetch(SKILL_ENDPOINT.getAllSkills);
     const data = await response.json();
+    setSkills(data);
   }
 
   const images = [
