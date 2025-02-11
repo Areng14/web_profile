@@ -2,14 +2,12 @@
 import { Box, Container, Grid2, Typography } from "@mui/material";
 import ImageSlider from "./components/ImageSlider";
 import SkillCard from "./components/SkillCard";
-import getSkills from "./getSkills";
 import { SKILL_ENDPOINT } from "./api/api_service";
-import React, { useEffect, useState } from "react";
-import { ISkill } from "./types/skillsType";
 import React, { useEffect, useState } from "react";
 import { Skill } from "./types/skill";
 
 export default function Home() {
+  const [skills, setSkills] = useState<Skill[]>([]);
 
   useEffect(() => {
     fetchSkills();
@@ -106,16 +104,18 @@ export default function Home() {
             Languages
           </Typography>
           <Grid2 container spacing={4} sx={{ paddingTop: 4 }}>
-            {skills.filter((skill) => skill.skillType === "Language").map((skill) => (
-              <Grid2 key={skill.id} size={{ xs: 12, md: 6, lg: 4 }}>
-                <SkillCard
-                  skill={skill.skillName}
-                  colors={skill.gradientColor}
-                  angle={`${skill.gradientAngle}deg`}
-                  icon={skill.icon}
-                />
-              </Grid2>
-            ))}
+            {skills
+              .filter((skill) => skill.skillType === "Language")
+              .map((skill) => (
+                <Grid2 key={skill.id} size={{ xs: 12, md: 6, lg: 4 }}>
+                  <SkillCard
+                    skill={skill.skillName}
+                    colors={skill.gradientColor}
+                    angle={`${skill.gradientAngle}deg`}
+                    icon={skill.icon}
+                  />
+                </Grid2>
+              ))}
           </Grid2>
 
           {/* Frameworks */}
@@ -130,16 +130,18 @@ export default function Home() {
             Frameworks
           </Typography>
           <Grid2 container spacing={4} sx={{ paddingTop: 4 }}>
-            {skills.filter((skill) => skill.skillType === "Frameworks").map((skill) => (
-              <Grid2 key={skill.id} size={{ xs: 12, md: 6, lg: 4 }}>
-                <SkillCard
-                  skill={skill.skillName}
-                  colors={skill.gradientColor}
-                  angle={`${skill.gradientAngle}deg`}
-                  icon={skill.icon}
-                />
-              </Grid2>
-            ))}
+            {skills
+              .filter((skill) => skill.skillType === "Frameworks")
+              .map((skill) => (
+                <Grid2 key={skill.id} size={{ xs: 12, md: 6, lg: 4 }}>
+                  <SkillCard
+                    skill={skill.skillName}
+                    colors={skill.gradientColor}
+                    angle={`${skill.gradientAngle}deg`}
+                    icon={skill.icon}
+                  />
+                </Grid2>
+              ))}
           </Grid2>
 
           {/* Design */}
@@ -154,16 +156,18 @@ export default function Home() {
             Design Tools
           </Typography>
           <Grid2 container spacing={4} sx={{ paddingTop: 4 }}>
-            {skills.filter((skill) => skill.skillType === "DesignTools").map((skill) => (
-              <Grid2 key={skill.id} size={{ xs: 12, md: 6, lg: 4 }}>
-                <SkillCard
-                  skill={skill.skillName}
-                  colors={skill.gradientColor}
-                  angle={`${skill.gradientAngle}deg`}
-                  icon={skill.icon}
-                />
-              </Grid2>
-            ))}
+            {skills
+              .filter((skill) => skill.skillType === "DesignTools")
+              .map((skill) => (
+                <Grid2 key={skill.id} size={{ xs: 12, md: 6, lg: 4 }}>
+                  <SkillCard
+                    skill={skill.skillName}
+                    colors={skill.gradientColor}
+                    angle={`${skill.gradientAngle}deg`}
+                    icon={skill.icon}
+                  />
+                </Grid2>
+              ))}
           </Grid2>
         </Container>
       </Box>
