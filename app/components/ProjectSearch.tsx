@@ -8,8 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import { useState, useEffect, useRef } from "react";
 import { getProjects, type Project } from '../projects/getProjects';
 import ProjectCard from "../components/ProjectCard";
-
-const temp_projects = getProjects();
+import { SKILL_ENDPOINT } from "../api/api_service";
 
 interface ProjectSearchProps {
   initialProjects: Project[];
@@ -22,6 +21,7 @@ export default function ProjectSearch({
 }: ProjectSearchProps): JSX.Element {
   const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState<string>(initialSearch);
+  const [projectList, setProjectList] = useState<Project[]>([]);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>(initialProjects);
   const searchBoxRef = useRef<HTMLDivElement>(null);
 
@@ -34,12 +34,12 @@ export default function ProjectSearch({
 
   const filterProjects = (term: string): void => {
     if (!term) {
-      setFilteredProjects(temp_projects);
+      setFilteredProjects(projectList);
       return;
     }
 
     const searchLower = term.toLowerCase();
-    const filtered = temp_projects.filter(project => 
+    const filtered = projectList.filter(project => 
       project.name.toLowerCase().includes(searchLower) ||
       project.technologies.some(tech => 
         tech.toLowerCase().includes(searchLower)
@@ -48,10 +48,29 @@ export default function ProjectSearch({
     setFilteredProjects(filtered);
   };
 
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const value = event.target.value;
     setSearchTerm(value);
     filterProjects(value);
+  };
+
+  const fetchProjects = async () => {
+    const response = await fetch(SKILL_ENDPOINT.getAllProjects);
+    const data: Project[] = await response.json();
+  
+    const ProjectsData = data.map((item:any) => ({
+      id: item._id,
+      ...item
+    }));
+  
+    if (response.ok) {
+      setProjectList(ProjectsData);
+      setFilteredProjects(ProjectsData);
+    }
   };
 
   return (

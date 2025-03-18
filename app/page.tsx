@@ -17,8 +17,13 @@ export default function Home() {
     const response = await fetch(SKILL_ENDPOINT.getAllSkills);
     const data: Skill[] = await response.json();
 
+    const skillsData = data.map((item:any) => ({
+      id: item._id,
+      ...item
+    }))
+
     if (response.ok) {
-      setSkills(data);
+      setSkills(skillsData);
     }
   };
 
