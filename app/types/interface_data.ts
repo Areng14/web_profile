@@ -13,7 +13,7 @@ export interface IUser {
   id: string;
   email: string;
   name: string;
-  role: "admin" | "user";
+  role?: "admin" | "user";
 }
 
 export interface LoginCredentialsType {
@@ -36,4 +36,14 @@ export interface Skill {
   gradientAngle: number;
   icon: string;
   skillType: string;
+}
+
+export interface ApiResponse<T=any> {
+  success: boolean,
+  message?: string,
+  data?: T
+  errors?: Array<{
+    field: string,
+    message: string
+  }>
 }

@@ -1,8 +1,8 @@
 'use client'
 
 import React, { createContext, ReactNode, useContext, useEffect } from "react";
-import { AuthContextType } from "../types/authContextType";
-import { LoginCredentialsType } from "../types/LoginCredentialsType";
+import { AuthContextType, LoginCredentialsType, IUser } from "../types/interface_data";
+import { AuthService } from "../api/auth_service";
 
 interface AuthProviderProps {
     children: ReactNode;
@@ -18,6 +18,27 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
     const login = async (credentials: LoginCredentialsType): Promise<void> => {
         setIsLoading(true);
+
+        try {
+            const response = await AuthService.Login(credentials)
+            if (response.success && response.data) {
+                const { token, user: IUser } = response.data
+                localStorage.setItem("token", token)
+                localStorage.setItem("user", JSON.stringify(user))
+
+                setUser(user)
+
+                setIsLogin(true)
+            } else {
+                const errorMessage = response.message || "Login failed!"
+                throw new Error(errorMessage)
+            }
+        } catch (error) {
+            console.log(error)
+            throw error
+        } finally {
+            setIsLoading(false)
+        }
     }
 
     const logout = async (): Promise<void> => {
