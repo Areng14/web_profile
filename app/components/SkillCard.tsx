@@ -1,6 +1,5 @@
 'use client';
 
-import { Box, Button, Typography } from "@mui/material";
 import React from "react";
 import Image from 'next/image'
 
@@ -16,75 +15,41 @@ interface SkillCardProps {
 const SkillCard: React.FC<SkillCardProps> = ({ skill = "None", icon, colors, angle = "45deg", iconangle=0, endpoint}) => {
 
     return (
-        <Box
-        sx={{
-            position: "relative",
-            overflow: "hidden",
-            borderRadius: 4,
-          }}>
-            <Box
-                sx={{
-                    position: "absolute",
-                    bottom: "8px",
-                    right: "8px",
-                    width: "75%",
-                    height: "75%",
-                    transition: "transform 0.3s ease",
-                    transform: `rotate(${iconangle}deg)`,
-                    zIndex: 1
-                }}
+        <div className="relative overflow-hidden rounded-2xl">
+            <div
+                className="absolute bottom-2 right-2 h-3/4 w-3/4 transition-transform duration-300"
+                style={{ transform: `rotate(${iconangle}deg)` }}
             >
                 <Image
-                src={icon}
-                alt=""
-                width={500} // Replace 500 with your desired width
-                height={500} // Replace 500 with your desired height
-                style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "contain",
-                }}
-                />
-            </Box>
-            <Box sx={{
-                background: `linear-gradient(${angle}, ${colors.join(", ")})`,
-                padding: 5,
-                borderRadius: 4,
-                height: "576px",
-                position: "relative",
-                display: "flex",
-                flexDirection: "column"
-            }}>
-                <Typography variant="h2" sx={{
-                    color: "white",
-                    display: "block",
-                    fontWeight: 550,
-                }}>
-                    {skill.toUpperCase()}
-                </Typography>
-                <Button 
-                    variant="contained" 
-                    sx={{ 
-                        position: "absolute",
-                        bottom: "36px",
-                        fontSize: "1.25rem",
-                        padding: "12px 24px",
-                        borderRadius: 3,
-                        "&:hover": {
-                            backgroundColor: "rgb(31, 33, 38)",
-                            color: "rgb(162, 169, 180)",
-                        },
-                        backgroundColor: "rgb(12, 13, 15)",
-                        color: "rgb(227, 238, 255)",
-                        zIndex: 1
+                    src={icon}
+                    alt=""
+                    width={500}
+                    height={500}
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain",
                     }}
+                />
+            </div>
+            <div
+                className="relative flex h-[576px] flex-col rounded-2xl p-5"
+                style={{
+                    background: `linear-gradient(${angle}, ${colors.join(", ")})`,
+                }}
+            >
+                <h2 className="text-2xl font-semibold text-white">
+                    {skill.toUpperCase()}
+                </h2>
+                <a
                     href={endpoint}
+                    className="absolute bottom-9 inline-flex rounded-xl bg-[#0c0d0f] px-6 py-3 text-lg font-medium text-slate-100 hover:bg-[#1f2126] hover:text-slate-300"
                 >
                     Find Projects
-                </Button>
-            </Box>
-        </Box>
-    )
+                </a>
+            </div>
+        </div>
+    );
 }
 
 export default SkillCard;

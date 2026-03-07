@@ -1,10 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Box, IconButton } from "@mui/material";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 interface ImageSliderProps {
   imgs: string[];
@@ -73,139 +69,51 @@ export default function ImageSlider({ imgs, autoFadeInterval = 5000 }: ImageSlid
   return (
     <>
       {/* Background layers in negative z-index */}
-      <Box
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: "100vh",
-          overflow: "hidden",
-          zIndex: -2,
-        }}
-      >
-        {/* Current Image */}
-        <Box
-          component="div"
-          sx={{
-            width: "100vw",
-            height: "100vh",
-            backgroundImage: `url(${imgs[currentIndex]})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            transition: "opacity 0.3s ease-in-out",
-            opacity: fade ? 1 : 0,
-          }}
+      <div className="absolute inset-0 -z-10 h-screen w-screen overflow-hidden">
+        <div
+          className={`h-screen w-screen bg-cover bg-center transition-opacity duration-300 ${
+            fade ? "opacity-100" : "opacity-0"
+          }`}
+          style={{ backgroundImage: `url(${imgs[currentIndex]})` }}
         />
-        
-        {/* Overlay */}
-        <Box
-          component="div"
-          sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-          }}
-        />
-      </Box>
+        <div className="absolute inset-0 h-screen w-screen bg-black/50" />
+      </div>
 
       {/* Navigation Buttons in positive z-index */}
-      <Box
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          zIndex: 1,
-          pointerEvents: "none",
-        }}
-      >
-        <IconButton
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <button
+          type="button"
           onClick={handlePrev}
-          sx={{
-            position: "absolute",
-            left: "10px",
-            top: "50%",
-            transform: "translateY(-50%)",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            color: "white",
-            "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" },
-            pointerEvents: "auto",
-          }}
+          className="pointer-events-auto absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
+          aria-label="Previous slide"
         >
-          <ArrowBackIosNewIcon />
-        </IconButton>
-        <IconButton
+          ‹
+        </button>
+        <button
+          type="button"
           onClick={handleNext}
-          sx={{
-            position: "absolute",
-            right: "10px",
-            top: "50%",
-            transform: "translateY(-50%)",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            color: "white",
-            "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" },
-            pointerEvents: "auto",
-          }}
+          className="pointer-events-auto absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
+          aria-label="Next slide"
         >
-          <ArrowForwardIosIcon />
-        </IconButton>
-      </Box>
+          ›
+        </button>
+      </div>
 
       {/* Scroll Down Indicator */}
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: "20px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 1,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          animation: "bounce 2s infinite",
-          "@keyframes bounce": {
-            "0%, 20%, 50%, 80%, 100%": {
-              transform: "translateX(-50%) translateY(0)",
-            },
-            "40%": {
-              transform: "translateX(-50%) translateY(-20px)",
-            },
-            "60%": {
-              transform: "translateX(-50%) translateY(-10px)",
-            },
-          },
-          pointerEvents: "auto",
-          cursor: "pointer",
-        }}
-        onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+      <button
+        type="button"
+        className="absolute bottom-5 left-1/2 z-0 flex -translate-x-1/2 flex-col items-center animate-bounce cursor-pointer"
+        onClick={() =>
+          window.scrollTo({ top: window.innerHeight, behavior: "smooth" })
+        }
       >
-        <Box
-          sx={{
-            color: "white",
-            textAlign: "center",
-            marginBottom: "8px",
-            fontSize: "14px",
-            textTransform: "uppercase",
-            letterSpacing: "1px",
-          }}
-        >
+        <span className="mb-2 text-xs uppercase tracking-[0.2em] text-white">
           Scroll Down
-        </Box>
-        <IconButton
-          sx={{
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            color: "white",
-            "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" },
-          }}
-        >
-          <ExpandMoreIcon />
-        </IconButton>
-      </Box>
+        </span>
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70">
+          ↓
+        </span>
+      </button>
     </>
   );
 }
