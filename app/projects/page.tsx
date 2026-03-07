@@ -1,8 +1,7 @@
-// app/projects/page.tsx
 import { Metadata } from "next";
 import ImageSlider from "../components/ImageSlider";
 import ProjectSearch from "../components/ProjectSearch";
-import { getProjects } from "./getProjects";
+import { fetchProjectsForDisplay } from "../lib/data";
 
 const images: string[] = [
   "/misc/mainslide/img5.png",
@@ -24,8 +23,14 @@ interface ProjectsPageProps {
 
 export default async function Projects({ searchParams }: ProjectsPageProps) {
   const { search } = await searchParams;
-  const initialProjects = search
-    ? getProjects().filter((project) => {
+  let initialProjects: Awaited<ReturnType<typeof fetchProjectsForDisplay>> = [];
+  try {
+    initialProjects = await fetchProjectsForDisplay();
+  } catch {
+    // Fallback: empty list
+  }
+  const filtered = search
+    ? initialProjects.filter((project) => {
         const searchLower = search.toLowerCase();
         return (
           project.name.toLowerCase().includes(searchLower) ||
@@ -35,7 +40,7 @@ export default async function Projects({ searchParams }: ProjectsPageProps) {
           )
         );
       })
-    : getProjects();
+    : initialProjects;
 
   return (
     <div>
@@ -61,7 +66,7 @@ export default async function Projects({ searchParams }: ProjectsPageProps) {
           <h2 className="pb-4 text-4xl font-bold sm:text-6xl">Projects</h2>
 
           <ProjectSearch
-            initialProjects={initialProjects}
+            initialProjects={filtered}
             initialSearch={search || ""}
           />
         </div>

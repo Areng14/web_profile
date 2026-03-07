@@ -19,13 +19,18 @@ const pages = [
     name: "Contact",
     url: "/contact",
   },
+  {
+    id: 4,
+    name: "Admin",
+    url: "/admin",
+  },
 ];
 
 function ResponsiveAppBar() {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-800 bg-[#101214]/90 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[var(--background)]/95 backdrop-blur-md">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:px-6">
         <div className="flex items-center gap-3">
           <img
@@ -81,7 +86,7 @@ function ResponsiveAppBar() {
 
       {/* Mobile menu */}
       {isOpen && (
-        <div className="border-t border-slate-800 bg-[#101214] md:hidden">
+        <div className="border-t border-[var(--border)] bg-[var(--background)] md:hidden">
           <div className="space-y-1 px-4 py-3">
             {pages.map((page) => (
               <Link

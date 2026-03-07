@@ -29,7 +29,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-background text-foreground min-h-screen`}
       >
-        <div className="flex min-h-screen flex-col bg-[#101214] text-slate-50">
+        <div className="flex min-h-screen flex-col bg-[var(--background)] text-slate-50">
           <ResponsiveAppBar />
           <main className="flex-1">{children}</main>
         </div>
