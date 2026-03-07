@@ -32,10 +32,9 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero */}
+      {/* Hero - generous padding on slider content */}
       <section className="relative flex h-screen min-h-[500px] w-full flex-col justify-end">
         <ImageSlider imgs={images} />
-        {/* pointer-events-none so slider buttons receive clicks; restore on content */}
         <div className="relative z-10 mx-auto w-full max-w-[1600px] px-8 pb-40 pt-28 sm:px-12 sm:pb-44 sm:pt-32 lg:px-20 lg:pb-52 lg:pt-40 pointer-events-none">
           <div className="max-w-2xl pointer-events-auto">
             <p className="mb-3 text-sm font-medium uppercase tracking-widest text-amber-400/90 sm:text-base">
@@ -70,7 +69,7 @@ export default async function Home() {
 
       {/* Skills */}
       <section className="relative border-t border-slate-800/80 bg-slate-950/50 py-16 sm:py-20 lg:py-24">
-        <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[1600px] px-6 sm:px-8 lg:px-10">
           <div className="mb-12 text-center sm:mb-16">
             <h2 className="text-3xl font-bold text-white sm:text-4xl md:text-5xl">
               Skills & tools
