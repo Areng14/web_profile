@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import ResponsiveAppBar from "./components/ResponsiveNavbar";
 
 const geistSans = localFont({
@@ -27,13 +26,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <ResponsiveAppBar/>
-        <AppRouterCacheProvider>
-
-          {children}
-        </AppRouterCacheProvider>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} bg-background text-foreground min-h-screen`}
+      >
+        <div className="flex min-h-screen flex-col bg-[#101214] text-slate-50">
+          <ResponsiveAppBar />
+          <main className="flex-1">{children}</main>
+        </div>
       </body>
     </html>
   );
 }
+

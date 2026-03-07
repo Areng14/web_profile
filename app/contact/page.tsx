@@ -1,6 +1,5 @@
-// app/projects/page.tsx
-import { Metadata } from 'next';
-import { Box, Container, Grid2, Typography } from "@mui/material";
+// app/contact/page.tsx
+import { Metadata } from "next";
 import ImageSlider from "../components/ImageSlider";
 
 const images: string[] = [
@@ -12,63 +11,37 @@ const images: string[] = [
 
 export const generateMetadata = async (): Promise<Metadata> => {
   return {
-    title: 'About',
-    description: 'About me',
+    title: "Contact",
+    description: "How to contact me",
   };
 };
 
-export default function About() {
+export default function Contact() {
   return (
-    <Box>
-      <Box sx={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
+    <div>
+      <section className="relative flex min-h-screen items-center">
         <ImageSlider imgs={images} />
-        <Container 
-          maxWidth={false} 
-          sx={{ maxWidth: "1600px", minWidth: { xs: "500px", md: "1600px" } }}
-        >
-          <Grid2
-            container
-            spacing={6}
-            sx={{
-              py: { xs: 4, md: 8 },
-              alignItems: "center",
-              px: 4,
-            }}
-          >
-            {/* Text Content Section */}
-            <Box>
-              <Typography
-                variant="h2"
-                sx={{
-                  fontSize: { xs: "2rem", sm: "2.5rem", md: "5rem" },
-                  mb: 5,
-                  wordBreak: "break-word",
-                  fontWeight: 700,
-                }}
-              >
-                Contact
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: { xs: "1rem", md: "1.1rem" },
-                  maxWidth: { xs: "60%", md: "50%" },
-                }}
-              >
-                A list of ways you can contact me for whatever reason.
-                I am mainly active on Discord, and I check my email every now and then.
-                Choose whatever way is most convenient for you.
-              </Typography>
-            </Box>
-          </Grid2>
-        </Container>
-      </Box>
+        <div className="z-10 mx-auto flex w-full max-w-[1600px] px-4 py-8">
+          <div className="max-w-xl space-y-6">
+            <h1 className="break-words text-4xl font-bold md:text-5xl">
+              Contact
+            </h1>
+            <p className="max-w-[60%] text-sm text-slate-200 md:max-w-[50%] md:text-base">
+              A list of ways you can contact me for whatever reason. I am mainly
+              active on Discord, and I check my email every now and then. Choose
+              whatever way is most convenient for you.
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* Content */}
-      <Box sx={{ paddingTop: 16 }}>
-        <Container maxWidth={false} sx={{ maxWidth: "1600px", minWidth: { xs: "500px", md: "1600px" } }}>
-            
-        </Container>
-      </Box>
-    </Box>
+      <section className="pt-16">
+        <div className="mx-auto max-w-[1600px] px-4">
+          {/* You can add actual contact methods here later */}
+        </div>
+      </section>
+    </div>
   );
 }
+

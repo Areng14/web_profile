@@ -1,6 +1,5 @@
 'use client';
 
-import { Box, Button, Typography, Tooltip } from "@mui/material";
 import React from "react";
 import Image from 'next/image';
 
@@ -56,31 +55,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     } : {};
 
     return (
-        <Box
-            sx={{
-                position: "relative",
-                overflow: "hidden",
-                borderRadius: 4,
-                width: "100%", 
-                maxWidth: "100%",
-                backgroundColor: "rgb(29, 32, 37)",
-                height: {
-                    xs: "896px",
-                    sm: "576px"
-                },
-                display: "flex",
-                flexDirection: "column"
-            }}
+        <div
+            className="relative flex w-full max-w-full flex-col overflow-hidden rounded-2xl bg-slate-900"
+            style={{ height: "576px" }}
         >
             {/* Image/Gradient Container - Top 50% */}
-            <Box
-                sx={{
-                    position: "relative",
-                    width: "100%",
-                    height: "50%",
-                    overflow: "hidden",
-                    ...backgroundStyle
-                }}
+            <div
+                className="relative h-1/2 w-full overflow-hidden"
+                style={backgroundStyle}
             >
                 {!gradientColors && image && (
                     <Image
@@ -94,107 +76,51 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 )}
                 {/* Tags Container */}
                 {technologies.length > 0 && (
-                    <Box
-                        sx={{
-                            position: "absolute",
-                            bottom: 16,
-                            right: 16,
-                            display: "flex",
-                            gap: 2,
-                            flexWrap: "wrap",
-                            justifyContent: "flex-end",
-                            maxWidth: "70%"
-                        }}
+                    <div
+                        className="absolute bottom-4 right-4 flex max-w-[70%] flex-wrap justify-end gap-2"
                     >
                         {technologies.map((tech, index) => (
                             techLogos[tech] && (
-                                <Tooltip 
+                                <div
                                     key={index}
+                                    className="relative h-10 w-10 overflow-hidden rounded-full bg-slate-100 p-1.5 transition-transform duration-200 hover:scale-110"
                                     title={tech}
-                                    placement="top"
-                                    arrow
                                 >
-                                    <Box
-                                        sx={{
-                                            position: "relative",
-                                            width: 40,
-                                            height: 40,
-                                            borderRadius: "50%",
-                                            overflow: "hidden",
-                                            backgroundColor: "rgb(220, 222, 231)",
-                                            padding: "6px",
-                                            transition: "transform 0.2s ease-in-out",
-                                            "&:hover": {
-                                                transform: "scale(1.1)",
-                                                cursor: "pointer"
-                                            }
+                                    <Image
+                                        src={techLogos[tech]}
+                                        alt={tech}
+                                        fill
+                                        style={{
+                                            objectFit: "contain",
+                                            padding: "6px"
                                         }}
-                                    >
-                                        <Image
-                                            src={techLogos[tech]}
-                                            alt={tech}
-                                            fill
-                                            style={{
-                                                objectFit: "contain",
-                                                padding: "6px"
-                                            }}
-                                        />
-                                    </Box>
-                                </Tooltip>
+                                    />
+                                </div>
                             )
                         ))}
-                    </Box>
+                    </div>
                 )}
-            </Box>
+            </div>
             
             {/* Content Container - Bottom 75% */}
-            <Box
-                sx={{
-                    padding: 5,
-                    paddingTop: 2,
-                    height: "75%",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 2
-                }}
-            >
-                <Typography 
-                    variant="h2" 
-                    sx={{
-                        color: "white",
-                        paddingTop: 2,
-                        fontWeight: 550,
-                    }}
-                >
+            <div className="flex h-3/4 flex-col gap-2 px-5 pb-5 pt-2">
+                <h2 className="pt-2 text-2xl font-semibold text-white">
                     {name.toUpperCase()}
-                </Typography>
-                <Typography sx={{ color: "white" }}>
+                </h2>
+                <p className="text-slate-200">
                     {description}
-                </Typography>
+                </p>
                 {gitRepo && (
-                    <Button 
-                        variant="contained" 
-                        sx={{ 
-                            position: "absolute",
-                            bottom: "36px",
-                            fontSize: "1.25rem",
-                            padding: "12px 24px",
-                            borderRadius: 3,
-                            "&:hover": {
-                                backgroundColor: "rgb(31, 33, 38)",
-                                color: "rgb(162, 169, 180)",
-                            },
-                            backgroundColor: "rgb(12, 13, 15)",
-                            color: "rgb(227, 238, 255)",
-                            zIndex: 1
-                        }}
+                    <button
+                        type="button"
+                        className="absolute bottom-9 inline-flex rounded-xl bg-[#0c0d0f] px-6 py-3 text-lg font-medium text-slate-100 hover:bg-[#1f2126] hover:text-slate-300"
                         onClick={goToGitRepo}
                     >
                         View Repository
-                    </Button>
+                    </button>
                 )}
-            </Box>
-        </Box>
+            </div>
+        </div>
     );
 }
 

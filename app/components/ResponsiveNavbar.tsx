@@ -1,164 +1,104 @@
 "use client";
+
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Button from "@mui/material/Button";
-import MenuItem from "@mui/material/MenuItem";
 import Link from "next/link";
 
 const pages = [
   {
-    "id": 1,
-    "name": "About",
-    "url": "/about",
+    id: 1,
+    name: "About",
+    url: "/about",
   },
   {
-    "id": 2,
-    "name": "Projects",
-    "url": "/projects",
+    id: 2,
+    name: "Projects",
+    url: "/projects",
   },
   {
-    "id": 3,
-    "name": "Contact",
-    "url": "/contact",
+    id: 3,
+    name: "Contact",
+    url: "/contact",
   },
-]
+];
 
 function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
+  const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <AppBar position="fixed" sx={{ background: "rgb(16, 18, 20)" }}>
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Box
-            component="img"
-            src="icon.png"
+    <header className="sticky top-0 z-40 border-b border-slate-800 bg-[#101214]/90 backdrop-blur">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:px-6">
+        <div className="flex items-center gap-3">
+          <img
+            src="/icon.png"
             alt="App Logo"
-            sx={{
-              display: { xs: "none", md: "flex" },
-              height: "32px",
-              marginRight: 2,
-            }}
+            className="hidden h-8 w-8 md:inline-block"
           />
-          <Typography
-            variant="h6"
-            noWrap
-            component={Link}
-            href="./"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
+          <Link
+            href="/"
+            className="hidden text-lg tracking-[0.3em] text-slate-50 md:inline-block"
           >
             ARENG
-          </Typography>
+          </Link>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{ display: { xs: "block", md: "none" } }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page.id} onClick={() => {
-                  handleCloseNavMenu();
-                }}>
-                  <Link href={page.url}>
-                    <Typography sx={{ textAlign: "center" }}>{page.name}</Typography>
-                  </Link>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-
-          {/* Small screens */}
-          <Box
-            component="img"
-            src="icon.png"
+          <img
+            src="/icon.png"
             alt="App Logo"
-            sx={{
-              display: { xs: "flex", md: "none" },
-              height: "32px",
-              marginRight: 2,
-            }}
-          />          
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="./"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
+            className="inline-block h-8 w-8 md:hidden"
+          />
+          <Link
+            href="/"
+            className="inline-block text-lg tracking-[0.3em] text-slate-50 md:hidden"
           >
             ARENG
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          </Link>
+        </div>
+
+        {/* Desktop links */}
+        <div className="hidden items-center gap-4 md:flex">
+          {pages.map((page) => (
+            <Link
+              key={page.id}
+              href={page.url}
+              className="rounded-md px-3 py-2 text-sm font-medium text-slate-100 transition hover:bg-slate-800/80"
+            >
+              {page.name}
+            </Link>
+          ))}
+        </div>
+
+        {/* Mobile menu toggle */}
+        <button
+          type="button"
+          className="inline-flex items-center justify-center rounded-md p-2 text-slate-100 hover:bg-slate-800 md:hidden"
+          aria-label="Toggle navigation menu"
+          onClick={() => setIsOpen((prev) => !prev)}
+        >
+          <span className="block h-0.5 w-5 bg-current" />
+          <span className="mt-1 block h-0.5 w-5 bg-current" />
+          <span className="mt-1 block h-0.5 w-5 bg-current" />
+        </button>
+      </nav>
+
+      {/* Mobile menu */}
+      {isOpen && (
+        <div className="border-t border-slate-800 bg-[#101214] md:hidden">
+          <div className="space-y-1 px-4 py-3">
             {pages.map((page) => (
-              <Button
+              <Link
                 key={page.id}
-                onClick={() => {
-                  handleCloseNavMenu();
-                }}
                 href={page.url}
-                sx={{ my: 2, color: "white", display: "block" }}
+                className="block rounded-md px-3 py-2 text-base font-medium text-slate-100 hover:bg-slate-800/80"
+                onClick={() => setIsOpen(false)}
               >
                 {page.name}
-              </Button>
+              </Link>
             ))}
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+          </div>
+        </div>
+      )}
+    </header>
   );
 }
+
 export default ResponsiveAppBar;
+
