@@ -3,8 +3,17 @@
 @tailwind utilities;
 
 :root {
-  --background: #0c0d0f;
-  --foreground: #ededed;
+  --background: #0a0b0c;
+  --foreground: #e2e8f0;
+  --accent: #f59e0b;
+  --accent-hover: #fbbf24;
+  --muted: #64748b;
+  --card-bg: #141619;
+  --border: #1e293b;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 html,

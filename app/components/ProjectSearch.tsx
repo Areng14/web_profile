@@ -2,10 +2,8 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect, useRef } from "react";
-import { getProjects, type Project } from '../projects/getProjects';
 import ProjectCard from "../components/ProjectCard";
-
-const temp_projects = getProjects();
+import type { Project } from "../lib/types";
 
 interface ProjectSearchProps {
   initialProjects: Project[];
@@ -22,6 +20,11 @@ export default function ProjectSearch({
   const searchBoxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setFilteredProjects(initialProjects);
+    setSearchTerm(initialSearch);
+  }, [initialProjects, initialSearch]);
+
+  useEffect(() => {
     // If there's a search query in the URL, scroll the search box into view
     if (searchParams.get('search')) {
       searchBoxRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -30,12 +33,12 @@ export default function ProjectSearch({
 
   const filterProjects = (term: string): void => {
     if (!term) {
-      setFilteredProjects(temp_projects);
+      setFilteredProjects(initialProjects);
       return;
     }
 
     const searchLower = term.toLowerCase();
-    const filtered = temp_projects.filter(project => 
+    const filtered = initialProjects.filter(project => 
       project.name.toLowerCase().includes(searchLower) ||
       project.description.toLowerCase().includes(searchLower) ||
       project.technologies.some(tech => 
