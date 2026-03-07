@@ -58,6 +58,7 @@ export default function ImageSlider({ imgs, autoFadeInterval = 5000 }: ImageSlid
     <>
       <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden>
         {publicPath && (
+          /* eslint-disable-next-line @next/next/no-img-element */
           <img
             src={publicPath}
             alt=""

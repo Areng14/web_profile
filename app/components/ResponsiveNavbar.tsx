@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const pages = [
   {
@@ -33,9 +34,11 @@ function ResponsiveAppBar() {
     <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[var(--background)]/95 backdrop-blur-md">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:px-6">
         <div className="flex items-center gap-3">
-          <img
+          <Image
             src="/icon.png"
             alt="App Logo"
+            width={32}
+            height={32}
             className="hidden h-8 w-8 md:inline-block"
           />
           <Link
@@ -45,9 +48,11 @@ function ResponsiveAppBar() {
             ARENG
           </Link>
 
-          <img
+          <Image
             src="/icon.png"
             alt="App Logo"
+            width={32}
+            height={32}
             className="inline-block h-8 w-8 md:hidden"
           />
           <Link

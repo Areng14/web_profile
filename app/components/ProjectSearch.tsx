@@ -13,7 +13,7 @@ interface ProjectSearchProps {
 export default function ProjectSearch({ 
   initialProjects,
   initialSearch 
-}: ProjectSearchProps): JSX.Element {
+}: ProjectSearchProps) {
   const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState<string>(initialSearch);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>(initialProjects);
