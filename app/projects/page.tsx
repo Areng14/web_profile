@@ -3,7 +3,6 @@ import { Suspense } from "react";
 import ImageSlider from "../components/ImageSlider";
 import ProjectSearch from "../components/ProjectSearch";
 import { fetchProjectsForDisplay } from "../lib/data";
-import Link from "next/link";
 
 const images: string[] = [
   "/misc/mainslide/img5.png",
