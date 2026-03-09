@@ -10,6 +10,13 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        accent: {
+          DEFAULT: "var(--accent)",
+          hover: "var(--accent-hover)",
+        },
+        muted: "var(--muted)",
+        "card-bg": "var(--card-bg)",
+        border: "var(--border)",
       },
     },
   },
