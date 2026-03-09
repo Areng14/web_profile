@@ -20,11 +20,6 @@ const pages = [
     name: "Contact",
     url: "/contact",
   },
-  {
-    id: 4,
-    name: "Admin",
-    url: "/admin",
-  },
 ];
 
 function ResponsiveAppBar() {
