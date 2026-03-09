@@ -50,7 +50,7 @@ export default async function Projects({ searchParams }: ProjectsPageProps) {
         <ImageSlider imgs={images} />
         <div className="relative z-10 mx-auto w-full max-w-[1600px] px-8 pb-40 pt-28 sm:px-12 sm:pb-44 sm:pt-32 lg:px-20 lg:pb-52 lg:pt-40 pointer-events-none">
           <div className="max-w-2xl pointer-events-auto">
-            <p className="mb-2 text-sm font-medium uppercase tracking-widest text-amber-400/90">
+            <p className="mb-2 text-sm font-medium uppercase tracking-widest text-accent/90">
               Portfolio
             </p>
             <h1 className="mb-3 text-4xl font-bold leading-tight text-white drop-shadow-lg sm:text-5xl md:text-6xl">

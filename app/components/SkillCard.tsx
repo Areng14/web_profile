@@ -70,7 +70,7 @@ const SkillCard: React.FC<SkillCardProps> = ({
 
   if (endpoint) {
     return (
-      <Link href={endpoint} className="block focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-[#0a0b0c] rounded-2xl">
+      <Link href={endpoint} className="block focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background rounded-2xl">
         {content}
       </Link>
     );

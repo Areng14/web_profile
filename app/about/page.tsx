@@ -24,7 +24,7 @@ export default function About() {
         <ImageSlider imgs={images} />
         <div className="relative z-10 mx-auto w-full max-w-[1600px] px-8 pb-40 pt-28 sm:px-12 sm:pb-44 sm:pt-32 lg:px-20 lg:pb-52 lg:pt-40 pointer-events-none">
           <div className="max-w-2xl pointer-events-auto">
-            <p className="mb-2 text-sm font-medium uppercase tracking-widest text-amber-400/90">
+            <p className="mb-2 text-sm font-medium uppercase tracking-widest text-accent/90">
               Get to know me
             </p>
             <h1 className="mb-3 text-4xl font-bold leading-tight text-white drop-shadow-lg sm:text-5xl md:text-6xl">
@@ -52,7 +52,7 @@ export default function About() {
                   language, which is why you see a lot of{" "}
                   <Link
                     href="/projects?search=Python"
-                    className="text-amber-400 underline-offset-2 hover:underline"
+                    className="text-accent underline-offset-2 hover:underline"
                   >
                     Python projects
                   </Link>{" "}
@@ -64,7 +64,7 @@ export default function About() {
                   My second program was a{" "}
                   <Link
                     href="https://github.com/Areng14/Fizzler-Recolor/"
-                    className="text-amber-400 underline-offset-2 hover:underline"
+                    className="text-accent underline-offset-2 hover:underline"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -82,7 +82,7 @@ export default function About() {
                   recent projects I have worked on was{" "}
                   <Link
                     href="https://github.com/Areng14/testrunner/"
-                    className="text-amber-400 underline-offset-2 hover:underline"
+                    className="text-accent underline-offset-2 hover:underline"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -97,7 +97,7 @@ export default function About() {
                   In conclusion, I am a software developer who makes programs in
                   my free time. I make programs that have a range of purposes,
                   from being useless to being kinda useful. Check out my{" "}
-                  <Link href="/projects" className="text-amber-400 underline-offset-2 hover:underline">
+                  <Link href="/projects" className="text-accent underline-offset-2 hover:underline">
                     projects page
                   </Link>{" "}
                   to see what I have made.
@@ -116,7 +116,7 @@ export default function About() {
                 are related to what I have done before or are similar to what I
                 have done before. Stuff like AI I will not work on as I have no
                 experience in that field. To contact me, go to the{" "}
-                <Link href="/contact" className="text-amber-400 underline-offset-2 hover:underline">
+                <Link href="/contact" className="text-accent underline-offset-2 hover:underline">
                   contact page
                 </Link>
                 .

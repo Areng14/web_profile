@@ -24,7 +24,7 @@ export default function Contact() {
         <ImageSlider imgs={images} />
         <div className="relative z-10 mx-auto w-full max-w-[1600px] px-8 pb-40 pt-28 sm:px-12 sm:pb-44 sm:pt-32 lg:px-20 lg:pb-52 lg:pt-40 pointer-events-none">
           <div className="max-w-2xl pointer-events-auto">
-            <p className="mb-2 text-sm font-medium uppercase tracking-widest text-amber-400/90">
+            <p className="mb-2 text-sm font-medium uppercase tracking-widest text-accent/90">
               Get in touch
             </p>
             <h1 className="mb-3 text-4xl font-bold leading-tight text-white drop-shadow-lg sm:text-5xl md:text-6xl">
@@ -67,11 +67,11 @@ export default function Contact() {
               </div>
               <p className="text-sm text-slate-500">
                 Prefer to browse first? Check out my{" "}
-                <Link href="/projects" className="text-amber-400 underline-offset-2 hover:underline">
+                <Link href="/projects" className="text-accent underline-offset-2 hover:underline">
                   projects
                 </Link>{" "}
                 or{" "}
-                <Link href="/about" className="text-amber-400 underline-offset-2 hover:underline">
+                <Link href="/about" className="text-accent underline-offset-2 hover:underline">
                   about
                 </Link>{" "}
                 page.

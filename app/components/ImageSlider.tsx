@@ -88,7 +88,7 @@ export default function ImageSlider({ imgs, autoFadeInterval = 5000 }: ImageSlid
               aria-label={`Go to slide ${i + 1}`}
               className={`h-2 rounded-full transition-all duration-300 ${
                 i === currentIndex
-                  ? "w-8 bg-amber-500"
+                  ? "w-8 bg-accent"
                   : "w-2 bg-white/40 hover:bg-white/60"
               }`}
             />

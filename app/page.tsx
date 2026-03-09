@@ -37,7 +37,7 @@ export default async function Home() {
         <ImageSlider imgs={images} />
         <div className="relative z-10 mx-auto w-full max-w-[1600px] px-8 pb-40 pt-28 sm:px-12 sm:pb-44 sm:pt-32 lg:px-20 lg:pb-52 lg:pt-40 pointer-events-none">
           <div className="max-w-2xl pointer-events-auto">
-            <p className="mb-3 text-sm font-medium uppercase tracking-widest text-amber-400/90 sm:text-base">
+            <p className="mb-3 text-sm font-medium uppercase tracking-widest text-accent/90 sm:text-base">
               Software Developer
             </p>
             <h1 className="mb-4 text-4xl font-bold leading-tight text-white drop-shadow-lg sm:text-5xl md:text-6xl lg:text-7xl">
@@ -52,7 +52,7 @@ export default async function Home() {
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/projects"
-                className="inline-flex items-center justify-center rounded-xl bg-amber-500 px-6 py-3 text-sm font-semibold text-black transition hover:bg-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-[#0a0b0c]"
+                className="inline-flex items-center justify-center rounded-xl bg-accent px-6 py-3 text-sm font-semibold text-white transition hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
               >
                 View Projects
               </Link>
