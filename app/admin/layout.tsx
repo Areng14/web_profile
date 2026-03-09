@@ -10,15 +10,14 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const isLogin = pathname === "/admin/login";
-  const isRegister = pathname === "/admin/register";
 
   useEffect(() => {
     if (!isReady) return;
-    if (!token && !isLogin && !isRegister) {
+    if (!token && !isLogin) {
       router.replace("/admin/login");
       return;
     }
-  }, [isReady, token, isLogin, isRegister, router]);
+  }, [isReady, token, isLogin, router]);
 
   const handleLogout = () => {
     logout();
@@ -33,7 +32,7 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (!token && (isLogin || isRegister)) {
+  if (!token && isLogin) {
     return <>{children}</>;
   }
 
