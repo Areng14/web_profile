@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { apiFetch } from "../../lib/api";
 import { useAuth } from "../../context/AuthContext";
 
@@ -33,8 +32,9 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="mx-auto max-w-md rounded-xl border border-slate-700 bg-[#0c0d0f] p-6">
-      <h1 className="mb-6 text-2xl font-bold">Admin Login</h1>
+    <div className="flex min-h-[80vh] items-center justify-center">
+    <div className="w-full max-w-md rounded-xl border border-slate-700 bg-[#0c0d0f] p-6">
+      <h1 className="mb-6 text-2xl font-bold">Login</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="mb-1 block text-sm text-slate-400">Email</label>
@@ -65,9 +65,7 @@ export default function AdminLoginPage() {
           {loading ? "Signing in..." : "Sign in"}
         </button>
       </form>
-      <p className="mt-4 text-center text-sm text-slate-400">
-        No account? <Link href="/admin/register" className="text-sky-400 hover:underline">Register</Link>
-      </p>
+    </div>
     </div>
   );
 }
