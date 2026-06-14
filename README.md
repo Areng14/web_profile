@@ -18,6 +18,28 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+## Content (serverless)
+
+This site is fully serverless — there is no separate backend to run. All
+projects and skills live in [`app/lib/content.ts`](app/lib/content.ts). Edit
+that file to add or change content; the public pages read from it directly.
+
+Skill icons can be a path under `/public` (e.g. `/misc/skills/python.svg`), an
+absolute URL, or a base64 data URI. To turn an SVG/image into a base64 data
+URI, POST it to the serverless route at `/api/upload`:
+
+```bash
+# multipart upload
+curl -F "file=@icon.svg" http://localhost:3000/api/upload
+
+# or JSON
+curl -H "Content-Type: application/json" \
+  -d '{"name":"icon.svg","data":"<base64>"}' \
+  http://localhost:3000/api/upload
+```
+
+The response includes a `dataUri` you can paste straight into `content.ts`.
+
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More
