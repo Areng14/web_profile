@@ -23,7 +23,7 @@ const SkillCard: React.FC<SkillCardProps> = ({
 }) => {
   const imageSrc = !icon
     ? null
-    : icon.startsWith("http")
+    : icon.startsWith("http") || icon.startsWith("data:")
       ? icon
       : icon.startsWith("/")
         ? icon
