@@ -26,14 +26,21 @@ that file to add or change content; the public pages read from it directly.
 
 Skill icons can be a path under `/public` (e.g. `/misc/skills/python.svg`), an
 absolute URL, or a base64 data URI. To turn an SVG/image into a base64 data
-URI, POST it to the serverless route at `/api/upload`:
+URI, POST it to the serverless route at `/api/upload`.
+
+The route is protected by a shared secret. Set `UPLOAD_SECRET` in your
+environment (e.g. an `.env.local` file locally, or project env vars on Vercel)
+and pass it as a `Bearer` token. If `UPLOAD_SECRET` is unset the route is
+disabled and returns `503`.
 
 ```bash
 # multipart upload
-curl -F "file=@icon.svg" http://localhost:3000/api/upload
+curl -H "Authorization: Bearer $UPLOAD_SECRET" \
+  -F "file=@icon.svg" http://localhost:3000/api/upload
 
 # or JSON
-curl -H "Content-Type: application/json" \
+curl -H "Authorization: Bearer $UPLOAD_SECRET" \
+  -H "Content-Type: application/json" \
   -d '{"name":"icon.svg","data":"<base64>"}' \
   http://localhost:3000/api/upload
 ```
