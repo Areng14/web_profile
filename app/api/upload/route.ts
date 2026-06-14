@@ -9,6 +9,12 @@ import { NextResponse } from "next/server";
 // Usage:
 //   multipart/form-data  ->  field "file" with the image
 //   application/json     ->  { "name": "icon.svg", "data": "<base64 or data URI>" }
+//
+// Protected by a shared secret. Set the UPLOAD_SECRET env var and pass it as
+// either an "Authorization: Bearer <secret>" or "x-upload-secret: <secret>"
+// header. If UPLOAD_SECRET is unset the route is disabled (fails closed).
+
+import { timingSafeEqual } from "node:crypto";
 
 export const runtime = "nodejs";
 
@@ -43,7 +49,34 @@ function jsonError(message: string, status: number) {
   return NextResponse.json({ error: message }, { status });
 }
 
+function safeEqual(a: string, b: string): boolean {
+  const bufA = Buffer.from(a);
+  const bufB = Buffer.from(b);
+  if (bufA.length !== bufB.length) return false;
+  return timingSafeEqual(bufA, bufB);
+}
+
+// Returns null when authorized, or an error response when not.
+function checkAuth(request: Request): NextResponse | null {
+  const secret = process.env.UPLOAD_SECRET;
+  if (!secret) {
+    return jsonError("Upload route is disabled (UPLOAD_SECRET is not set).", 503);
+  }
+  const header = request.headers.get("authorization") ?? "";
+  const bearer = header.toLowerCase().startsWith("bearer ")
+    ? header.slice(7)
+    : null;
+  const provided = bearer ?? request.headers.get("x-upload-secret") ?? "";
+  if (!provided || !safeEqual(provided, secret)) {
+    return jsonError("Unauthorized.", 401);
+  }
+  return null;
+}
+
 export async function POST(request: Request) {
+  const unauthorized = checkAuth(request);
+  if (unauthorized) return unauthorized;
+
   const contentType = request.headers.get("content-type") ?? "";
 
   try {
@@ -116,7 +149,7 @@ export async function POST(request: Request) {
 export function GET() {
   return NextResponse.json({
     message:
-      "POST an SVG/image (multipart field 'file', or JSON {name, data}) to receive a base64 data URI for use as a skill icon.",
+      "POST an SVG/image (multipart field 'file', or JSON {name, data}) to receive a base64 data URI for use as a skill icon. Requires an 'Authorization: Bearer <UPLOAD_SECRET>' (or 'x-upload-secret') header.",
     allowed: Array.from(ALLOWED_MIME),
     maxBytes: MAX_BYTES,
   });
