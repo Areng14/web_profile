@@ -1,6 +1,6 @@
 import ImageSlider from "./components/ImageSlider";
 import SkillCard from "./components/SkillCard";
-import { fetchPublicSkills } from "./lib/data";
+import { fetchProjects, fetchPublicSkills } from "./lib/data";
 import { SkillType } from "./lib/types";
 import Link from "next/link";
 
@@ -12,9 +12,15 @@ export default async function Home() {
     "/misc/mainslide/img4.png",
   ];
 
+  const projectCounts: Record<string, number> = {};
   let skillsByType: { type: SkillType; title: string; skills: Awaited<ReturnType<typeof fetchPublicSkills>> }[] = [];
   try {
-    const allSkills = await fetchPublicSkills();
+    const [allSkills, allProjects] = await Promise.all([fetchPublicSkills(), fetchProjects()]);
+    allProjects.forEach((p) =>
+      p.skillId.forEach((id) => {
+        projectCounts[id] = (projectCounts[id] ?? 0) + 1;
+      })
+    );
     const order = [SkillType.Lang, SkillType.Framework, SkillType.DesignTools];
     const titles: Record<SkillType, string> = {
       [SkillType.Lang]: "Languages",
@@ -68,7 +74,7 @@ export default async function Home() {
       </section>
 
       {/* Skills */}
-      <section className="relative border-t border-slate-800/80 bg-slate-950/50 py-16 sm:py-20 lg:py-24">
+      <section className="relative border-t border-white/[0.06] py-16 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-[1600px] px-6 sm:px-8 lg:px-10">
           <div className="mb-12 text-center sm:mb-16">
             <h2 className="text-3xl font-bold text-white sm:text-4xl md:text-5xl">
@@ -81,25 +87,27 @@ export default async function Home() {
 
           {skillsByType.map(({ type, title, skills }) => (
             <div key={type} className="mb-12 last:mb-0 lg:mb-16">
-              <h3 className="mb-6 text-xl font-semibold text-slate-300 sm:text-2xl">
-                {title}
-              </h3>
+              <div className="mb-5 flex items-center gap-4">
+                <h3 className="text-sm font-medium uppercase tracking-widest text-slate-400">
+                  {title}
+                </h3>
+                <span className="h-px flex-1 bg-white/[0.06]" aria-hidden />
+              </div>
               {skills.length > 0 ? (
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
                   {skills.map((s, index) => (
                     <SkillCard
                       key={s.id ?? index}
                       skill={s.skillName}
-                      colors={s.gradientColor ?? []}
-                      angle={`${s.gradientAngle ?? 45}deg`}
+                      color={s.color ?? s.gradientColor?.[0] ?? "#94a3b8"}
                       icon={s.icon}
-                      iconangle={45}
+                      projectCount={projectCounts[s.id] ?? 0}
                       endpoint={`/projects?search=${encodeURIComponent(s.skillName)}`}
                     />
                   ))}
                 </div>
               ) : (
-                <div className="flex min-h-[200px] items-center justify-center rounded-2xl border border-dashed border-slate-600/80 bg-slate-800/30 py-12">
+                <div className="flex min-h-[168px] items-center justify-center rounded-xl border border-dashed border-white/10 py-12">
                   <p className="text-slate-500">Coming soon</p>
                 </div>
               )}
