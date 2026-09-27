@@ -130,7 +130,7 @@ export default async function Home({ searchParams }: HomeProps) {
                 <span className="h-px flex-1 bg-white/[0.06]" aria-hidden />
               </div>
               {skills.length > 0 ? (
-                <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
                   {skills.map((s, index) => (
                     <SkillCard
                       key={s.id ?? index}
