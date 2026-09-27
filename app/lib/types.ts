@@ -7,6 +7,8 @@ export interface ApiProject {
   gradientAngle: number;
   gitRepo: string;
   skillId: string[];
+  // Marks a project that real people use; shown as an icon next to the name
+  hasUsers?: boolean;
 }
 
 // Matches API skill type
@@ -14,6 +16,7 @@ export enum SkillType {
   Lang = "Language",
   DesignTools = "DesignTool",
   Framework = "Framework",
+  Tools = "Tool",
 }
 
 export interface ApiSkill {
@@ -23,6 +26,10 @@ export interface ApiSkill {
   gradientAngle: number;
   icon: string;
   skillType: SkillType;
+  // Solid brand color used by the skill card; falls back to gradientColor[0].
+  color?: string;
+  // What I use this skill for, shown on the skill card
+  description?: string;
 }
 
 // Display shape used by frontend components
@@ -33,6 +40,7 @@ export interface Project {
   gradientColors: string[];
   gradientAngle: number;
   gitRepo?: string;
+  hasUsers?: boolean;
   technologies: string[];
 }
 
@@ -44,6 +52,7 @@ export function apiProjectToProject(api: ApiProject, skillIdToName: Record<strin
     gradientColors: api.gradientColor ?? [],
     gradientAngle: api.gradientAngle ?? 45,
     gitRepo: api.gitRepo || undefined,
+    hasUsers: api.hasUsers,
     technologies: (api.skillId ?? []).map((id) => skillIdToName[id] || id),
   };
 }

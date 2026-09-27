@@ -1,10 +1,16 @@
 import ImageSlider from "./components/ImageSlider";
+import ProjectSearch from "./components/ProjectSearch";
 import SkillCard from "./components/SkillCard";
-import { fetchPublicSkills } from "./lib/data";
+import { fetchProjects, fetchProjectsForDisplay, fetchPublicSkills } from "./lib/data";
 import { SkillType } from "./lib/types";
 import Link from "next/link";
 
-export default async function Home() {
+interface HomeProps {
+  searchParams: Promise<{ tech?: string; search?: string }>;
+}
+
+export default async function Home({ searchParams }: HomeProps) {
+  const { tech, search } = await searchParams;
   const images = [
     "/misc/mainslide/img1.png",
     "/misc/mainslide/img2.png",
@@ -12,13 +18,26 @@ export default async function Home() {
     "/misc/mainslide/img4.png",
   ];
 
+  const projectCounts: Record<string, number> = {};
+  let projects: Awaited<ReturnType<typeof fetchProjectsForDisplay>> = [];
   let skillsByType: { type: SkillType; title: string; skills: Awaited<ReturnType<typeof fetchPublicSkills>> }[] = [];
   try {
-    const allSkills = await fetchPublicSkills();
-    const order = [SkillType.Lang, SkillType.Framework, SkillType.DesignTools];
+    const [allSkills, allProjects, displayProjects] = await Promise.all([
+      fetchPublicSkills(),
+      fetchProjects(),
+      fetchProjectsForDisplay(),
+    ]);
+    projects = displayProjects;
+    allProjects.forEach((p) =>
+      p.skillId.forEach((id) => {
+        projectCounts[id] = (projectCounts[id] ?? 0) + 1;
+      })
+    );
+    const order = [SkillType.Lang, SkillType.Framework, SkillType.Tools, SkillType.DesignTools];
     const titles: Record<SkillType, string> = {
       [SkillType.Lang]: "Languages",
       [SkillType.Framework]: "Frameworks",
+      [SkillType.Tools]: "Tools",
       [SkillType.DesignTools]: "Design Tools",
     };
     skillsByType = order.map((type) => ({
@@ -51,7 +70,7 @@ export default async function Home() {
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
-                href="/projects"
+                href="#projects"
                 className="inline-flex items-center justify-center rounded-xl bg-accent px-6 py-3 text-sm font-semibold text-white transition hover:bg-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
               >
                 View Projects
@@ -67,8 +86,31 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Skills */}
-      <section className="relative border-t border-slate-800/80 bg-slate-950/50 py-16 sm:py-20 lg:py-24">
+      {/* Projects */}
+      <section id="projects" className="relative border-t border-white/[0.06] py-16 sm:py-20 lg:py-24">
+        <div className="mx-auto max-w-[1600px] px-6 sm:px-8 lg:px-10">
+          <div className="mb-12 text-center sm:mb-16">
+            <h2 className="text-3xl font-bold text-white sm:text-4xl md:text-5xl">
+              Projects
+            </h2>
+            <p className="mx-auto mt-3 max-w-xl text-slate-400">
+              Things I&apos;ve built. Filter by technology or search by name.
+            </p>
+          </div>
+
+          <ProjectSearch
+            projects={projects}
+            initialTech={tech ?? null}
+            initialSearch={search ?? ""}
+          />
+        </div>
+      </section>
+
+      {/* Skills. Named so it slides along when a project filter changes the grid height */}
+      <section
+        className="relative border-t border-white/[0.06] py-16 sm:py-20 lg:py-24"
+        style={{ viewTransitionName: "skills-section" }}
+      >
         <div className="mx-auto max-w-[1600px] px-6 sm:px-8 lg:px-10">
           <div className="mb-12 text-center sm:mb-16">
             <h2 className="text-3xl font-bold text-white sm:text-4xl md:text-5xl">
@@ -81,42 +123,34 @@ export default async function Home() {
 
           {skillsByType.map(({ type, title, skills }) => (
             <div key={type} className="mb-12 last:mb-0 lg:mb-16">
-              <h3 className="mb-6 text-xl font-semibold text-slate-300 sm:text-2xl">
-                {title}
-              </h3>
+              <div className="mb-5 flex items-center gap-4">
+                <h3 className="text-sm font-medium uppercase tracking-widest text-slate-400">
+                  {title}
+                </h3>
+                <span className="h-px flex-1 bg-white/[0.06]" aria-hidden />
+              </div>
               {skills.length > 0 ? (
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
                   {skills.map((s, index) => (
                     <SkillCard
                       key={s.id ?? index}
                       skill={s.skillName}
-                      colors={s.gradientColor ?? []}
-                      angle={`${s.gradientAngle ?? 45}deg`}
+                      color={s.color ?? s.gradientColor?.[0] ?? "#94a3b8"}
+                      description={s.description}
                       icon={s.icon}
-                      iconangle={45}
-                      endpoint={`/projects?search=${encodeURIComponent(s.skillName)}`}
+                      projectCount={projectCounts[s.id] ?? 0}
+                      techId={projectCounts[s.id] ? s.id : undefined}
                     />
                   ))}
                 </div>
               ) : (
-                <div className="flex min-h-[200px] items-center justify-center rounded-2xl border border-dashed border-slate-600/80 bg-slate-800/30 py-12">
+                <div className="flex min-h-[168px] items-center justify-center rounded-xl border border-dashed border-white/10 py-12">
                   <p className="text-slate-500">Coming soon</p>
                 </div>
               )}
             </div>
           ))}
 
-          <div className="mt-12 text-center">
-            <Link
-              href="/projects"
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-600 bg-slate-800/50 px-5 py-2.5 text-sm font-medium text-slate-200 transition hover:border-slate-500 hover:bg-slate-800/80"
-            >
-              See all projects
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
-          </div>
         </div>
       </section>
     </div>

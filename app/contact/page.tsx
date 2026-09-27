@@ -67,7 +67,7 @@ export default function Contact() {
               </div>
               <p className="text-sm text-slate-500">
                 Prefer to browse first? Check out my{" "}
-                <Link href="/projects" className="text-accent underline-offset-2 hover:underline">
+                <Link href="/#projects" className="text-accent underline-offset-2 hover:underline">
                   projects
                 </Link>{" "}
                 or{" "}

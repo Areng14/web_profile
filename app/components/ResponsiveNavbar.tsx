@@ -13,7 +13,7 @@ const pages = [
   {
     id: 2,
     name: "Projects",
-    url: "/projects",
+    url: "/#projects",
   },
   {
     id: 3,
