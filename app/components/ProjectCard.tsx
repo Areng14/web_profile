@@ -12,6 +12,12 @@ skills.forEach((s) => {
     };
 });
 
+// gitRepo can be a full URL, "owner/repo", or just a repo name under my account
+const repoUrl = (gitRepo: string) =>
+    gitRepo.startsWith("http")
+        ? gitRepo
+        : `https://github.com/${gitRepo.includes("/") ? gitRepo : `areng14/${gitRepo}`}`;
+
 interface ProjectCardProps {
     id: string;
     name: string;
@@ -97,7 +103,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     <>
                         {/* Stretched link: its ::after covers the whole card */}
                         <a
-                            href={`https://github.com/areng14/${gitRepo}`}
+                            href={repoUrl(gitRepo)}
                             className="font-medium text-slate-300 transition-colors after:absolute after:inset-0 after:content-[''] focus:outline-none group-hover:text-white"
                         >
                             View repository
