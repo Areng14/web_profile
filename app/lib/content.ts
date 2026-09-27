@@ -181,7 +181,6 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "BeePackageEditor",
     skillId: ["python"],
-    replacedBy: "BeePEE",
   },
   {
     id: "2",
