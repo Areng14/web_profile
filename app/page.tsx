@@ -85,8 +85,31 @@ export default async function Home({ searchParams }: HomeProps) {
         </div>
       </section>
 
-      {/* Skills */}
-      <section className="relative border-t border-white/[0.06] py-16 sm:py-20 lg:py-24">
+      {/* Projects */}
+      <section id="projects" className="relative border-t border-white/[0.06] py-16 sm:py-20 lg:py-24">
+        <div className="mx-auto max-w-[1600px] px-6 sm:px-8 lg:px-10">
+          <div className="mb-12 text-center sm:mb-16">
+            <h2 className="text-3xl font-bold text-white sm:text-4xl md:text-5xl">
+              Projects
+            </h2>
+            <p className="mx-auto mt-3 max-w-xl text-slate-400">
+              Things I&apos;ve built. Filter by technology or search by name.
+            </p>
+          </div>
+
+          <ProjectSearch
+            projects={projects}
+            initialTech={tech ?? null}
+            initialSearch={search ?? ""}
+          />
+        </div>
+      </section>
+
+      {/* Skills. Named so it slides along when a project filter changes the grid height */}
+      <section
+        className="relative border-t border-white/[0.06] py-16 sm:py-20 lg:py-24"
+        style={{ viewTransitionName: "skills-section" }}
+      >
         <div className="mx-auto max-w-[1600px] px-6 sm:px-8 lg:px-10">
           <div className="mb-12 text-center sm:mb-16">
             <h2 className="text-3xl font-bold text-white sm:text-4xl md:text-5xl">
@@ -106,12 +129,13 @@ export default async function Home({ searchParams }: HomeProps) {
                 <span className="h-px flex-1 bg-white/[0.06]" aria-hidden />
               </div>
               {skills.length > 0 ? (
-                <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+                <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
                   {skills.map((s, index) => (
                     <SkillCard
                       key={s.id ?? index}
                       skill={s.skillName}
                       color={s.color ?? s.gradientColor?.[0] ?? "#94a3b8"}
+                      description={s.description}
                       icon={s.icon}
                       projectCount={projectCounts[s.id] ?? 0}
                       techId={projectCounts[s.id] ? s.id : undefined}
@@ -126,26 +150,6 @@ export default async function Home({ searchParams }: HomeProps) {
             </div>
           ))}
 
-        </div>
-      </section>
-
-      {/* Projects */}
-      <section id="projects" className="relative border-t border-white/[0.06] py-16 sm:py-20 lg:py-24">
-        <div className="mx-auto max-w-[1600px] px-6 sm:px-8 lg:px-10">
-          <div className="mb-12 text-center sm:mb-16">
-            <h2 className="text-3xl font-bold text-white sm:text-4xl md:text-5xl">
-              Projects
-            </h2>
-            <p className="mx-auto mt-3 max-w-xl text-slate-400">
-              Things I&apos;ve built. Filter by technology or search by name.
-            </p>
-          </div>
-
-          <ProjectSearch
-            projects={projects}
-            initialTech={tech ?? null}
-            initialSearch={search ?? ""}
-          />
         </div>
       </section>
     </div>

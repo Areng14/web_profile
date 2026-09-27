@@ -217,39 +217,36 @@ export default function ProjectSearch({
         </div>
       </div>
 
-      {/* Min height keeps the page from shrinking (and the scroll from jumping) when a filter hides cards */}
-      <div className="min-h-screen">
-        {filteredProjects.length > 0 ? (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {filteredProjects.map((project) => (
-              <ProjectCard
-                key={project.id}
-                id={project.id}
-                name={project.name}
-                description={project.description}
-                gitRepo={project.gitRepo}
-                technologies={project.technologies}
-                activeTech={activeChip?.name}
-                onTechClick={handleTagClick}
-              />
-            ))}
-          </div>
-        ) : (
-          <div
-            className="flex min-h-[200px] flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-white/10"
-            style={{ viewTransitionName: "projects-empty" }}
+      {filteredProjects.length > 0 ? (
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {filteredProjects.map((project) => (
+            <ProjectCard
+              key={project.id}
+              id={project.id}
+              name={project.name}
+              description={project.description}
+              gitRepo={project.gitRepo}
+              technologies={project.technologies}
+              activeTech={activeChip?.name}
+              onTechClick={handleTagClick}
+            />
+          ))}
+        </div>
+      ) : (
+        <div
+          className="flex min-h-[200px] flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-white/10"
+          style={{ viewTransitionName: "projects-empty" }}
+        >
+          <p className="text-slate-500">No projects found</p>
+          <button
+            type="button"
+            onClick={clearFilters}
+            className="text-sm font-medium text-slate-300 underline-offset-4 hover:text-white hover:underline"
           >
-            <p className="text-slate-500">No projects found</p>
-            <button
-              type="button"
-              onClick={clearFilters}
-              className="text-sm font-medium text-slate-300 underline-offset-4 hover:text-white hover:underline"
-            >
-              Clear filters
-            </button>
-          </div>
-        )}
-      </div>
+            Clear filters
+          </button>
+        </div>
+      )}
     </>
   );
 }
