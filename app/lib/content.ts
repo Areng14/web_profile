@@ -13,6 +13,7 @@ export const skills: ApiSkill[] = [
   {
     id: "python",
     skillName: "Python",
+    color: "#4B8BBE",
     gradientColor: ["#3776AB", "#FFD43B"],
     gradientAngle: 45,
     icon: "/misc/skills/python.svg",
@@ -21,6 +22,7 @@ export const skills: ApiSkill[] = [
   {
     id: "javascript",
     skillName: "JavaScript",
+    color: "#F7DF1E",
     gradientColor: ["#F7DF1E", "#C9A227"],
     gradientAngle: 45,
     icon: "/misc/skills/js.svg",
@@ -29,6 +31,7 @@ export const skills: ApiSkill[] = [
   {
     id: "typescript",
     skillName: "TypeScript",
+    color: "#3178C6",
     gradientColor: ["#3178C6", "#1E4F8A"],
     gradientAngle: 45,
     icon: "/misc/skills/ts.svg",
@@ -37,6 +40,7 @@ export const skills: ApiSkill[] = [
   {
     id: "java",
     skillName: "Java",
+    color: "#E76F00",
     gradientColor: ["#E76F00", "#B07219"],
     gradientAngle: 45,
     icon: "/misc/skills/java.svg",
@@ -45,6 +49,7 @@ export const skills: ApiSkill[] = [
   {
     id: "swift",
     skillName: "Swift",
+    color: "#F05138",
     gradientColor: ["#F05138", "#C1352A"],
     gradientAngle: 45,
     icon: "/misc/skills/swift.svg",
@@ -55,6 +60,7 @@ export const skills: ApiSkill[] = [
   {
     id: "react",
     skillName: "React",
+    color: "#61DAFB",
     gradientColor: ["#61DAFB", "#1F8FB3"],
     gradientAngle: 45,
     icon: "/misc/skills/react.svg",
@@ -63,6 +69,7 @@ export const skills: ApiSkill[] = [
   {
     id: "electron",
     skillName: "Electron",
+    color: "#9FEAF9",
     gradientColor: ["#2B2E3A", "#47848F"],
     gradientAngle: 45,
     icon: "/misc/skills/electron.svg",
@@ -71,6 +78,7 @@ export const skills: ApiSkill[] = [
   {
     id: "nodejs",
     skillName: "Node.js",
+    color: "#5FA04E",
     gradientColor: ["#3C873A", "#215732"],
     gradientAngle: 45,
     icon: "/misc/skills/nodejs.svg",
@@ -79,6 +87,7 @@ export const skills: ApiSkill[] = [
   {
     id: "nextjs",
     skillName: "Next.js",
+    color: "#FFFFFF",
     gradientColor: ["#444444", "#000000"],
     gradientAngle: 45,
     icon: "/misc/skills/nextjs.svg",
@@ -89,6 +98,7 @@ export const skills: ApiSkill[] = [
   {
     id: "adobe",
     skillName: "Adobe",
+    color: "#FF3B30",
     gradientColor: ["#FF0000", "#990000"],
     gradientAngle: 45,
     icon: "/misc/skills/adobe.svg",

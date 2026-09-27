@@ -23,6 +23,8 @@ export interface ApiSkill {
   gradientAngle: number;
   icon: string;
   skillType: SkillType;
+  // Solid brand color used by the skill card; falls back to gradientColor[0].
+  color?: string;
 }
 
 // Display shape used by frontend components
