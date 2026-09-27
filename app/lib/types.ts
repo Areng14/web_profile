@@ -7,8 +7,8 @@ export interface ApiProject {
   gradientAngle: number;
   gitRepo: string;
   skillId: string[];
-  // Marks a project with real users; shown as an icon next to the name, with this text as the tooltip
-  status?: string;
+  // Marks a project that real people use; shown as an icon next to the name
+  hasUsers?: boolean;
 }
 
 // Matches API skill type
@@ -40,7 +40,7 @@ export interface Project {
   gradientColors: string[];
   gradientAngle: number;
   gitRepo?: string;
-  status?: string;
+  hasUsers?: boolean;
   technologies: string[];
 }
 
@@ -52,7 +52,7 @@ export function apiProjectToProject(api: ApiProject, skillIdToName: Record<strin
     gradientColors: api.gradientColor ?? [],
     gradientAngle: api.gradientAngle ?? 45,
     gitRepo: api.gitRepo || undefined,
-    status: api.status,
+    hasUsers: api.hasUsers,
     technologies: (api.skillId ?? []).map((id) => skillIdToName[id] || id),
   };
 }
