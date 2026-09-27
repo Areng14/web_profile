@@ -227,6 +227,7 @@ export default function ProjectSearch({
               description={project.description}
               gitRepo={project.gitRepo}
               hasUsers={project.hasUsers}
+              replacedBy={project.replacedBy}
               technologies={project.technologies}
               activeTech={activeChip?.name}
               onTechClick={handleTagClick}
