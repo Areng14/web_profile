@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import ProjectCard from "../components/ProjectCard";
 import { skills } from "../lib/content";
 import type { Project } from "../lib/types";
@@ -13,13 +14,26 @@ interface ProjectSearchProps {
 
 const skillColor = (s: (typeof skills)[number]) => s.color ?? s.gradientColor?.[0] ?? "#94a3b8";
 
+// Animate a filter change with the View Transitions API so cards slide to their
+// new spots and fade in/out. Falls back to an instant update where unsupported.
+const withTransition = (update: () => void) => {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!document.startViewTransition || reduceMotion) {
+    update();
+    return;
+  }
+  document.startViewTransition(() => flushSync(update));
+};
+
 export default function ProjectSearch({
   projects,
   initialTech,
   initialSearch,
 }: ProjectSearchProps) {
   const [tech, setTech] = useState<string | null>(initialTech);
+  // searchTerm drives the input; query is the debounced value used for filtering
   const [searchTerm, setSearchTerm] = useState<string>(initialSearch);
+  const [query, setQuery] = useState<string>(initialSearch);
   const filtersRef = useRef<HTMLDivElement>(null);
 
   // Chips: every skill that at least one project uses, with its project count
@@ -47,17 +61,24 @@ export default function ProjectSearch({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Apply typed searches after a short pause so every keystroke doesn't restart the animation
+  useEffect(() => {
+    if (searchTerm === query) return;
+    const timeout = setTimeout(() => withTransition(() => setQuery(searchTerm)), 150);
+    return () => clearTimeout(timeout);
+  }, [searchTerm, query]);
+
   // Keep the URL shareable without stacking history entries
   useEffect(() => {
     const params = new URLSearchParams();
     if (tech) params.set("tech", tech);
-    if (searchTerm) params.set("search", searchTerm);
-    const query = params.toString();
-    window.history.replaceState(null, "", query ? `?${query}` : window.location.pathname);
-  }, [tech, searchTerm]);
+    if (query) params.set("search", query);
+    const qs = params.toString();
+    window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
+  }, [tech, query]);
 
   const filteredProjects = useMemo(() => {
-    const searchLower = searchTerm.toLowerCase();
+    const searchLower = query.toLowerCase();
     return projects.filter((project) => {
       if (activeChip && !project.technologies.includes(activeChip.name)) return false;
       if (!searchLower) return true;
@@ -67,22 +88,27 @@ export default function ProjectSearch({
         project.technologies.some((t) => t.toLowerCase().includes(searchLower))
       );
     });
-  }, [projects, activeChip, searchTerm]);
+  }, [projects, activeChip, query]);
 
-  const selectTech = (id: string | null) => setTech((current) => (current === id ? null : id));
+  const selectTech = (id: string | null) =>
+    withTransition(() => setTech((current) => (current === id ? null : id)));
 
   // Clicking a tag on a card switches the filter and jumps back up to it
   const handleTagClick = (techName: string) => {
     const chip = chips.find((c) => c.name === techName);
     if (!chip) return;
-    setTech(chip.id);
-    filtersRef.current?.scrollIntoView({ behavior: "smooth" });
+    withTransition(() => {
+      setTech(chip.id);
+      filtersRef.current?.scrollIntoView({ block: "start" });
+    });
   };
 
-  const clearFilters = () => {
-    setTech(null);
-    setSearchTerm("");
-  };
+  const clearFilters = () =>
+    withTransition(() => {
+      setTech(null);
+      setSearchTerm("");
+      setQuery("");
+    });
 
   const chipClass = (active: boolean) =>
     `inline-flex shrink-0 items-center gap-2 rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors ${
@@ -123,7 +149,7 @@ export default function ProjectSearch({
         <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by technology">
           <button
             type="button"
-            onClick={() => setTech(null)}
+            onClick={() => selectTech(null)}
             aria-pressed={!activeChip}
             className={chipClass(!activeChip)}
             style={{ ["--chip" as string]: "rgba(255,255,255,0.35)" }}
@@ -159,32 +185,39 @@ export default function ProjectSearch({
         </div>
       </div>
 
-      {filteredProjects.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {filteredProjects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              name={project.name}
-              description={project.description}
-              gitRepo={project.gitRepo}
-              technologies={project.technologies}
-              activeTech={activeChip?.name}
-              onTechClick={handleTagClick}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="flex min-h-[200px] flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-white/10">
-          <p className="text-slate-500">No projects found</p>
-          <button
-            type="button"
-            onClick={clearFilters}
-            className="text-sm font-medium text-slate-300 underline-offset-4 hover:text-white hover:underline"
+      {/* Min height keeps the page from shrinking (and the scroll from jumping) when a filter hides cards */}
+      <div className="min-h-screen">
+        {filteredProjects.length > 0 ? (
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {filteredProjects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                id={project.id}
+                name={project.name}
+                description={project.description}
+                gitRepo={project.gitRepo}
+                technologies={project.technologies}
+                activeTech={activeChip?.name}
+                onTechClick={handleTagClick}
+              />
+            ))}
+          </div>
+        ) : (
+          <div
+            className="flex min-h-[200px] flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-white/10"
+            style={{ viewTransitionName: "projects-empty" }}
           >
-            Clear filters
-          </button>
-        </div>
-      )}
+            <p className="text-slate-500">No projects found</p>
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="text-sm font-medium text-slate-300 underline-offset-4 hover:text-white hover:underline"
+            >
+              Clear filters
+            </button>
+          </div>
+        )}
+      </div>
     </>
   );
 }

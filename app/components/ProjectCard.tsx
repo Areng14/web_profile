@@ -13,6 +13,7 @@ skills.forEach((s) => {
 });
 
 interface ProjectCardProps {
+    id: string;
     name: string;
     description: string;
     gitRepo?: string;
@@ -22,6 +23,7 @@ interface ProjectCardProps {
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
+    id,
     name,
     description,
     gitRepo,
@@ -36,6 +38,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     return (
         <div
             className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg p-6 transition-colors duration-200 hover:border-white/20 has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-accent"
+            // Unique name lets filter changes animate this card to its new position
+            style={{ viewTransitionName: `project-${id}` }}
         >
             {/* GitHub-style language bar: one solid segment per technology, grows on hover */}
             <div
