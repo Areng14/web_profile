@@ -1,14 +1,15 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
+import { selectProjectTech } from "./ProjectSearch";
 
 interface SkillCardProps {
   skill: string;
   icon: string;
   color: string;
   projectCount?: number;
-  endpoint?: string;
+  // When set, clicking the card filters the projects section to this skill
+  techId?: string;
 }
 
 const SkillCard: React.FC<SkillCardProps> = ({
@@ -16,7 +17,7 @@ const SkillCard: React.FC<SkillCardProps> = ({
   icon,
   color,
   projectCount,
-  endpoint,
+  techId,
 }) => {
   const imageSrc = !icon
     ? null
@@ -34,7 +35,7 @@ const SkillCard: React.FC<SkillCardProps> = ({
   const content = (
     <div
       className={`relative flex h-[168px] flex-col justify-between overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg p-5 transition-colors duration-200 ${
-        endpoint ? "group hover:border-[var(--skill)]" : ""
+        techId ? "group hover:border-[var(--skill)]" : ""
       }`}
       style={{ ["--skill" as string]: color }}
     >
@@ -65,7 +66,7 @@ const SkillCard: React.FC<SkillCardProps> = ({
           <h3 className="text-lg font-semibold text-white">{skill}</h3>
           <p className="mt-0.5 text-sm text-slate-500">{countLabel}</p>
         </div>
-        {endpoint && (
+        {techId && (
           <svg
             className="h-5 w-5 shrink-0 -translate-x-1 text-slate-600 transition-all duration-200 group-hover:translate-x-0 group-hover:text-white"
             fill="none"
@@ -80,14 +81,15 @@ const SkillCard: React.FC<SkillCardProps> = ({
     </div>
   );
 
-  if (endpoint) {
+  if (techId) {
     return (
-      <Link
-        href={endpoint}
-        className="block rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      <button
+        type="button"
+        onClick={() => selectProjectTech(techId)}
+        className="block w-full rounded-xl text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
         {content}
-      </Link>
+      </button>
     );
   }
 
