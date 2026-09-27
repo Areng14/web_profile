@@ -36,7 +36,7 @@ const SkillCard: React.FC<SkillCardProps> = ({
 
   const content = (
     <div
-      className={`relative flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg p-4 transition-colors duration-200 ${
+      className={`relative flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg p-5 transition-colors duration-200 ${
         techId ? "group hover:border-[var(--skill)]" : ""
       }`}
       style={{ ["--skill" as string]: color }}
@@ -48,32 +48,31 @@ const SkillCard: React.FC<SkillCardProps> = ({
         aria-hidden
       />
 
-      {/* Icon (flat silhouette in the brand color) sits inline with the name */}
-      <div className="flex items-center gap-2.5">
-        {imageSrc ? (
-          <span
-            className="block h-6 w-6 shrink-0"
-            style={{
-              backgroundColor: color,
-              WebkitMask: `url("${imageSrc}") center / contain no-repeat`,
-              mask: `url("${imageSrc}") center / contain no-repeat`,
-            }}
-            aria-hidden
-          />
-        ) : (
-          <span className="block h-6 w-6 shrink-0 rounded" style={{ backgroundColor: color }} aria-hidden />
-        )}
-        <h3 className="text-base font-semibold text-white">{skill}</h3>
-      </div>
-      {description && (
-        <p className="mt-2 text-[13px] leading-relaxed text-slate-400">{description}</p>
+      {/* Icon rendered as a flat silhouette in the brand color */}
+      {imageSrc ? (
+        <span
+          className="block h-10 w-10"
+          style={{
+            backgroundColor: color,
+            WebkitMask: `url("${imageSrc}") center / contain no-repeat`,
+            mask: `url("${imageSrc}") center / contain no-repeat`,
+          }}
+          aria-hidden
+        />
+      ) : (
+        <span className="block h-10 w-10 rounded-md" style={{ backgroundColor: color }} aria-hidden />
       )}
 
-      <div className="mt-auto flex items-center justify-between gap-3 pt-3">
-        <p className="text-xs text-slate-500">{countLabel}</p>
+      <h3 className="mt-4 text-lg font-semibold text-white">{skill}</h3>
+      {description && (
+        <p className="mt-1.5 text-sm leading-relaxed text-slate-400">{description}</p>
+      )}
+
+      <div className="mt-auto flex items-center justify-between gap-3 pt-5">
+        <p className="text-sm text-slate-500">{countLabel}</p>
         {techId && (
           <svg
-            className="h-4 w-4 shrink-0 -translate-x-1 text-slate-600 transition-all duration-200 group-hover:translate-x-0 group-hover:text-white"
+            className="h-5 w-5 shrink-0 -translate-x-1 text-slate-600 transition-all duration-200 group-hover:translate-x-0 group-hover:text-white"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
