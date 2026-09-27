@@ -44,6 +44,17 @@ export const skills: ApiSkill[] = [
     skillType: SkillType.Lang,
   },
   {
+    id: "go",
+    skillName: "Go",
+    description:
+      "Backend services. The bank app's REST API runs on Go Fiber with JWT auth.",
+    color: "#00ADD8",
+    gradientColor: ["#00ADD8", "#007D9C"],
+    gradientAngle: 45,
+    icon: "/misc/skills/go.svg",
+    skillType: SkillType.Lang,
+  },
+  {
     id: "swift",
     skillName: "Swift",
     description:
@@ -82,7 +93,7 @@ export const skills: ApiSkill[] = [
     id: "nextjs",
     skillName: "Next.js",
     description:
-      "React and TypeScript on the web. This site is built with it.",
+      "React and TypeScript on the web: this site and the bank app's dashboard.",
     color: "#FFFFFF",
     gradientColor: ["#444444", "#000000"],
     gradientAngle: 45,
@@ -95,7 +106,7 @@ export const skills: ApiSkill[] = [
     id: "docker",
     skillName: "Docker",
     description:
-      "Containerizing apps so they build and run the same on any machine, from local dev to deployment.",
+      "Multi-stage images running as a non-root user, built and shipped to a VPS by GitHub Actions on every push.",
     color: "#2496ED",
     gradientColor: ["#2496ED", "#1D63ED"],
     gradientAngle: 45,
@@ -136,8 +147,18 @@ export const projects: ApiProject[] = [
       "A desktop editor for building custom items for Portal 2's Puzzle Maker (via the BEEmod mod). Create and edit item packages visually, with no hand-editing of config files. It can auto-generate 3D models from level geometry and has a built-in signage designer.",
     gradientColor: ["#E3C83A", "#D88D5E"],
     gradientAngle: 45,
-    gitRepo: "",
+    gitRepo: "BeemodTools/BeePEE",
     skillId: ["electron", "javascript", "nodejs", "python", "java"],
+  },
+  {
+    id: "10",
+    name: "Bank App",
+    description:
+      "A full-stack banking web app. Users can sign up, deposit, withdraw, send money to other users and view their transaction history. Built in Next.js on a Go backend, with JWT auth and Docker deployment to a VPS.",
+    gradientColor: ["#00ADD8", "#2496ED"],
+    gradientAngle: 45,
+    gitRepo: "bank-app",
+    skillId: ["nextjs", "go", "docker"],
   },
   {
     id: "1",
