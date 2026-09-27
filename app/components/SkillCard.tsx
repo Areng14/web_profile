@@ -33,7 +33,9 @@ const SkillCard: React.FC<SkillCardProps> = ({
 
   const content = (
     <div
-      className="group relative flex h-[168px] flex-col justify-between overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg p-5 transition-colors duration-200 hover:border-[var(--skill)]"
+      className={`relative flex h-[168px] flex-col justify-between overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg p-5 transition-colors duration-200 ${
+        endpoint ? "group hover:border-[var(--skill)]" : ""
+      }`}
       style={{ ["--skill" as string]: color }}
     >
       {/* Solid accent bar, grows on hover */}
@@ -63,15 +65,17 @@ const SkillCard: React.FC<SkillCardProps> = ({
           <h3 className="text-lg font-semibold text-white">{skill}</h3>
           <p className="mt-0.5 text-sm text-slate-500">{countLabel}</p>
         </div>
-        <svg
-          className="h-5 w-5 shrink-0 -translate-x-1 text-slate-600 transition-all duration-200 group-hover:translate-x-0 group-hover:text-white"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          aria-hidden
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m-6-6l6 6-6 6" />
-        </svg>
+        {endpoint && (
+          <svg
+            className="h-5 w-5 shrink-0 -translate-x-1 text-slate-600 transition-all duration-200 group-hover:translate-x-0 group-hover:text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m-6-6l6 6-6 6" />
+          </svg>
+        )}
       </div>
     </div>
   );

@@ -102,7 +102,7 @@ export default async function Home() {
                       color={s.color ?? s.gradientColor?.[0] ?? "#94a3b8"}
                       icon={s.icon}
                       projectCount={projectCounts[s.id] ?? 0}
-                      endpoint={`/projects?search=${encodeURIComponent(s.skillName)}`}
+                      endpoint={projectCounts[s.id] ? `/projects?tech=${encodeURIComponent(s.id)}` : undefined}
                     />
                   ))}
                 </div>

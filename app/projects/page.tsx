@@ -19,29 +19,17 @@ export const generateMetadata = async (): Promise<Metadata> => {
 };
 
 interface ProjectsPageProps {
-  searchParams: Promise<{ search?: string }>;
+  searchParams: Promise<{ tech?: string; search?: string }>;
 }
 
 export default async function Projects({ searchParams }: ProjectsPageProps) {
-  const { search } = await searchParams;
-  let initialProjects: Awaited<ReturnType<typeof fetchProjectsForDisplay>> = [];
+  const { tech, search } = await searchParams;
+  let projects: Awaited<ReturnType<typeof fetchProjectsForDisplay>> = [];
   try {
-    initialProjects = await fetchProjectsForDisplay();
+    projects = await fetchProjectsForDisplay();
   } catch {
     // Fallback
   }
-  const filtered = search
-    ? initialProjects.filter((project) => {
-        const searchLower = search.toLowerCase();
-        return (
-          project.name.toLowerCase().includes(searchLower) ||
-          project.description.toLowerCase().includes(searchLower) ||
-          project.technologies.some((tech) =>
-            tech.toLowerCase().includes(searchLower),
-          )
-        );
-      })
-    : initialProjects;
 
   return (
     <div className="min-h-screen">
@@ -73,14 +61,15 @@ export default async function Projects({ searchParams }: ProjectsPageProps) {
               All projects
             </h2>
             <p className="mt-2 text-slate-400">
-              Search by name, description, or technology.
+              Filter by technology, or search by name and description.
             </p>
           </div>
 
           <Suspense fallback={<div className="py-12 text-slate-400">Loading...</div>}>
             <ProjectSearch
-              initialProjects={filtered}
-              initialSearch={search || ""}
+              projects={projects}
+              initialTech={tech ?? null}
+              initialSearch={search ?? ""}
             />
           </Suspense>
         </div>
