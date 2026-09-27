@@ -163,6 +163,16 @@ export const projects: ApiProject[] = [
     hasUsers: true,
   },
   {
+    id: "12",
+    name: "AlgebraLoop",
+    description:
+      "A math practice site covering nine courses, from Algebra 1 through AP Calc and Linear Algebra. Every problem is generated and graded right in the browser from randomized templates, with no backend at all. It includes a built-in graphing calculator.",
+    gradientColor: ["#6366F1", "#8B5CF6"],
+    gradientAngle: 45,
+    gitRepo: "",
+    skillId: ["nextjs", "claudecode"],
+  },
+  {
     id: "10",
     name: "Bank App",
     description:
