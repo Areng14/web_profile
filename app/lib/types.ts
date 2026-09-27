@@ -14,6 +14,7 @@ export enum SkillType {
   Lang = "Language",
   DesignTools = "DesignTool",
   Framework = "Framework",
+  Tools = "Tool",
 }
 
 export interface ApiSkill {

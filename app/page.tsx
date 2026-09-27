@@ -33,10 +33,11 @@ export default async function Home({ searchParams }: HomeProps) {
         projectCounts[id] = (projectCounts[id] ?? 0) + 1;
       })
     );
-    const order = [SkillType.Lang, SkillType.Framework, SkillType.DesignTools];
+    const order = [SkillType.Lang, SkillType.Framework, SkillType.Tools, SkillType.DesignTools];
     const titles: Record<SkillType, string> = {
       [SkillType.Lang]: "Languages",
       [SkillType.Framework]: "Frameworks",
+      [SkillType.Tools]: "Tools",
       [SkillType.DesignTools]: "Design Tools",
     };
     skillsByType = order.map((type) => ({
