@@ -41,12 +41,13 @@ const SkillCard: React.FC<SkillCardProps> = ({
       }`}
       style={{ ["--skill" as string]: color }}
     >
-      {/* Solid accent bar, grows on hover */}
-      <span
-        className="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-[0.12] transition-transform duration-300 group-hover:scale-x-100"
-        style={{ backgroundColor: color }}
-        aria-hidden
-      />
+      {/* Solid accent bar, inset past the rounded corners; grows on hover */}
+      <span className="absolute left-5 right-5 top-0 h-[3px]" aria-hidden>
+        <span
+          className="block h-full w-[12%] rounded-b-full transition-[width] duration-300 group-hover:w-full"
+          style={{ backgroundColor: color }}
+        />
+      </span>
 
       {/* Icon rendered as a flat silhouette in the brand color */}
       {imageSrc ? (
