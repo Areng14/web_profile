@@ -43,79 +43,42 @@ export default function About() {
           <div className="mx-auto max-w-3xl space-y-14">
             <div>
               <h2 className="mb-6 text-2xl font-bold text-white sm:text-3xl">
-                Story
+                What I do
               </h2>
               <div className="space-y-4 text-slate-300 leading-relaxed">
                 <p>
-                  Since the age of 12, I have been interested in computers and
-                  technology. I started off with learning Python as my first
-                  language, which is why you see a lot of{" "}
-                  <Link
-                    href="/?tech=python#projects"
-                    className="text-accent underline-offset-2 hover:underline"
-                  >
-                    Python projects
-                  </Link>{" "}
-                  in my projects. My first program was a temporary file
-                  remover. It was a simple program that goes through temporary
-                  directories and removes the files to free up space.
+                  I build tools, games and apps, mostly for communities I&apos;m
+                  part of. The biggest is BeePEE, a desktop editor for Portal
+                  2&apos;s BEEmod that real people use, along with BeeBOT, the
+                  Discord bot that keeps its server free of scams and triages its
+                  crash reports.
                 </p>
                 <p>
-                  My second program was a{" "}
-                  <Link
-                    href="https://github.com/Areng14/Fizzler-Recolor/"
-                    className="text-accent underline-offset-2 hover:underline"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Fizzler Recolorer
-                  </Link>{" "}
-                  for the game Portal 2. It was a program that can recolor the
-                  fizzler in the game. It works by changing the VMT (Valve
-                  Material) color value to the selected color. It didn&apos;t have
-                  a GUI so you had to use the command line to use it.
+                  I like projects where the hard part is under the hood: a model
+                  pipeline that chains Java, Python and Valve&apos;s own compiler
+                  behind one button, a math site whose tests generate thousands
+                  of problems to keep the grader honest, or a railway sim with a
+                  real interlocking.
                 </p>
                 <p>
-                  I have since been learning new languages and frameworks to
-                  expand my knowledge. I have recently been learning React and
-                  other JS frameworks and JavaScript overall. One of the more
-                  recent projects I have worked on was{" "}
-                  <Link
-                    href="https://github.com/Areng14/testrunner/"
-                    className="text-accent underline-offset-2 hover:underline"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    TestRunner
-                  </Link>
-                  , which is a program that runs tests on multiple Python scripts
-                  and checks if they match the expected output. The program
-                  features a security measure where if the program does something
-                  suspicious, it will warn the user.
-                </p>
-                <p>
-                  In conclusion, I am a software developer who makes programs in
-                  my free time. I make programs that have a range of purposes,
-                  from being useless to being kinda useful. Check out my{" "}
+                  Most of my work is in Python and JavaScript/TypeScript, with
+                  some Java and Go. Everything is in the{" "}
                   <Link href="/#projects" className="text-accent underline-offset-2 hover:underline">
-                    projects page
-                  </Link>{" "}
-                  to see what I have made.
+                    projects section
+                  </Link>
+                  .
                 </p>
               </div>
             </div>
 
             <div>
               <h2 className="mb-6 text-2xl font-bold text-white sm:text-3xl">
-                Why me?
+                Working together
               </h2>
               <p className="text-slate-300 leading-relaxed">
-                I am open to work on projects that are interesting but not too
-                challenging. Keep in mind that I may choose to not work on a
-                project if I am busy. I am mainly open to work on projects that
-                are related to what I have done before or are similar to what I
-                have done before. Stuff like AI I will not work on as I have no
-                experience in that field. To contact me, go to the{" "}
+                I&apos;m open to interesting projects, especially ones close to
+                what I&apos;ve built: desktop tools, web apps, Discord bots and
+                game tooling. I might pass if I&apos;m busy. Reach me through the{" "}
                 <Link href="/contact" className="text-accent underline-offset-2 hover:underline">
                   contact page
                 </Link>
