@@ -7,6 +7,8 @@ export interface ApiProject {
   gradientAngle: number;
   gitRepo: string;
   skillId: string[];
+  // Solid accent color for the project card; falls back to gradientColor[0].
+  color?: string;
 }
 
 // Matches API skill type
@@ -35,6 +37,7 @@ export interface Project {
   gradientColors: string[];
   gradientAngle: number;
   gitRepo?: string;
+  color?: string;
   technologies: string[];
 }
 
@@ -46,6 +49,7 @@ export function apiProjectToProject(api: ApiProject, skillIdToName: Record<strin
     gradientColors: api.gradientColor ?? [],
     gradientAngle: api.gradientAngle ?? 45,
     gitRepo: api.gitRepo || undefined,
+    color: api.color ?? api.gradientColor?.[0],
     technologies: (api.skillId ?? []).map((id) => skillIdToName[id] || id),
   };
 }

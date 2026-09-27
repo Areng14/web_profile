@@ -79,7 +79,7 @@ export default function ProjectSearch({
             placeholder="Search projects by name, description, or technology..."
             value={searchTerm}
             onChange={handleSearch}
-            className="w-full rounded-md border border-slate-700 bg-[#0c0d0f] py-2 pl-10 pr-3 text-sm text-white placeholder:text-slate-500 focus:border-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-400"
+            className="w-full rounded-xl border border-white/[0.06] bg-card-bg py-3 pl-10 pr-3 text-sm text-white placeholder:text-slate-500 focus:border-white/20 focus:outline-none"
           />
         </div>
       </div>
@@ -87,23 +87,19 @@ export default function ProjectSearch({
       {filteredProjects.length > 0 ? (
         <div className="grid gap-4 pt-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredProjects.map((project) => (
-            <div key={project.id}>
-              <ProjectCard
-                name={project.name}
-                description={project.description}
-                gradientColors={project.gradientColors}
-                gradientAngle={project.gradientAngle}
-                {...(project.gitRepo ? { gitRepo: project.gitRepo } : {})}
-                technologies={project.technologies}
-              />
-            </div>
+            <ProjectCard
+              key={project.id}
+              name={project.name}
+              description={project.description}
+              color={project.color}
+              gitRepo={project.gitRepo}
+              technologies={project.technologies}
+            />
           ))}
         </div>
       ) : (
-        <div className="py-8 text-center text-xl text-slate-400">
-          <h3 className="text-3xl font-bold text-white sm:text-4xl">
-            No projects found
-          </h3>
+        <div className="flex min-h-[200px] items-center justify-center rounded-xl border border-dashed border-white/10">
+          <p className="text-slate-500">No projects found</p>
         </div>
       )}
     </>
