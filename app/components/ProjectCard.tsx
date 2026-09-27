@@ -49,14 +49,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             // Unique name lets filter changes animate this card to its new position
             style={{ viewTransitionName: `project-${id}` }}
         >
-            {/* GitHub-style language bar: one solid segment per technology, grows on hover */}
-            <div
-                className="absolute inset-x-0 top-0 flex h-1 origin-left scale-x-[0.25] gap-0.5 transition-transform duration-300 group-hover:scale-x-100"
-                aria-hidden
-            >
-                {barColors.map((c, i) => (
-                    <span key={i} className="flex-1" style={{ backgroundColor: c }} />
-                ))}
+            {/* GitHub-style language bar: one solid segment per technology, inset past the
+                rounded corners; grows on hover */}
+            <div className="absolute left-6 right-6 top-0 h-1" aria-hidden>
+                <div className="flex h-full w-1/4 gap-0.5 overflow-hidden rounded-b-full transition-[width] duration-300 group-hover:w-full">
+                    {barColors.map((c, i) => (
+                        <span key={i} className="flex-1" style={{ backgroundColor: c }} />
+                    ))}
+                </div>
             </div>
 
             <div className="flex items-center gap-2">
