@@ -18,6 +18,18 @@ const repoUrl = (gitRepo: string) =>
         ? gitRepo
         : `https://github.com/${gitRepo.includes("/") ? gitRepo : `areng14/${gitRepo}`}`;
 
+// Hard-stop gradient with one equal segment per color and a 2px gap between them
+const languageBarGradient = (colors: string[]) => {
+    const n = colors.length;
+    const stops = colors.flatMap((c, i) => {
+        const start = i === 0 ? "0%" : `calc(${(i / n) * 100}% + 1px)`;
+        const end = i === n - 1 ? "100%" : `calc(${((i + 1) / n) * 100}% - 1px)`;
+        const seg = [`${c} ${start}`, `${c} ${end}`];
+        return i === n - 1 ? seg : [...seg, `transparent ${end}`, `transparent calc(${((i + 1) / n) * 100}% + 1px)`];
+    });
+    return `linear-gradient(90deg, ${stops.join(", ")})`;
+};
+
 interface ProjectCardProps {
     id: string;
     name: string;
@@ -49,15 +61,20 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             // Unique name lets filter changes animate this card to its new position
             style={{ viewTransitionName: `project-${id}` }}
         >
-            {/* GitHub-style language bar: one solid segment per technology, inset past the
-                rounded corners; grows on hover */}
-            <div className="absolute left-6 right-6 top-0 h-1" aria-hidden>
-                <div className="flex h-full w-1/4 gap-0.5 overflow-hidden rounded-b-full transition-[width] duration-300 group-hover:w-full">
-                    {barColors.map((c, i) => (
-                        <span key={i} className="flex-1" style={{ backgroundColor: c }} />
-                    ))}
-                </div>
-            </div>
+            {/* GitHub-style language bar, drawn as a curved top border: the border area is
+                masked out of a hard-stop gradient so it follows the card's rounded corners.
+                At rest the colors are squeezed into the first quarter; hover spreads them out. */}
+            <span
+                className="pointer-events-none absolute inset-0 rounded-[11px] border-t-4 border-transparent bg-no-repeat transition-[clip-path,background-size] duration-300 [background-size:25%_100%] [clip-path:inset(0_75%_0_0)] group-hover:[background-size:100%_100%] group-hover:[clip-path:inset(0)]"
+                style={{
+                    backgroundImage: languageBarGradient(barColors),
+                    backgroundOrigin: "border-box",
+                    WebkitMask: "linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0)",
+                    WebkitMaskComposite: "xor",
+                    mask: "linear-gradient(#000 0 0) padding-box exclude, linear-gradient(#000 0 0)",
+                }}
+                aria-hidden
+            />
 
             <div className="flex items-center gap-2">
                 <h2 className="text-xl font-semibold text-white">{name}</h2>
