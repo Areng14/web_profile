@@ -90,6 +90,19 @@ export const skills: ApiSkill[] = [
     skillType: SkillType.Framework,
   },
 
+  // Tools
+  {
+    id: "docker",
+    skillName: "Docker",
+    description:
+      "Containerizing apps so they build and run the same on any machine, from local dev to deployment.",
+    color: "#2496ED",
+    gradientColor: ["#2496ED", "#1D63ED"],
+    gradientAngle: 45,
+    icon: "/misc/skills/docker.svg",
+    skillType: SkillType.Tools,
+  },
+
   // Design Tools
   {
     id: "adobe",
