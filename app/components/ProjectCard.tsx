@@ -24,6 +24,7 @@ interface ProjectCardProps {
     description: string;
     gitRepo?: string;
     hasUsers?: boolean;
+    replacedBy?: string;
     technologies?: string[];
     activeTech?: string;
     onTechClick?: (tech: string) => void;
@@ -35,6 +36,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     description,
     gitRepo,
     hasUsers,
+    replacedBy,
     technologies = [],
     activeTech,
     onTechClick,
@@ -70,6 +72,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     </span>
                 )}
             </div>
+            {replacedBy && (
+                <p className="mt-1 text-xs font-medium text-amber-400/90">
+                    Deprecated · replaced by {replacedBy}
+                </p>
+            )}
             <p className="mt-2 text-sm leading-relaxed text-slate-400">{description}</p>
 
             {technologies.length > 0 && (
