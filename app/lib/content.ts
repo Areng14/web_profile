@@ -144,7 +144,7 @@ export const projects: ApiProject[] = [
     id: "9",
     name: "BeePEE",
     description:
-      "A desktop editor for building custom items for Portal 2's Puzzle Maker (via the BEEmod mod). Create and edit item packages visually, with no hand-editing of config files. It can auto-generate 3D models from level geometry and has a built-in signage designer.",
+      "A desktop editor for making custom Portal 2 Puzzle Maker items (via BEEmod). One button turns level geometry into a real game model.",
     gradientColor: ["#E3C83A", "#D88D5E"],
     gradientAngle: 45,
     gitRepo: "BeemodTools/BeePEE",
@@ -155,7 +155,7 @@ export const projects: ApiProject[] = [
     id: "11",
     name: "BeeBOT",
     description:
-      "The Discord bot for the BeemodTools community. It catches scams with a fine-tuned DistilBERT model and GPT fallback, and triages BeePEE crash reports with an AI agent that deduplicates bugs and digs through the user's package to find the cause.",
+      "The Discord bot for the BeemodTools community. It catches scams with a fine-tuned DistilBERT model and triages BeePEE crash reports with an AI agent.",
     gradientColor: ["#4B8BBE", "#5865F2"],
     gradientAngle: 45,
     gitRepo: "",
@@ -166,7 +166,7 @@ export const projects: ApiProject[] = [
     id: "12",
     name: "AlgebraLoop",
     description:
-      "A math practice site covering nine courses, from Algebra 1 through AP Calc and Linear Algebra. Every problem is generated and graded right in the browser from randomized templates, with no backend at all. It includes a built-in graphing calculator.",
+      "Math practice from Algebra 1 to AP Calc, with every problem generated and graded in the browser. Tests generate thousands of problems to keep the grader honest.",
     gradientColor: ["#6366F1", "#8B5CF6"],
     gradientAngle: 45,
     gitRepo: "",
@@ -176,7 +176,7 @@ export const projects: ApiProject[] = [
     id: "13",
     name: "Railway Signalling Sim",
     description:
-      "Be the signaller for a fictional 8-zone railway. A real interlocking decides which routes are allowed, and seeded shifts throw in failures and breakdowns.",
+      "Be the signaller for a fictional 8-zone railway, with a real interlocking deciding which routes are allowed. Ships with a 20-page rule book that tests keep in sync with the game.",
     gradientColor: ["#F59E0B", "#DC2626"],
     gradientAngle: 45,
     gitRepo: "",
@@ -196,7 +196,7 @@ export const projects: ApiProject[] = [
     id: "10",
     name: "Bank App",
     description:
-      "A full-stack banking web app. Users can sign up, deposit, withdraw, send money to other users and view their transaction history. Built in Next.js on a Go backend, with JWT auth and Docker deployment to a VPS.",
+      "A full-stack banking app: sign up, deposit, withdraw and send money to other users. Next.js on a Go backend with JWT auth, deployed with Docker.",
     gradientColor: ["#00ADD8", "#2496ED"],
     gradientAngle: 45,
     gitRepo: "",
@@ -206,7 +206,7 @@ export const projects: ApiProject[] = [
     id: "1",
     name: "BPE",
     description:
-      "Beemod Package Editor is a python program that allows users to create and edit packages for BEEMOD, a puzzlemaker mod for Portal 2. BPE v3 allows users to use plugins to extend the functionality of the program. Now deprecated and replaced by BeePEE.",
+      "The original Python editor for BEEmod item packages, with plugin support in v3. Now deprecated and replaced by BeePEE.",
     gradientColor: ["rgb(217, 211, 43)", "rgb(216, 141, 94)"],
     gradientAngle: 45,
     gitRepo: "BeePackageEditor",
@@ -216,7 +216,7 @@ export const projects: ApiProject[] = [
     id: "2",
     name: "TR",
     description:
-      "TestRunner is built for testing multiple scripts at a time. Designed for teachers to use to mass grade student assignments. Includes a warning if the script uses weird imports.",
+      "Runs a batch of scripts at once so teachers can mass-grade student assignments, and warns when a script uses weird imports.",
     gradientColor: ["rgb(30, 192, 70)", "rgb(72, 99, 52)"],
     gradientAngle: 45,
     gitRepo: "TestRunner",
@@ -226,7 +226,7 @@ export const projects: ApiProject[] = [
     id: "3",
     name: "Blank",
     description:
-      "A image format using only whitespace. [SPACE][TAB][SPACE][TAB][SPACE][TAB] Each increment of whitespace corresponds to an increment in the RGB values. A newline signifies to move on to the next row.",
+      "An image format made entirely of whitespace. Spaces and tabs encode RGB values, and a newline starts the next row.",
     gradientColor: ["rgb(35, 71, 169)", "rgb(45, 151, 163)"],
     gradientAngle: 45,
     gitRepo: "blank",
@@ -236,7 +236,7 @@ export const projects: ApiProject[] = [
     id: "4",
     name: "SCR ATO",
     description:
-      "An macro program that automates the driving of trains in Stepford County Railway. The script uses OCR to read the information on the HUD which the program decides what to press.",
+      "A macro that drives trains in Stepford County Railway on its own. It reads the HUD with OCR and decides what to press.",
     gradientColor: ["rgb(35, 111, 173)", "rgb(40, 44, 121)"],
     gradientAngle: 45,
     gitRepo: "scr-ato",
@@ -246,7 +246,7 @@ export const projects: ApiProject[] = [
     id: "5",
     name: "Graph IMG",
     description:
-      "A vector based image format that uses mathematical functions to generate images. The program uses a custom language to define the image.",
+      "A vector image format that draws with math functions, defined in its own small language.",
     gradientColor: ["rgb(80, 35, 169)", "rgb(155, 45, 163)"],
     gradientAngle: 45,
     gitRepo: "GraphIMG",
@@ -256,7 +256,7 @@ export const projects: ApiProject[] = [
     id: "6",
     name: "Website",
     description:
-      "This very website. Built using Next.js, React, Material-UI and NodeJS for the backend. The website is responsive and showcases my projects, skills, design knowledge, and contact information.",
+      "This site. Next.js with no backend, filterable projects and animated transitions.",
     gradientColor: ["rgb(182, 37, 88)", "rgb(140, 49, 185)"],
     gradientAngle: 45,
     gitRepo: "web_profile",
@@ -266,7 +266,7 @@ export const projects: ApiProject[] = [
     id: "7",
     name: "Yapper",
     description:
-      "A work in progress yapping program. Yapper allows for users to yap to each other. Basically a chat program.",
+      "A work-in-progress desktop chat app built with Electron.",
     gradientColor: ["rgb(157, 95, 33)", "rgb(177, 48, 109)"],
     gradientAngle: 45,
     gitRepo: "",
@@ -276,7 +276,7 @@ export const projects: ApiProject[] = [
     id: "8",
     name: "MC SERVER",
     description:
-      "A minecraft minigames server. Game logic coded by me in Java. Games include: KitPVP Duels, Extreme Hide and Seek",
+      "A Minecraft minigames server with game logic in Java, including KitPVP Duels and Extreme Hide and Seek.",
     gradientColor: ["rgb(0, 151, 161)", "rgb(164, 0, 153)"],
     gradientAngle: 45,
     gitRepo: "",
