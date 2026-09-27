@@ -5,6 +5,7 @@ import { selectProjectTech } from "./ProjectSearch";
 
 interface SkillCardProps {
   skill: string;
+  description?: string;
   icon: string;
   color: string;
   projectCount?: number;
@@ -14,6 +15,7 @@ interface SkillCardProps {
 
 const SkillCard: React.FC<SkillCardProps> = ({
   skill = "None",
+  description,
   icon,
   color,
   projectCount,
@@ -34,7 +36,7 @@ const SkillCard: React.FC<SkillCardProps> = ({
 
   const content = (
     <div
-      className={`relative flex h-[168px] flex-col justify-between overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg p-5 transition-colors duration-200 ${
+      className={`relative flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg p-5 transition-colors duration-200 ${
         techId ? "group hover:border-[var(--skill)]" : ""
       }`}
       style={{ ["--skill" as string]: color }}
@@ -61,11 +63,13 @@ const SkillCard: React.FC<SkillCardProps> = ({
         <span className="block h-10 w-10 rounded-md" style={{ backgroundColor: color }} aria-hidden />
       )}
 
-      <div className="flex items-end justify-between gap-3">
-        <div>
-          <h3 className="text-lg font-semibold text-white">{skill}</h3>
-          <p className="mt-0.5 text-sm text-slate-500">{countLabel}</p>
-        </div>
+      <h3 className="mt-4 text-lg font-semibold text-white">{skill}</h3>
+      {description && (
+        <p className="mt-1.5 text-sm leading-relaxed text-slate-400">{description}</p>
+      )}
+
+      <div className="mt-auto flex items-center justify-between gap-3 pt-5">
+        <p className="text-sm text-slate-500">{countLabel}</p>
         {techId && (
           <svg
             className="h-5 w-5 shrink-0 -translate-x-1 text-slate-600 transition-all duration-200 group-hover:translate-x-0 group-hover:text-white"
@@ -86,7 +90,7 @@ const SkillCard: React.FC<SkillCardProps> = ({
       <button
         type="button"
         onClick={() => selectProjectTech(techId)}
-        className="block w-full rounded-xl text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        className="block h-full w-full rounded-xl text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
         {content}
       </button>

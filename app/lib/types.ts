@@ -25,6 +25,8 @@ export interface ApiSkill {
   skillType: SkillType;
   // Solid brand color used by the skill card; falls back to gradientColor[0].
   color?: string;
+  // What I use this skill for, shown on the skill card
+  description?: string;
 }
 
 // Display shape used by frontend components

@@ -13,6 +13,8 @@ export const skills: ApiSkill[] = [
   {
     id: "python",
     skillName: "Python",
+    description:
+      "My go-to for tools and automation: desktop apps, custom image formats, an OCR bot, and the model pipeline in BeePEE.",
     color: "#4B8BBE",
     gradientColor: ["#3776AB", "#FFD43B"],
     gradientAngle: 45,
@@ -22,6 +24,8 @@ export const skills: ApiSkill[] = [
   {
     id: "javascript",
     skillName: "JavaScript",
+    description:
+      "The logic behind my Electron apps, from the UI to talking to the file system and other processes.",
     color: "#F7DF1E",
     gradientColor: ["#F7DF1E", "#C9A227"],
     gradientAngle: 45,
@@ -31,6 +35,8 @@ export const skills: ApiSkill[] = [
   {
     id: "java",
     skillName: "Java",
+    description:
+      "Game logic for a Minecraft minigames server, plus wiring VMF2OBJ into BeePEE's model pipeline.",
     color: "#E76F00",
     gradientColor: ["#E76F00", "#B07219"],
     gradientAngle: 45,
@@ -40,6 +46,8 @@ export const skills: ApiSkill[] = [
   {
     id: "swift",
     skillName: "Swift",
+    description:
+      "Picking up native Apple development. Nothing shipped yet.",
     color: "#F05138",
     gradientColor: ["#F05138", "#C1352A"],
     gradientAngle: 45,
@@ -51,6 +59,8 @@ export const skills: ApiSkill[] = [
   {
     id: "electron",
     skillName: "Electron",
+    description:
+      "Cross-platform desktop apps with installers, auto-updates and crash reporting.",
     color: "#9FEAF9",
     gradientColor: ["#2B2E3A", "#47848F"],
     gradientAngle: 45,
@@ -60,6 +70,8 @@ export const skills: ApiSkill[] = [
   {
     id: "nodejs",
     skillName: "Node.js",
+    description:
+      "The backend side of my apps: file handling, child processes, packaging and build tooling.",
     color: "#5FA04E",
     gradientColor: ["#3C873A", "#215732"],
     gradientAngle: 45,
@@ -69,6 +81,8 @@ export const skills: ApiSkill[] = [
   {
     id: "nextjs",
     skillName: "Next.js",
+    description:
+      "React and TypeScript on the web. This site is built with it.",
     color: "#FFFFFF",
     gradientColor: ["#444444", "#000000"],
     gradientAngle: 45,
@@ -80,6 +94,8 @@ export const skills: ApiSkill[] = [
   {
     id: "adobe",
     skillName: "Adobe",
+    description:
+      "Photoshop and Illustrator for logos, icons and UI assets.",
     color: "#FF3B30",
     gradientColor: ["#FF0000", "#990000"],
     gradientAngle: 45,
