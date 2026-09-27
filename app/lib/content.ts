@@ -160,7 +160,7 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "",
     skillId: ["python"],
-    status: "Running live for the BeemodTools community",
+    status: "Used by real people",
   },
   {
     id: "10",
