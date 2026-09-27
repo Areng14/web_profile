@@ -157,7 +157,7 @@ export const projects: ApiProject[] = [
       "A full-stack banking web app. Users can sign up, deposit, withdraw, send money to other users and view their transaction history. Built in Next.js on a Go backend, with JWT auth and Docker deployment to a VPS.",
     gradientColor: ["#00ADD8", "#2496ED"],
     gradientAngle: 45,
-    gitRepo: "bank-app",
+    gitRepo: "",
     skillId: ["nextjs", "go", "docker"],
   },
   {
