@@ -16,7 +16,6 @@ interface ProjectCardProps {
     name: string;
     description: string;
     gitRepo?: string;
-    color?: string;
     technologies?: string[];
 }
 
@@ -24,20 +23,25 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     name,
     description,
     gitRepo,
-    color = "var(--accent)",
     technologies = []
 }) => {
+    const barColors = technologies.length > 0
+        ? technologies.map((tech) => skillByName[tech.toLowerCase()]?.color ?? "#475569")
+        : ["#475569"];
+
     const content = (
         <div
-            className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg p-6 transition-colors duration-200 hover:border-[var(--project)]"
-            style={{ ["--project" as string]: color }}
+            className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg p-6 transition-colors duration-200 hover:border-white/20"
         >
-            {/* Solid accent bar, grows on hover */}
-            <span
-                className="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-[0.12] transition-transform duration-300 group-hover:scale-x-100"
-                style={{ backgroundColor: color }}
+            {/* GitHub-style language bar: one solid segment per technology */}
+            <div
+                className="absolute inset-x-0 top-0 flex h-1 gap-0.5 transition-[height] duration-200 group-hover:h-1.5"
                 aria-hidden
-            />
+            >
+                {barColors.map((c, i) => (
+                    <span key={i} className="flex-1" style={{ backgroundColor: c }} />
+                ))}
+            </div>
 
             <h2 className="text-xl font-semibold text-white">{name}</h2>
             <p className="mt-2 text-sm leading-relaxed text-slate-400">{description}</p>
