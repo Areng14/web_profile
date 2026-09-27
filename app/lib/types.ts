@@ -7,7 +7,7 @@ export interface ApiProject {
   gradientAngle: number;
   gitRepo: string;
   skillId: string[];
-  // Short status badge shown next to the name, e.g. "Live" or "In use"
+  // Marks a project with real users; shown as an icon next to the name, with this text as the tooltip
   status?: string;
 }
 
