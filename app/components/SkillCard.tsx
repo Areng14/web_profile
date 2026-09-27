@@ -1,78 +1,99 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
-import Link from "next/link";
+import { selectProjectTech } from "./ProjectSearch";
 
 interface SkillCardProps {
   skill: string;
+  description?: string;
   icon: string;
-  iconangle?: number;
-  colors: string[];
-  angle?: string;
-  endpoint?: string;
+  color: string;
+  projectCount?: number;
+  // When set, clicking the card filters the projects section to this skill
+  techId?: string;
 }
 
 const SkillCard: React.FC<SkillCardProps> = ({
   skill = "None",
+  description,
   icon,
-  colors,
-  angle = "45deg",
-  iconangle = 0,
-  endpoint,
+  color,
+  projectCount,
+  techId,
 }) => {
   const imageSrc = !icon
     ? null
-    : icon.startsWith("http") || icon.startsWith("data:")
+    : icon.startsWith("http") || icon.startsWith("data:") || icon.startsWith("/")
       ? icon
-      : icon.startsWith("/")
-        ? icon
-        : `/${icon.replace(/^\//, "")}`;
+      : `/${icon}`;
+
+  const countLabel =
+    projectCount === undefined
+      ? "Find projects"
+      : projectCount === 0
+        ? "No projects yet"
+        : `${projectCount} project${projectCount === 1 ? "" : "s"}`;
 
   const content = (
     <div
-      className="group relative flex h-[280px] flex-col overflow-hidden rounded-2xl border border-white/5 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl sm:h-[320px]"
-      style={{
-        background: `linear-gradient(${angle}, ${colors.join(", ")})`,
-      }}
+      className={`relative flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg p-5 transition-colors duration-200 ${
+        techId ? "group hover:border-[var(--skill)]" : ""
+      }`}
+      style={{ ["--skill" as string]: color }}
     >
-      <div
-        className="absolute bottom-2 right-2 h-2/3 w-2/3 opacity-90 transition-transform duration-300 group-hover:scale-105"
-        style={{ transform: `rotate(${iconangle}deg)` }}
-      >
-        {imageSrc ? (
-          <Image
-            src={imageSrc}
-            alt=""
-            width={400}
-            height={400}
-            className="h-full w-full object-contain"
-          />
-        ) : (
-          <div className="h-full w-full rounded bg-white/10" aria-hidden />
+      {/* Accent bar drawn as a top border so it curves with the card's corners; revealed on hover */}
+      <span
+        className="pointer-events-none absolute inset-0 rounded-[11px] border-t-[3px] transition-[clip-path] duration-300 [clip-path:inset(0_88%_0_0)] group-hover:[clip-path:inset(0)]"
+        style={{ borderTopColor: color }}
+        aria-hidden
+      />
+
+      {/* Icon rendered as a flat silhouette in the brand color */}
+      {imageSrc ? (
+        <span
+          className="block h-10 w-10"
+          style={{
+            backgroundColor: color,
+            WebkitMask: `url("${imageSrc}") center / contain no-repeat`,
+            mask: `url("${imageSrc}") center / contain no-repeat`,
+          }}
+          aria-hidden
+        />
+      ) : (
+        <span className="block h-10 w-10 rounded-md" style={{ backgroundColor: color }} aria-hidden />
+      )}
+
+      <h3 className="mt-4 text-lg font-semibold text-white">{skill}</h3>
+      {description && (
+        <p className="mt-1.5 text-sm leading-relaxed text-slate-400">{description}</p>
+      )}
+
+      <div className="mt-auto flex items-center justify-between gap-3 pt-5">
+        <p className="text-sm text-slate-500">{countLabel}</p>
+        {techId && (
+          <svg
+            className="h-5 w-5 shrink-0 -translate-x-1 text-slate-600 transition-all duration-200 group-hover:translate-x-0 group-hover:text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m-6-6l6 6-6 6" />
+          </svg>
         )}
-      </div>
-      <div className="relative flex flex-1 flex-col p-5">
-        <h3 className="text-xl font-semibold text-white drop-shadow sm:text-2xl">
-          {skill}
-        </h3>
-        <div className="mt-auto pt-4">
-          <span className="inline-flex items-center gap-1.5 rounded-lg bg-black/30 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition group-hover:bg-black/40">
-            Find projects
-            <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </span>
-        </div>
       </div>
     </div>
   );
 
-  if (endpoint) {
+  if (techId) {
     return (
-      <Link href={endpoint} className="block focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background rounded-2xl">
+      <button
+        type="button"
+        onClick={() => selectProjectTech(techId)}
+        className="block h-full w-full rounded-xl text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      >
         {content}
-      </Link>
+      </button>
     );
   }
 
