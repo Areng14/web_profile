@@ -91,7 +91,6 @@ export default function ProjectSearch({
               key={project.id}
               name={project.name}
               description={project.description}
-              color={project.color}
               gitRepo={project.gitRepo}
               technologies={project.technologies}
             />
