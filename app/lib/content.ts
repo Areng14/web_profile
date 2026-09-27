@@ -25,7 +25,7 @@ export const skills: ApiSkill[] = [
     id: "javascript",
     skillName: "JavaScript",
     description:
-      "The logic behind my Electron apps, from the UI to talking to the file system and other processes.",
+      "The logic behind my Electron apps, plus framework-free browser games: a 3D tower defense and a railway signalling sim.",
     color: "#F7DF1E",
     gradientColor: ["#F7DF1E", "#C9A227"],
     gradientAngle: 45,
@@ -171,6 +171,26 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "",
     skillId: ["nextjs", "claudecode"],
+  },
+  {
+    id: "13",
+    name: "Railway Signalling Sim",
+    description:
+      "Run a modern control-centre workstation over a fictional 8-zone railway. A real interlocking locks routes and points, other zones run on automatic route setting, and seeded shifts throw in track failures, stuck points and breakdowns. Scored on the industry's own punctuality measure. The board is plain SVG, no game engine.",
+    gradientColor: ["#F59E0B", "#DC2626"],
+    gradientAngle: 45,
+    gitRepo: "",
+    skillId: ["javascript", "claudecode"],
+  },
+  {
+    id: "14",
+    name: "Tower Defense",
+    description:
+      "A 3D tower defense game in Three.js with 20 towers, 28 enemy types, 20 maps and a 50-wave campaign. Bosses split apart on death, and each difficulty reshapes the whole campaign instead of just adding health. Balance was tuned against measured win rates, and every sound is synthesized with the Web Audio API.",
+    gradientColor: ["#10B981", "#0EA5E9"],
+    gradientAngle: 45,
+    gitRepo: "",
+    skillId: ["javascript", "claudecode"],
   },
   {
     id: "10",
