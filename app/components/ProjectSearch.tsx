@@ -226,6 +226,7 @@ export default function ProjectSearch({
               name={project.name}
               description={project.description}
               gitRepo={project.gitRepo}
+              status={project.status}
               technologies={project.technologies}
               activeTech={activeChip?.name}
               onTechClick={handleTagClick}

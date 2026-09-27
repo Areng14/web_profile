@@ -14,7 +14,7 @@ export const skills: ApiSkill[] = [
     id: "python",
     skillName: "Python",
     description:
-      "My go-to for tools and automation: desktop apps, custom image formats, an OCR bot, and the model pipeline in BeePEE.",
+      "My go-to for tools and automation: a Discord bot with a fine-tuned ML model, desktop apps, custom image formats, and the model pipeline in BeePEE.",
     color: "#4B8BBE",
     gradientColor: ["#3776AB", "#FFD43B"],
     gradientAngle: 45,
@@ -149,6 +149,18 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "BeemodTools/BeePEE",
     skillId: ["electron", "javascript", "nodejs", "python", "java"],
+    status: "In use",
+  },
+  {
+    id: "11",
+    name: "BeeBOT",
+    description:
+      "The Discord bot for the BeemodTools community. It catches scams with a fine-tuned DistilBERT model and GPT fallback, and triages BeePEE crash reports with an AI agent that deduplicates bugs and digs through the user's package to find the cause.",
+    gradientColor: ["#4B8BBE", "#5865F2"],
+    gradientAngle: 45,
+    gitRepo: "",
+    skillId: ["python"],
+    status: "Live",
   },
   {
     id: "10",

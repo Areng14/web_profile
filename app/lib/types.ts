@@ -7,6 +7,8 @@ export interface ApiProject {
   gradientAngle: number;
   gitRepo: string;
   skillId: string[];
+  // Short status badge shown next to the name, e.g. "Live" or "In use"
+  status?: string;
 }
 
 // Matches API skill type
@@ -38,6 +40,7 @@ export interface Project {
   gradientColors: string[];
   gradientAngle: number;
   gitRepo?: string;
+  status?: string;
   technologies: string[];
 }
 
@@ -49,6 +52,7 @@ export function apiProjectToProject(api: ApiProject, skillIdToName: Record<strin
     gradientColors: api.gradientColor ?? [],
     gradientAngle: api.gradientAngle ?? 45,
     gitRepo: api.gitRepo || undefined,
+    status: api.status,
     technologies: (api.skillId ?? []).map((id) => skillIdToName[id] || id),
   };
 }
