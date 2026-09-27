@@ -1,79 +1,15 @@
-import { Metadata } from "next";
-import { Suspense } from "react";
-import ImageSlider from "../components/ImageSlider";
-import ProjectSearch from "../components/ProjectSearch";
-import { fetchProjectsForDisplay } from "../lib/data";
+import { redirect } from "next/navigation";
 
-const images: string[] = [
-  "/misc/mainslide/img5.png",
-  "/misc/mainslide/img6.png",
-  "/misc/mainslide/img7.png",
-  "/misc/mainslide/img8.png",
-];
-
-export const generateMetadata = async (): Promise<Metadata> => {
-  return {
-    title: "Projects",
-    description: "A collection of software projects",
-  };
-};
-
+// Projects now live on the home page; keep old links (and their filters) working
 interface ProjectsPageProps {
   searchParams: Promise<{ tech?: string; search?: string }>;
 }
 
 export default async function Projects({ searchParams }: ProjectsPageProps) {
   const { tech, search } = await searchParams;
-  let projects: Awaited<ReturnType<typeof fetchProjectsForDisplay>> = [];
-  try {
-    projects = await fetchProjectsForDisplay();
-  } catch {
-    // Fallback
-  }
-
-  return (
-    <div className="min-h-screen">
-      {/* Hero with slider - same padding as home */}
-      <section className="relative flex h-screen min-h-[500px] w-full flex-col justify-end">
-        <ImageSlider imgs={images} />
-        <div className="relative z-10 mx-auto w-full max-w-[1600px] px-8 pb-40 pt-28 sm:px-12 sm:pb-44 sm:pt-32 lg:px-20 lg:pb-52 lg:pt-40 pointer-events-none">
-          <div className="max-w-2xl pointer-events-auto">
-            <p className="mb-2 text-sm font-medium uppercase tracking-widest text-accent/90">
-              Portfolio
-            </p>
-            <h1 className="mb-3 text-4xl font-bold leading-tight text-white drop-shadow-lg sm:text-5xl md:text-6xl">
-              Projects
-            </h1>
-            <p className="max-w-lg text-base leading-relaxed text-slate-300 drop-shadow sm:text-lg">
-              A collection of programs and scripts that use a variety of
-              languages and libraries. Each project is different and showcases
-              my skills in software.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Project list */}
-      <section className="border-t border-white/[0.06] py-16 sm:py-20 lg:py-24">
-        <div className="mx-auto max-w-[1600px] px-6 sm:px-8 lg:px-10">
-          <div className="mb-10">
-            <h2 className="text-2xl font-bold text-white sm:text-3xl">
-              All projects
-            </h2>
-            <p className="mt-2 text-slate-400">
-              Filter by technology, or search by name and description.
-            </p>
-          </div>
-
-          <Suspense fallback={<div className="py-12 text-slate-400">Loading...</div>}>
-            <ProjectSearch
-              projects={projects}
-              initialTech={tech ?? null}
-              initialSearch={search ?? ""}
-            />
-          </Suspense>
-        </div>
-      </section>
-    </div>
-  );
+  const params = new URLSearchParams();
+  if (tech) params.set("tech", tech);
+  if (search) params.set("search", search);
+  const qs = params.toString();
+  redirect(`/${qs ? `?${qs}` : ""}#projects`);
 }

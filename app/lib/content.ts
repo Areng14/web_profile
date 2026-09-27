@@ -90,6 +90,16 @@ export const skills: ApiSkill[] = [
 
 export const projects: ApiProject[] = [
   {
+    id: "9",
+    name: "BeePEE",
+    description:
+      "A desktop editor for building custom items for Portal 2's Puzzle Maker (via the BEEmod mod). Create and edit item packages visually, with no hand-editing of config files. It can auto-generate 3D models from level geometry and has a built-in signage designer.",
+    gradientColor: ["#E3C83A", "#D88D5E"],
+    gradientAngle: 45,
+    gitRepo: "",
+    skillId: ["electron", "javascript", "nodejs", "python", "java"],
+  },
+  {
     id: "1",
     name: "BPE",
     description:

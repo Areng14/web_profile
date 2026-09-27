@@ -51,12 +51,12 @@ export default function About() {
                   technology. I started off with learning Python as my first
                   language, which is why you see a lot of{" "}
                   <Link
-                    href="/projects?search=Python"
+                    href="/?tech=python#projects"
                     className="text-accent underline-offset-2 hover:underline"
                   >
                     Python projects
                   </Link>{" "}
-                  on the projects page. My first program was a temporary file
+                  in my projects. My first program was a temporary file
                   remover. It was a simple program that goes through temporary
                   directories and removes the files to free up space.
                 </p>
@@ -97,7 +97,7 @@ export default function About() {
                   In conclusion, I am a software developer who makes programs in
                   my free time. I make programs that have a range of purposes,
                   from being useless to being kinda useful. Check out my{" "}
-                  <Link href="/projects" className="text-accent underline-offset-2 hover:underline">
+                  <Link href="/#projects" className="text-accent underline-offset-2 hover:underline">
                     projects page
                   </Link>{" "}
                   to see what I have made.

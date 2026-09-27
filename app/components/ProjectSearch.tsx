@@ -25,6 +25,31 @@ const withTransition = (update: () => void) => {
   document.startViewTransition(() => flushSync(update));
 };
 
+// Smooth-scroll an element to the top of the viewport, then run a callback.
+// Filtering waits for the scroll so the animation isn't fighting it.
+const scrollThen = (el: HTMLElement | null, callback: () => void) => {
+  if (!el) return callback();
+  const offset = parseFloat(getComputedStyle(el).scrollMarginTop) || 0;
+  if (Math.abs(el.getBoundingClientRect().top - offset) < 8) return callback();
+
+  let done = false;
+  const finish = () => {
+    if (done) return;
+    done = true;
+    window.removeEventListener("scrollend", finish);
+    callback();
+  };
+  window.addEventListener("scrollend", finish);
+  setTimeout(finish, 900); // fallback for browsers without scrollend
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
+};
+
+const SELECT_TECH_EVENT = "projects:select-tech";
+
+// Lets other parts of the page (e.g. skill cards) filter the project grid
+export const selectProjectTech = (id: string) =>
+  window.dispatchEvent(new CustomEvent<string>(SELECT_TECH_EVENT, { detail: id }));
+
 export default function ProjectSearch({
   projects,
   initialTech,
@@ -53,12 +78,22 @@ export default function ProjectSearch({
 
   const activeChip = chips.find((c) => c.id === tech) ?? null;
 
-  // Arriving from a skill card: bring the filters into view
+  // Arriving with a filter in the URL: bring the filters into view
   useEffect(() => {
     if (initialTech || initialSearch) {
       filtersRef.current?.scrollIntoView({ behavior: "smooth" });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Skill cards elsewhere on the page ask to show a technology's projects
+  useEffect(() => {
+    const onSelect = (e: Event) => {
+      const id = (e as CustomEvent<string>).detail;
+      scrollThen(filtersRef.current, () => withTransition(() => setTech(id)));
+    };
+    window.addEventListener(SELECT_TECH_EVENT, onSelect);
+    return () => window.removeEventListener(SELECT_TECH_EVENT, onSelect);
   }, []);
 
   // Apply typed searches after a short pause so every keystroke doesn't restart the animation
@@ -97,10 +132,7 @@ export default function ProjectSearch({
   const handleTagClick = (techName: string) => {
     const chip = chips.find((c) => c.name === techName);
     if (!chip) return;
-    withTransition(() => {
-      setTech(chip.id);
-      filtersRef.current?.scrollIntoView({ block: "start" });
-    });
+    scrollThen(filtersRef.current, () => withTransition(() => setTech(chip.id)));
   };
 
   const clearFilters = () =>
