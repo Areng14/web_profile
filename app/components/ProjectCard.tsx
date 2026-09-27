@@ -23,6 +23,7 @@ interface ProjectCardProps {
     name: string;
     description: string;
     gitRepo?: string;
+    status?: string;
     technologies?: string[];
     activeTech?: string;
     onTechClick?: (tech: string) => void;
@@ -33,6 +34,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     name,
     description,
     gitRepo,
+    status,
     technologies = [],
     activeTech,
     onTechClick,
@@ -57,7 +59,18 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 ))}
             </div>
 
-            <h2 className="text-xl font-semibold text-white">{name}</h2>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <h2 className="text-xl font-semibold text-white">{name}</h2>
+                {status && (
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-medium text-emerald-400 ring-1 ring-inset ring-emerald-500/20">
+                        <span className="relative flex h-1.5 w-1.5" aria-hidden>
+                            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75 motion-reduce:animate-none" />
+                            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                        </span>
+                        {status}
+                    </span>
+                )}
+            </div>
             <p className="mt-2 text-sm leading-relaxed text-slate-400">{description}</p>
 
             {technologies.length > 0 && (
