@@ -102,6 +102,17 @@ export const skills: ApiSkill[] = [
     icon: "/misc/skills/docker.svg",
     skillType: SkillType.Tools,
   },
+  {
+    id: "claudecode",
+    skillName: "Claude Code",
+    description:
+      "AI pair programmer for planning changes, refactors and reviews. It writes a lot of the code; I still read every diff.",
+    color: "#D97757",
+    gradientColor: ["#D97757", "#B85C3E"],
+    gradientAngle: 45,
+    icon: "/misc/skills/claudecode.svg",
+    skillType: SkillType.Tools,
+  },
 
   // Design Tools
   {
@@ -186,7 +197,7 @@ export const projects: ApiProject[] = [
     gradientColor: ["rgb(182, 37, 88)", "rgb(140, 49, 185)"],
     gradientAngle: 45,
     gitRepo: "web_profile",
-    skillId: ["nextjs", "nodejs"],
+    skillId: ["nextjs", "nodejs", "claudecode"],
   },
   {
     id: "7",
