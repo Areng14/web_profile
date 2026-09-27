@@ -33,9 +33,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         <div
             className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg p-6 transition-colors duration-200 hover:border-white/20"
         >
-            {/* GitHub-style language bar: one solid segment per technology */}
+            {/* GitHub-style language bar: one solid segment per technology, grows on hover */}
             <div
-                className="absolute inset-x-0 top-0 flex h-1 gap-0.5 transition-[height] duration-200 group-hover:h-1.5"
+                className="absolute inset-x-0 top-0 flex h-1 origin-left scale-x-[0.25] gap-0.5 transition-transform duration-300 group-hover:scale-x-100"
                 aria-hidden
             >
                 {barColors.map((c, i) => (
