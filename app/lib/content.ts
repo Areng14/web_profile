@@ -110,6 +110,7 @@ export const projects: ApiProject[] = [
   {
     id: "1",
     name: "BPE",
+    color: "#E3C83A",
     description:
       "Beemod Package Editor is a python program that allows users to create and edit packages for BEEMOD, a puzzlemaker mod for Portal 2. BPE v3 allows users to use plugins to extend the functionality of the program.",
     gradientColor: ["rgb(217, 211, 43)", "rgb(216, 141, 94)"],
@@ -120,6 +121,7 @@ export const projects: ApiProject[] = [
   {
     id: "2",
     name: "TR",
+    color: "#34C759",
     description:
       "TestRunner is built for testing multiple scripts at a time. Designed for teachers to use to mass grade student assignments. Includes a warning if the script uses weird imports.",
     gradientColor: ["rgb(30, 192, 70)", "rgb(72, 99, 52)"],
@@ -130,6 +132,7 @@ export const projects: ApiProject[] = [
   {
     id: "3",
     name: "Blank",
+    color: "#3B82F6",
     description:
       "A image format using only whitespace. [SPACE][TAB][SPACE][TAB][SPACE][TAB] Each increment of whitespace corresponds to an increment in the RGB values. A newline signifies to move on to the next row.",
     gradientColor: ["rgb(35, 71, 169)", "rgb(45, 151, 163)"],
@@ -140,6 +143,7 @@ export const projects: ApiProject[] = [
   {
     id: "4",
     name: "SCR ATO",
+    color: "#0EA5E9",
     description:
       "An macro program that automates the driving of trains in Stepford County Railway. The script uses OCR to read the information on the HUD which the program decides what to press.",
     gradientColor: ["rgb(35, 111, 173)", "rgb(40, 44, 121)"],
@@ -150,6 +154,7 @@ export const projects: ApiProject[] = [
   {
     id: "5",
     name: "Graph IMG",
+    color: "#A855F7",
     description:
       "A vector based image format that uses mathematical functions to generate images. The program uses a custom language to define the image.",
     gradientColor: ["rgb(80, 35, 169)", "rgb(155, 45, 163)"],
@@ -160,6 +165,7 @@ export const projects: ApiProject[] = [
   {
     id: "6",
     name: "Website",
+    color: "#EC4899",
     description:
       "This very website. Built using Next.js, React, Material-UI and NodeJS for the backend. The website is responsive and showcases my projects, skills, design knowledge, and contact information.",
     gradientColor: ["rgb(182, 37, 88)", "rgb(140, 49, 185)"],
@@ -170,6 +176,7 @@ export const projects: ApiProject[] = [
   {
     id: "7",
     name: "Yapper",
+    color: "#F59E0B",
     description:
       "A work in progress yapping program. Yapper allows for users to yap to each other. Basically a chat program.",
     gradientColor: ["rgb(157, 95, 33)", "rgb(177, 48, 109)"],
@@ -180,6 +187,7 @@ export const projects: ApiProject[] = [
   {
     id: "8",
     name: "MC SERVER",
+    color: "#14B8A6",
     description:
       "A minecraft minigames server. Game logic coded by me in Java. Games include: KitPVP Duels, Extreme Hide and Seek",
     gradientColor: ["rgb(0, 151, 161)", "rgb(164, 0, 153)"],

@@ -1,127 +1,109 @@
 'use client';
 
 import React from "react";
-import Image from 'next/image';
+import { skills } from "../lib/content";
 
-// Technology tags mapping
-const techLogos: { [key: string]: string } = {
-    // Languages
-    "Python": "/misc/skills/monochrome/python.svg",
-    "JavaScript": "/misc/skills/monochrome/js.svg",
-    "JS": "/misc/skills/monochrome/js.svg",
-    "TypeScript": "/misc/skills/monochrome/ts.svg",
-    "TS": "/misc/skills/monochrome/ts.svg",
-    "Java": "/misc/skills/monochrome/java.svg",
-    "Swift": "/misc/skills/monochrome/swift.svg",
-    
-    // Frameworks
-    "React": "/misc/skills/monochrome/react.svg",
-    "Electron": "/misc/skills/monochrome/electron.svg",
-    "Node.js": "/misc/skills/monochrome/nodejs.svg",
-    "NodeJS": "/misc/skills/monochrome/nodejs.svg",
-    "Node": "/misc/skills/monochrome/nodejs.svg",
-    "Next.js": "/misc/skills/monochrome/nextjs.svg",
-    "NextJS": "/misc/skills/monochrome/nextjs.svg",
-    "Next": "/misc/skills/monochrome/nextjs.svg",
-};
+// Look up a technology's icon + brand color from the skills list
+const skillByName: Record<string, { icon: string; color: string }> = {};
+skills.forEach((s) => {
+    skillByName[s.skillName.toLowerCase()] = {
+        icon: s.icon,
+        color: s.color ?? s.gradientColor?.[0] ?? "#94a3b8",
+    };
+});
 
 interface ProjectCardProps {
     name: string;
     description: string;
-    image?: string;
     gitRepo?: string;
-    gradientColors?: string[];
-    gradientAngle?: number;
-    technologies?: string[]; // Now just accepts technology names
+    color?: string;
+    technologies?: string[];
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ 
-    name, 
-    description, 
-    image, 
+const ProjectCard: React.FC<ProjectCardProps> = ({
+    name,
+    description,
     gitRepo,
-    gradientColors,
-    gradientAngle = 45,
+    color = "var(--accent)",
     technologies = []
 }) => {
-    const goToGitRepo = () => {
-        if (gitRepo) {
-            window.location.href = `https://github.com/areng14/${gitRepo}`;
-        }
-    }
-
-    const backgroundStyle = gradientColors ? {
-        background: `linear-gradient(${gradientAngle}deg, ${gradientColors.join(', ')})`
-    } : {};
-
-    return (
+    const content = (
         <div
-            className="relative flex w-full max-w-full flex-col overflow-hidden rounded-2xl bg-slate-900"
-            style={{ height: "576px" }}
+            className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg p-6 transition-colors duration-200 hover:border-[var(--project)]"
+            style={{ ["--project" as string]: color }}
         >
-            {/* Image/Gradient Container - Top 50% */}
-            <div
-                className="relative h-1/2 w-full overflow-hidden"
-                style={backgroundStyle}
-            >
-                {!gradientColors && image && (
-                    <Image
-                        src={image}
-                        alt={name}
-                        fill
-                        style={{
-                            objectFit: "cover",
-                        }}
-                    />
-                )}
-                {/* Tags Container */}
-                {technologies.length > 0 && (
-                    <div
-                        className="absolute bottom-4 right-4 flex max-w-[70%] flex-wrap justify-end gap-2"
-                    >
-                        {technologies.map((tech, index) => (
-                            techLogos[tech] && (
-                                <div
-                                    key={index}
-                                    className="relative h-10 w-10 overflow-hidden rounded-full bg-slate-100 p-1.5 transition-transform duration-200 hover:scale-110"
-                                    title={tech}
-                                >
-                                    <Image
-                                        src={techLogos[tech]}
-                                        alt={tech}
-                                        fill
+            {/* Solid accent bar, grows on hover */}
+            <span
+                className="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-[0.12] transition-transform duration-300 group-hover:scale-x-100"
+                style={{ backgroundColor: color }}
+                aria-hidden
+            />
+
+            <h2 className="text-xl font-semibold text-white">{name}</h2>
+            <p className="mt-2 text-sm leading-relaxed text-slate-400">{description}</p>
+
+            {technologies.length > 0 && (
+                <ul className="mt-auto flex flex-wrap gap-2 pt-5">
+                    {technologies.map((tech) => {
+                        const skill = skillByName[tech.toLowerCase()];
+                        return (
+                            <li
+                                key={tech}
+                                className="inline-flex items-center gap-1.5 rounded-md bg-white/[0.04] px-2 py-1 text-xs font-medium text-slate-300"
+                            >
+                                {skill && (
+                                    <span
+                                        className="block h-3.5 w-3.5"
                                         style={{
-                                            objectFit: "contain",
-                                            padding: "6px"
+                                            backgroundColor: skill.color,
+                                            WebkitMask: `url("${skill.icon}") center / contain no-repeat`,
+                                            mask: `url("${skill.icon}") center / contain no-repeat`,
                                         }}
+                                        aria-hidden
                                     />
-                                </div>
-                            )
-                        ))}
-                    </div>
-                )}
-            </div>
-            
-            {/* Content Container - Bottom 75% */}
-            <div className="flex h-3/4 flex-col gap-2 px-5 pb-5 pt-2">
-                <h2 className="pt-2 text-2xl font-semibold text-white">
-                    {name.toUpperCase()}
-                </h2>
-                <p className="text-slate-200">
-                    {description}
-                </p>
-                {gitRepo && (
-                    <button
-                        type="button"
-                        className="absolute bottom-9 inline-flex rounded-xl bg-[#0c0d0f] px-6 py-3 text-lg font-medium text-slate-100 hover:bg-[#1f2126] hover:text-slate-300"
-                        onClick={goToGitRepo}
-                    >
-                        View Repository
-                    </button>
+                                )}
+                                {tech}
+                            </li>
+                        );
+                    })}
+                </ul>
+            )}
+
+            <div className={`${technologies.length > 0 ? "" : "mt-auto "}flex items-center justify-between pt-5 text-sm`}>
+                {gitRepo ? (
+                    <>
+                        <span className="font-medium text-slate-300 transition-colors group-hover:text-white">
+                            View repository
+                        </span>
+                        <svg
+                            className="h-5 w-5 -translate-x-1 text-slate-600 transition-all duration-200 group-hover:translate-x-0 group-hover:text-white"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            aria-hidden
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m-6-6l6 6-6 6" />
+                        </svg>
+                    </>
+                ) : (
+                    <span className="text-slate-600">No public repo</span>
                 )}
             </div>
         </div>
     );
+
+    if (gitRepo) {
+        return (
+            <a
+                href={`https://github.com/areng14/${gitRepo}`}
+                className="block h-full rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+                {content}
+            </a>
+        );
+    }
+
+    return content;
 }
 
 export default ProjectCard;

@@ -66,7 +66,7 @@ export default async function Projects({ searchParams }: ProjectsPageProps) {
       </section>
 
       {/* Project list */}
-      <section className="border-t border-slate-800/80 bg-slate-950/50 py-16 sm:py-20 lg:py-24">
+      <section className="border-t border-white/[0.06] py-16 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-[1600px] px-6 sm:px-8 lg:px-10">
           <div className="mb-10">
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
