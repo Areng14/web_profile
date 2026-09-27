@@ -16,7 +16,7 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: "Areng",
-  description: "Software Engineer i think",
+  description: "Software developer building desktop tools, web apps, bots and games.",
 };
 
 export default function RootLayout({
