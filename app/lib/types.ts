@@ -9,8 +9,6 @@ export interface ApiProject {
   skillId: string[];
   // Marks a project that real people use; shown as an icon next to the name
   hasUsers?: boolean;
-  // Name of the project that replaced this one; marks the card as deprecated
-  replacedBy?: string;
 }
 
 // Matches API skill type
@@ -43,7 +41,6 @@ export interface Project {
   gradientAngle: number;
   gitRepo?: string;
   hasUsers?: boolean;
-  replacedBy?: string;
   technologies: string[];
 }
 
@@ -56,7 +53,6 @@ export function apiProjectToProject(api: ApiProject, skillIdToName: Record<strin
     gradientAngle: api.gradientAngle ?? 45,
     gitRepo: api.gitRepo || undefined,
     hasUsers: api.hasUsers,
-    replacedBy: api.replacedBy,
     technologies: (api.skillId ?? []).map((id) => skillIdToName[id] || id),
   };
 }
