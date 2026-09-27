@@ -149,7 +149,7 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "BeemodTools/BeePEE",
     skillId: ["electron", "javascript", "nodejs", "python", "java"],
-    status: "Used by real people",
+    hasUsers: true,
   },
   {
     id: "11",
@@ -160,7 +160,7 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "",
     skillId: ["python"],
-    status: "Used by real people",
+    hasUsers: true,
   },
   {
     id: "10",
