@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="/games/signalling/">
+<title>Railway Signalling</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="bar">
+    <div class="stat clock"><h6>Railway time</h6><div class="num" id="clock">06:00:00</div><div class="sub" id="clockSub">Not started</div></div>
+    <div class="seg rate" id="rate" role="radiogroup" aria-label="How fast the clock runs">
+      <button type="button" role="radio" data-rate="0" data-tip="Hold the clock" hidden>Hold</button>
+      <button type="button" role="radio" data-rate="1" data-tip="Real time">1×</button>
+      <button type="button" role="radio" data-rate="2" data-tip="Twice real time">2×</button>
+      <button type="button" role="radio" data-rate="4" data-tip="Four times real time">4×</button>
+      <button type="button" role="radio" data-rate="8" data-tip="Eight times real time">8×</button>
+    </div>
+    <div class="stat"><h6>On time</h6><div class="num" id="ppm">—</div><div class="sub" id="ppmSub">0 of 0 finished</div></div>
+    <div class="stat"><h6>Marks</h6><div class="num" id="marks">—</div><div class="sub" id="marksSub">Three and you are relieved</div></div>
+    <div class="stat next"><h6>Next here</h6><div class="num code" id="next">—</div><div class="sub" id="nextSub">Nothing due</div></div>
+    <div class="stat wide"><h6 id="sayFrom">Last</h6><div class="say" id="say">Choose a shift to begin.</div></div>
+    <div class="acts">
+      <button class="btn btn-secondary icon" id="phoneBtn" type="button" aria-expanded="false" aria-controls="phone" aria-label="The phone: ring in a fault, or a driver" data-tip="The phone"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.2 3.8l2.4 3.1c.4.5.4 1.2 0 1.7l-1.3 1.5a10.6 10.6 0 0 0 5.6 5.6l1.5-1.3c.5-.4 1.2-.4 1.7 0l3.1 2.4c.5.4.6 1.2.1 1.7l-1.4 1.5c-.6.6-1.4.9-2.2.7C10.4 19.3 4.7 13.6 3.3 7.3c-.2-.8.1-1.6.7-2.2l1.5-1.4c.5-.5 1.3-.4 1.7.1z"/></svg></button>
+      <button class="btn btn-secondary icon" id="guideBtn" type="button" aria-expanded="false" aria-controls="guide" aria-label="Help: the written guide, the rule book" data-tip="Help: the written guide"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.5"/><path d="M9.4 9.4a2.6 2.6 0 1 1 3.7 2.4c-.8.4-1.1 1-1.1 1.8"/><circle cx="12" cy="17" r=".9" class="dot"/></svg></button>
+      <button class="btn btn-secondary icon" id="menuBtn" type="button" aria-expanded="false" aria-controls="settings" aria-label="Menu: sound, the shift and the lesson" data-tip="Sound, the shift and the lesson"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </header>
+
+  <main class="work">
+    <div class="board">
+      <div class="tutor" id="tutor" role="status" hidden><div class="tutorHead"><span class="tutorStep" id="tutorStep"></span><div class="tutorBar" aria-hidden="true"><div class="tutorFill" id="tutorFill"></div></div><span class="tutorPhase" id="tutorPhase"></span></div><div class="tutorBody"><span class="tutorText" id="tutorText"></span><ol class="tutorActs" id="tutorActs" hidden></ol><span class="tutorHint" id="tutorHint" hidden></span></div><button class="btn btn-secondary" id="tutorNext" type="button" hidden>Next</button></div>
+      <section class="display" id="display" aria-label="Signalling display"></section>
+      <div class="overview" id="overview" aria-label="The whole desk, small: the part on screen is framed, and a click or a drag here moves the board"></div>
+      <div class="network" id="network" hidden>
+        <div class="networkPic" id="networkPic"></div>
+        <div class="networkPic" id="schoolPic" hidden></div>
+        <button class="btn btn-secondary networkClose" id="networkClose" type="button">Back to the board</button>
+      </div>
+    </div>
+    <aside class="side">
+      <div class="tabs" role="tablist" aria-label="Panels">
+        <button type="button" role="tab" data-pane="timetable" aria-selected="true">Timetable</button>
+        <button type="button" role="tab" data-pane="trains" aria-selected="false">Trains</button>
+        <button type="button" role="tab" data-pane="alarms" aria-selected="false">Alarms <span class="badge" id="alarmBadge" hidden>0</span></button>
+      </div>
+      <div class="finder"><input id="sideFilter" type="search" placeholder="Find a train, operator or place" autocomplete="off" spellcheck="false" aria-label="Find a train, operator or place"></div>
+      <div class="pane" id="paneTimetable" role="tabpanel"><table class="tt"><thead><tr><th>Train</th><th>From – to</th><th>Booked</th><th>Plat</th><th>Now</th></tr></thead><tbody id="ttBody"></tbody></table></div>
+      <div class="pane" id="paneTrains" role="tabpanel" hidden><div id="trainList" class="list"></div></div>
+      <div class="pane" id="paneAlarms" role="tabpanel" hidden><div class="trainBar" id="ackAllBar" hidden><button class="btn btn-secondary" id="ackAll" type="button">Acknowledge all</button></div><div id="alarmList" class="list"></div></div>
+      <div class="pane trainPane" id="paneTrain" role="region" aria-label="One train's timetable" hidden>
+        <div class="trainBar"><button class="btn btn-secondary" id="trainBack" type="button">Back to the list</button></div>
+        <div class="trainHead" id="trainHead"></div>
+        <table class="tt"><thead><tr><th>Place</th><th>Booked</th><th>Actual</th><th>±</th></tr></thead><tbody id="trainBody"></tbody></table>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="tray">
+    <button class="btn btn-secondary" id="mapBtn" type="button" aria-pressed="false" aria-controls="network" data-tip="The diagram of the line">Network</button>
+    <div class="hint" id="hint">Click a signal, then the signal or platform end you want the route to. Right-click for more. The keys are in the written guide (H).</div>
+    <div class="log" id="log"></div>
+  </footer>
+
+  <div class="ctx" id="ctx" hidden role="menu"></div>
+
+  <div class="trainPop trainPane" id="trainPop" role="region" aria-label="One train's timetable" hidden>
+    <div class="trainHead" id="trainPopHead"></div>
+    <table class="tt"><thead><tr><th>Place</th><th>Booked</th><th>Actual</th><th>±</th></tr></thead><tbody id="trainPopBody"></tbody></table>
+  </div>
+
+  <div class="interpose" id="interpose" hidden>
+    <label>Describe <input id="interposeInput" maxlength="4" autocomplete="off" spellcheck="false" placeholder="1A23"></label>
+    <button class="btn btn-primary" id="interposeOk" type="button">Interpose</button>
+    <button class="btn btn-secondary" id="interposeCancel" type="button">Cancel description</button>
+  </div>
+
+  <div class="panel phone" id="phone" role="dialog" aria-labelledby="phoneTitle" hidden>
+    <div class="panelBar"><h6 id="phoneTitle">The phone</h6><button class="btn btn-secondary" id="phoneHang" type="button">Hang up</button></div>
+    <div class="phoneReply" id="phoneReply" role="status"><span class="phoneFrom" id="phoneFrom">The phone</span><span class="phoneSaid" id="phoneSaid"></span></div>
+    <div class="phoneList" id="phoneList" role="group" aria-label="What is wrong"></div>
+    <div class="phoneWhere">
+      <label for="phoneInput" id="phoneAsk">Choose what is wrong first</label>
+      <input id="phoneInput" maxlength="8" autocomplete="off" spellcheck="false" disabled>
+      <button class="btn btn-primary" id="phoneRing" type="button" disabled>Ring</button>
+      <button class="btn btn-secondary" id="phoneBack" type="button" disabled>Back</button>
+    </div>
+    <p class="phoneKeys" id="phoneKeys"></p>
+  </div>
+
+  <div class="panel guide" id="guide" role="dialog" aria-label="The written guide: Rule Book Module SO/01, Signalling Operations" hidden>
+    <div class="panelBar"><h6>Rule Book Module SO/01 · Signalling Operations</h6><div class="panelActs"><a class="btn btn-secondary" id="guideTab" href="guide/so01.pdf" target="_blank" rel="noopener" type="application/pdf" data-tip="The PDF, to read, save or print">Open in a new tab</a><button class="btn btn-secondary" id="guideClose" type="button">Close</button></div></div>
+    <div class="guideDoc" id="guideDoc"></div>
+  </div>
+
+  <div class="panel ask" id="lessonAsk" role="dialog" aria-labelledby="lessonAskTitle" hidden>
+    <h6 id="lessonAskTitle">Start the lesson?</h6>
+    <p>The lesson takes you off this desk to the training desk. Your shift is saved as it stands, and Resume on the start screen picks it up again where it stopped.</p>
+    <div class="askActs">
+      <button class="btn btn-primary" id="lessonGo" type="button">Start the lesson</button>
+      <button class="btn btn-secondary" id="lessonStay" type="button">Stay on the shift</button>
+    </div>
+  </div>
+
+  <div class="panel settings" id="settings" hidden>
+    <h6>Sound</h6>
+    <label class="slider">Master <input type="range" id="masterLevel" min="0" max="100" step="5"></label>
+    <label class="slider">Effects <input type="range" id="effectsLevel" min="0" max="100" step="5"></label>
+    <label class="slider">Trains coming on <input type="range" id="arrivalsLevel" min="0" max="100" step="5"></label>
+    <h6>The shift</h6>
+    <p class="muted" id="shiftInfo"></p>
+    <button class="btn btn-secondary" id="endShift" type="button">End the shift now</button>
+    <h6>The lesson</h6>
+    <button class="btn btn-secondary" id="learnDesk" type="button" aria-expanded="false" aria-controls="lessonAsk" data-tip="The lesson, on the training desk">Learn the desk</button>
+  </div>
+
+  <div class="veil" id="veil">
+    <div class="card start">
+      <div class="startHead">
+        <div>
+          <h6>Railway Signalling</h6>
+          <h1 id="veilTitle">Morning shift</h1>
+          <p id="veilText">Eight zones of Chattanooga's railway, seventy trains, two hours. Pick a desk; it is yours until the shift ends.</p>
+          <p class="muted forecast" id="forecast"></p>
+        </div>
+        <p class="sub" id="best"></p>
+      </div>
+      <div class="startBody">
+        <h6 class="pickLabel">Your desk</h6>
+        <div class="deskGrid" id="zonePick" role="radiogroup" aria-label="Which zone to work"></div>
+        <h6 class="pickLabel">Conditions</h6>
+        <div class="levelGrid" id="levels" role="radiogroup" aria-label="Conditions"></div>
+      </div>
+      <div class="startRow">
+        <label class="seedRow">Clock in at <select id="clockIn"></select></label>
+        <span class="muted seedHint">The day, the weather and whatever goes wrong are rolled fresh every shift.</span>
+        <div class="veilActions">
+          <button class="btn btn-primary" id="startBtn" type="button">Start the shift</button>
+          <button class="btn btn-secondary" id="learnBtn" type="button">Learn the desk first</button>
+          <button class="btn btn-secondary" id="resumeBtn" type="button" hidden>Resume</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="srOnly" id="veilStatus" role="status"></p>
+
+  <div class="veil" id="results" hidden>
+    <div class="card wide">
+      <h6>Shift over</h6>
+      <h1 id="resultTitle">On time: 0%</h1>
+      <p id="resultText"></p>
+      <div class="marksList" id="marksList" hidden></div>
+      <div class="resultsWrap"><table class="tt results"><thead><tr><th>Train</th><th>From – to</th><th>Late</th><th>Notes</th></tr></thead><tbody id="resultsBody"></tbody></table></div>
+      <div class="veilActions">
+        <button class="btn btn-primary" id="againBtn" type="button">Another shift</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

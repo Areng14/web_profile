@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base href="/games/td/">
+<title>Tower Defense</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <div class="hud top" hidden>
+    <div class="stat wave">
+      <div class="num" id="wave">Wave 1</div>
+      <div class="lives" id="lives" role="img" aria-label="20 lives"></div>
+    </div>
+    <div class="stat"><h6>Gold</h6><div class="num" id="gold">150</div></div>
+  </div>
+
+  <!-- Wave notes: drop in from the top before a wave with a warning or a line to read. -->
+  <div class="hud notes" id="notes" role="status" aria-live="polite"><h6 id="notesTitle"></h6><div id="notesText"></div></div>
+
+  <div class="hud corner" hidden>
+    <button class="btn btn-secondary" id="pause" type="button" data-tip="Pause (P)" aria-label="Pause"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" fill="currentColor"/></svg></button>
+  </div>
+  <div class="hud tome">
+    <button class="btn btn-secondary" id="settingsBtn" type="button" data-tip="Settings" aria-label="Settings" aria-expanded="false" aria-controls="settings"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4.5h6.5M12.5 4.5H14M2 8h1.5M7.5 8H14M2 11.5h8M14 11.5h0" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="10.5" cy="4.5" r="1.75" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="5.5" cy="8" r="1.75" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="11.5" r="1.75" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+    <button class="btn btn-secondary" id="book" type="button" data-tip="Field guide (B)" aria-label="Field guide"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2.5h5a1.5 1.5 0 0 1 1 .4 1.5 1.5 0 0 1 1-.4h5v10.5H9a1 1 0 0 0-1 .6 1 1 0 0 0-1-.6H2Z M3 3.5v8.5h4.5V4a.5.5 0 0 0-.5-.5Zm10 0H9.5a.5.5 0 0 0-.5.5v8h4Z" fill="currentColor"/></svg></button>
+  </div>
+
+  <!-- Settings: how loud the music and the sound effects are, and which wave notes show. -->
+  <div class="settings" id="settings" hidden>
+    <h6>Settings</h6>
+    <label class="slider"><span>Music</span><input id="musicLevel" type="range" min="0" max="100" step="5"><b id="musicOut"></b></label>
+    <label class="slider"><span>Sound effects</span><input id="sfxLevel" type="range" min="0" max="100" step="5"><b id="sfxOut"></b></label>
+    <div class="choice">
+      <span>Wave notes</span>
+      <div class="seg" id="notesMode" role="radiogroup" aria-label="Which notes show before a wave">
+        <button type="button" role="radio" data-mode="all" title="Warnings, and a line to read on quiet waves">All</button>
+        <button type="button" role="radio" data-mode="warnings" title="Only warnings about what is coming">Warnings</button>
+        <button type="button" role="radio" data-mode="off" title="Nothing">Off</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- The field guide: every enemy, what it does, and when it first shows up. -->
+  <div class="book" id="bookPanel" hidden>
+    <div class="book-head">
+      <h2>Field guide</h2>
+      <div class="book-tabs" role="tablist">
+        <button class="tab" id="tabEnemies" type="button" role="tab" aria-selected="true">Enemies</button>
+        <button class="tab" id="tabTowers" type="button" role="tab" aria-selected="false">Towers</button>
+        <button class="tab" id="tabMutations" type="button" role="tab" aria-selected="false">Mutations</button>
+      </div>
+      <p id="bookNote">Every cube that walks the road, what it does, and the wave it first appears.</p>
+      <button class="btn btn-secondary" id="bookClose" type="button">Close</button>
+    </div>
+    <div class="book-grid" id="bookGrid"></div>
+    <div class="book-grid towers" id="towerGrid" hidden></div>
+    <div class="book-grid" id="mutGrid" hidden></div>
+  </div>
+
+  <div class="hud side" hidden>
+    <div class="shop" id="shop" role="group" aria-label="Towers"></div>
+  </div>
+  <!-- What a tower does: opens beside the shop while a row is hovered. -->
+  <div class="hud detail" id="detail" hidden></div>
+
+  <!-- Floats above the selected tower; placed by main.js each frame. -->
+  <div class="ask" id="ask" hidden role="alertdialog" aria-modal="true" aria-labelledby="askTitle" aria-describedby="askText">
+    <div class="ask-box">
+      <h3 id="askTitle"></h3>
+      <p id="askText"></p>
+      <div class="row">
+        <button class="btn btn-secondary" id="askNo" type="button"></button>
+        <button class="btn" id="askYes" type="button"></button>
+      </div>
+    </div>
+  </div>
+  <div class="hud pop" id="pop" hidden></div>
+  <div class="hud pop watch" id="epop" hidden></div>
+
+  <!-- Sandbox only: jump to a wave, or send one cube of a chosen kind. -->
+  <div class="hud sandbox" id="sandbox" hidden>
+    <div class="panel">
+      <b>Sandbox</b>
+      <h6>Wave</h6>
+      <div class="row"><input id="jumpWave" type="number" min="1" max="999" value="1" aria-label="Wave to jump to"><button class="btn btn-secondary" id="jumpGo" type="button" title="The next wave to start is this one">Jump</button></div>
+      <h6>Type</h6>
+      <div class="grid" id="sendKinds" role="group" aria-label="Cube to send"></div>
+      <h6>Mutation</h6>
+      <div class="grid" id="sendMuts" role="group" aria-label="Mutation to send it with"></div>
+      <button class="btn" id="sendGo" type="button" title="Put one on the road now">Send</button>
+    </div>
+  </div>
+
+  <div class="hud bottom" hidden>
+    <div class="status" id="status"></div>
+    <div class="bar">
+      <button class="btn start" id="start" type="button">Start wave 1</button>
+      <button class="btn btn-secondary" id="speed" type="button" aria-label="Simulation speed">1&times;</button>
+      <button class="btn btn-secondary" id="auto" type="button" aria-pressed="false" title="Start the next wave on its own">Auto</button>
+      <button class="btn btn-secondary" id="sound" type="button" aria-pressed="true" title="Sound on or off">Sound</button>
+    </div>
+  </div>
+
+  <!-- What has changed about the way a run plays. Its own panel: the field
+       guide describes the road as it is, this says how it got that way. -->
+  <div class="book changes-book" id="changePanel" hidden>
+    <div class="book-head">
+      <h2>Changes</h2>
+      <p>How the road has changed. A wave count is kept against the version it was held on, so any set before the current one was let go when it came in.</p>
+      <button class="btn btn-secondary" id="changeClose" type="button">Close</button>
+    </div>
+    <div class="changes" id="changeList"></div>
+  </div>
+
+  <!-- The changes button belongs to the menu, not to a run: it sits in the
+       veil's own corner and goes with it. -->
+  <div class="hud menu-corner" hidden>
+    <button class="btn btn-secondary" id="changes" type="button" data-tip="Changes" aria-label="Changes"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><circle cx="3.5" cy="4" r="1.25" fill="currentColor"/><circle cx="3.5" cy="8" r="1.25" fill="currentColor"/><circle cx="3.5" cy="12" r="1.25" fill="currentColor"/><path d="M6.5 4H14M6.5 8h5M6.5 12h6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg></button>
+  </div>
+
+  <div class="veil" id="veil">
+    <!-- The veil's own words and buttons: laid out loose on most screens, and
+         framed as a panel down the left while a route is being chosen. -->
+    <div class="chooser" id="chooser">
+    <h2 id="veilTitle">Ready?</h2>
+    <p id="veilText">Each wave follows the roads from their entrances to their exits. Allocate a limited budget between towers, their upgrades and the clearing of ground, so that nothing reaches an exit.</p>
+    <!-- After a loss: the cube that walked through on the leak that ended it. -->
+    <div class="through" id="veilThrough" hidden></div>
+    <!-- On a wide window the routes are picked one at a time from a card of
+         each one's facts; on a narrow one, from the list under it. -->
+    <div class="routecard" id="routeCard" aria-live="polite"></div>
+    <div class="routes" id="veilRoutes" role="group" aria-label="Route"></div>
+    <div class="levels" id="veilLevels" role="group" aria-label="Difficulty"></div>
+    <div class="keys">
+      <div><span>Place a tower</span><kbd>Shop, then click</kbd></div>
+      <div><span>Start a wave</span><kbd>Space</kbd></div>
+      <div><span>Turn the view</span><kbd>Q / E or right-drag</kbd></div>
+      <div><span>Pan / zoom</span><kbd>Arrows / + −</kbd></div>
+      <div><span>Speed / pause</span><kbd>F / P</kbd></div>
+      <div><span>Auto-start waves</span><kbd>A</kbd></div>
+      <div><span>Sound</span><kbd>M</kbd></div>
+      <div><span>Field guide</span><kbd>B</kbd></div>
+      <div><span>Upgrade paths / sell</span><kbd>U, I / S</kbd></div>
+      <div><span>Target mode</span><kbd>T</kbd></div>
+    </div>
+    <div class="row">
+      <button class="btn" id="veilBtn" type="button">Start</button>
+      <button class="btn btn-secondary" id="veilAlt" type="button" hidden>Keep going</button>
+    </div>
+    </div>
+    <div class="stage" id="kitStage" hidden>
+      <div class="show">
+        <canvas id="kitCanvas"></canvas>
+        <div class="about" id="kitAbout"></div>
+      </div>
+      <div class="pick">
+        <h3>Choose your towers</h3>
+        <p class="note" id="kitNote"></p>
+        <div class="presets" id="kitPresets" role="group" aria-label="Presets"></div>
+        <form class="saveas" id="kitSaveForm" hidden>
+          <input id="kitSaveName" type="text" maxlength="24" placeholder="Name this rack" autocomplete="off">
+          <button class="btn" id="kitSaveGo" type="submit">Save</button>
+          <button class="btn btn-secondary" id="kitSaveNo" type="button">Cancel</button>
+        </form>
+        <div class="rack" id="kitRack" role="group" aria-label="Towers to choose from"></div>
+        <div class="row">
+          <button class="btn btn-secondary" id="kitBack" type="button">Back</button>
+          <button class="btn" id="kitGo" type="button">Start</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
