@@ -1917,11 +1917,8 @@ for (const k of KEYS) {
  * The written guide is the rule book, Rule Book Module SO/01, a document of
  * its own in `guide/`, fetched the first time the guide is opened and set out
  * in a shadow root, so its printed page's styles and the desk's never meet.
- * It is put in this page rather than a frame of its own because the page this
- * one sits in listens for Escape and the backslash on this window, and a key
- * pressed in a frame inside it would never get there.
  */
-const RULE_BOOK = new URL("guide/so01.html", location.href);
+const RULE_BOOK = new URL("guide/so01.html", document.baseURI);
 /** A page of the rule book, as wide as it is printed. */
 const PAGE_WIDTH = 794;
 let ruleBook = null;
@@ -1983,7 +1980,6 @@ function stash() {
   if (sim.finished) store.clearRun();
   else store.saveRun(sim.snapshot());
 }
-window.addEventListener("algebraloop:stash", stash);
 window.addEventListener("pagehide", stash);
 window.addEventListener("beforeunload", stash);
 document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") stash(); });

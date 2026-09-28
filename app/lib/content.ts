@@ -181,6 +181,7 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "",
     skillId: ["javascript", "claudecode"],
+    playUrl: "/games/signalling",
   },
   {
     id: "14",
@@ -191,6 +192,7 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "",
     skillId: ["javascript", "claudecode"],
+    playUrl: "/games/td",
   },
   {
     id: "10",

@@ -9,6 +9,8 @@ export interface ApiProject {
   skillId: string[];
   // Marks a project that real people use; shown as an icon next to the name
   hasUsers?: boolean;
+  // Link to a playable/live version hosted on this site, e.g. "/games/td"
+  playUrl?: string;
 }
 
 // Matches API skill type
@@ -41,6 +43,7 @@ export interface Project {
   gradientAngle: number;
   gitRepo?: string;
   hasUsers?: boolean;
+  playUrl?: string;
   technologies: string[];
 }
 
@@ -53,6 +56,7 @@ export function apiProjectToProject(api: ApiProject, skillIdToName: Record<strin
     gradientAngle: api.gradientAngle ?? 45,
     gitRepo: api.gitRepo || undefined,
     hasUsers: api.hasUsers,
+    playUrl: api.playUrl,
     technologies: (api.skillId ?? []).map((id) => skillIdToName[id] || id),
   };
 }

@@ -21,10 +21,10 @@ let difficulty = "easy";
 // The sandbox is a switch laid over the difficulty, not a difficulty of its own.
 let sandbox = false;
 try {
-  const kept = localStorage.getItem("algebraloop.u17.difficulty");
+  const kept = localStorage.getItem("td.difficulty");
   if (DIFFICULTIES[kept]) difficulty = kept;
   else if (kept === "sandbox") { difficulty = "normal"; sandbox = true; } // from when it was one
-  if (localStorage.getItem("algebraloop.u17.sandbox") === "1") sandbox = true;
+  if (localStorage.getItem("td.sandbox") === "1") sandbox = true;
 } catch {}
 /**
  * The key a best score is stored under: per route, per difficulty, per balance.
@@ -97,9 +97,9 @@ function notesAhead() {
 // ---- Settings -------------------------------------------------------
 // Music and sound effect levels live with the audio; which wave notes show
 // is kept here. All of it is remembered in this browser.
-const NOTES_KEY = "algebraloop.u17.notes";
+const NOTES_KEY = "td.notes";
 let notesMode = "all";
-try { const m = localStorage.getItem(NOTES_KEY) || localStorage.getItem("algebraloop.u17.herald"); if (m === "all" || m === "warnings" || m === "off") notesMode = m; } catch {}
+try { const m = localStorage.getItem(NOTES_KEY) || localStorage.getItem("td.herald"); if (m === "all" || m === "warnings" || m === "off") notesMode = m; } catch {}
 const settingsPanel = $("settings"), settingsBtn = $("settingsBtn");
 function showSettings(open) {
   settingsPanel.hidden = !open;
@@ -185,7 +185,7 @@ let lastPlayed = -1;
 let view = { hover: null, placing: null, selected: null, watching: null, flashes: [], arcs: [] };
 let speed = 1, paused = false, last = 0;
 // The speed a player last left it at comes back with them.
-try { const kept = Number(localStorage.getItem("algebraloop.u17.speed")); if ([1, 2, 5].includes(kept)) speed = kept; } catch {}
+try { const kept = Number(localStorage.getItem("td.speed")); if ([1, 2, 5].includes(kept)) speed = kept; } catch {}
 speedBtn.textContent = speed + "×";
 // Auto-start: the next wave begins on its own a moment after a clear. On
 // unless the player has switched it off, which is remembered.
@@ -195,7 +195,7 @@ speedBtn.textContent = speed + "×";
  */
 const AUTO_COUNT = 3;
 let auto = true, autoTimer = 0;
-try { auto = localStorage.getItem("algebraloop.u17.auto") !== "0"; } catch {}
+try { auto = localStorage.getItem("td.auto") !== "0"; } catch {}
 
 window.addEventListener("resize", () => { scene.fit(); if (veilMode === "choose") placeChooser(); if (veilMode === "kit") placeKitBoard(); });
 
@@ -851,7 +851,7 @@ function showDetail(kind, row) {
 /**
  * Ask before something that cannot be taken back, in the page's own colours.
  * Resolves true only if the reader says go ahead. Escape is deliberately not
- * bound: the page this sits inside wants it.
+ * bound.
  */
 let askDone = null, askFrom = null;
 function ask(title, text, yes, no) {
@@ -978,14 +978,14 @@ startBtn.addEventListener("click", () => { autoTimer = 0; if (simulation.startWa
 speedBtn.addEventListener("click", () => {
   speed = speed === 1 ? 2 : speed === 2 ? 5 : 1;
   speedBtn.textContent = speed + "×";
-  try { localStorage.setItem("algebraloop.u17.speed", String(speed)); } catch {}
+  try { localStorage.setItem("td.speed", String(speed)); } catch {}
   speedBtn.blur();
 });
 autoBtn.addEventListener("click", () => { setAuto(!auto); autoBtn.blur(); });
 pauseBtn.addEventListener("click", () => { togglePause(); pauseBtn.blur(); });
 function setAuto(on) {
   auto = on;
-  try { localStorage.setItem("algebraloop.u17.auto", on ? "1" : "0"); } catch {}
+  try { localStorage.setItem("td.auto", on ? "1" : "0"); } catch {}
   // Turning it off stops a countdown already running. Turning it on does not
   // start one: auto is what happens once a wave has been held, and throwing the
   // switch while a board is still being built should not send the next wave in
@@ -1017,13 +1017,12 @@ document.addEventListener("keyup", (e) => { panHeld.delete(e.key); });
 // A key let go while the window is elsewhere never sends its keyup.
 window.addEventListener("blur", () => panHeld.clear());
 
-// Escape is left alone on purpose: the page this sits in uses it.
+// Escape is left alone on purpose.
 document.addEventListener("keydown", (e) => {
   if (e.ctrlKey || e.metaKey || e.altKey) return;
   if (!askPanel.hidden) return; // the question on top has the keys
   const k = e.key.toLowerCase();
-  // The changes panel sits over everything and has only its Close button:
-  // Escape belongs to the page this is running inside.
+  // The changes panel sits over everything and has only its Close button.
   if (!changePanel.hidden) return;
   if (k === "b") { if (bookPanel.hidden) openBook(); else closeBook(); return; }
   if (!bookPanel.hidden) return; // Keep menu and run shortcuts behind the guide.
@@ -1158,10 +1157,8 @@ function showThrough(through) {
 }
 function autosave() { if (simulation && simulation.phase !== "lost") saveRun(simulation.snapshot()); }
 /**
- * Save the run this instant, a wave under way included. The page this sits in
- * can take the frame away without warning, and it says so first with
- * `algebraloop:stash`; a closed tab or one sent to the background says so with
- * `pagehide` or `visibilitychange`. Only a run under way is written: the board
+ * Save the run this instant, a wave under way included. A closed tab or one
+ * sent to the background says so with `pagehide` or `visibilitychange`. Only a run under way is written: the board
  * behind the chooser or the towers step is a preview, and a lost run has
  * already been let go.
  */
@@ -1174,7 +1171,6 @@ function stash() {
     saveRun(simulation.snapshot());
   } catch (e) { /* not remembered, still playable */ }
 }
-window.addEventListener("algebraloop:stash", stash);
 window.addEventListener("pagehide", stash);
 document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") stash(); });
 
@@ -1534,7 +1530,7 @@ function showVeil(mode, title, text, main, alt) {
     $("sandboxSwitch").addEventListener("click", () => {
       if (!sandbox && !sandboxOpen(difficulty)) { play("denied"); return; }
       sandbox = !sandbox;
-      try { localStorage.setItem("algebraloop.u17.sandbox", sandbox ? "1" : "0"); } catch {}
+      try { localStorage.setItem("td.sandbox", sandbox ? "1" : "0"); } catch {}
       pickLevel(difficulty);
       play("click");
     });
@@ -1555,14 +1551,14 @@ function showVeil(mode, title, text, main, alt) {
 function pickLevel(key) {
   if (key !== difficulty) forgetBook();
   difficulty = key;
-  try { localStorage.setItem("algebraloop.u17.difficulty", key); } catch {}
+  try { localStorage.setItem("td.difficulty", key); } catch {}
   // The rack shows what this level sells: Ruin has no mint to offer.
   for (const b of document.querySelectorAll("#kitRack button[data-kind]")) b.style.display = allowed(b.dataset.kind) ? "" : "none";
   // Moving to a difficulty the sandbox has not been earned at puts it away.
   const open = sandboxOpen(key);
   if (sandbox && !open) {
     sandbox = false;
-    try { localStorage.setItem("algebraloop.u17.sandbox", "0"); } catch {}
+    try { localStorage.setItem("td.sandbox", "0"); } catch {}
   }
   const box = $("levelPick");
   if (box) {

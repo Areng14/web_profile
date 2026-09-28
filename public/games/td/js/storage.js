@@ -1,7 +1,7 @@
-const KEY = "algebraloop.u17.save";
-const BEST = "algebraloop.u17.best.";
-const KIT = "algebraloop.u17.kit";
-const PRESETS = "algebraloop.u17.presets";
+const KEY = "td.save";
+const BEST = "td.best.";
+const KIT = "td.kit";
+const PRESETS = "td.presets";
 
 export function saveRun(snapshot) {
   try { localStorage.setItem(KEY, JSON.stringify(snapshot)); } catch (e) { /* not remembered, still playable */ }

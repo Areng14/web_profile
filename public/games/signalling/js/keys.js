@@ -2,8 +2,7 @@
 // the buttons are built from and the written guide's Appendix A is held to by
 // a test, so none of them can say something the others do not. One action to a key, from the
 // letters, the number row and the arrows, grouped the way the screen is.
-// Escape and backslash are left alone for the page this sits in, and nothing
-// here is read while a box is being typed in.
+// Nothing here is read while a box is being typed in.
 
 /**
  * Every key: `key` as the browser names it (a letter in lower case), `id` the
