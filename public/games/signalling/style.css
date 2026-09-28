@@ -1,7 +1,5 @@
-/* Scheduling. The unit repeats the site's palette in its own :root so it
-   stands alone in a frame and still looks like a page of AlgebraLoop. The
-   signalling display inside it keeps the colours a control centre uses,
-   because those mean things. */
+/* Railway Signalling. The signalling display keeps the colours a control
+   centre uses, because those mean things. */
 :root {
   --bg: #151312;
   --surface: #201e1d;

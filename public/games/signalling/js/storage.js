@@ -2,10 +2,10 @@
 // sound levels, and whether the guide has been read. Every read is defended,
 // because a page that cannot remember anything should still be playable.
 
-const RUN = "algebraloop.u21.run";
-const BEST = "algebraloop.u21.best.";
-const SOUND = "algebraloop.u21.sound";
-const SEEN = "algebraloop.u21.seen";
+const RUN = "signalling.run";
+const BEST = "signalling.best.";
+const SOUND = "signalling.sound";
+const SEEN = "signalling.seen";
 
 export function saveRun(snapshot) {
   try { localStorage.setItem(RUN, JSON.stringify(snapshot)); } catch { /* not remembered, still playable */ }

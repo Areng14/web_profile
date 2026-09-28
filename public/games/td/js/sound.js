@@ -2,8 +2,8 @@
 // fetched. The context is created on the first pointer or key press, as
 // browsers require. Everything is short and quiet; the mix is meant to sit
 // under the simulation, not on top of it.
-const SOUND_KEY = "algebraloop.u17.sound";
-const VOLUME_KEY = "algebraloop.u17.volume";
+const SOUND_KEY = "td.sound";
+const VOLUME_KEY = "td.volume";
 
 // Everything runs through the master, which the mute switch silences. Under
 // it the music and the sound effects each have a level of their own.
