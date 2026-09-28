@@ -61,8 +61,6 @@ export default async function Home({ searchParams }: HomeProps) {
             </p>
             <h1 className="mb-4 text-4xl font-bold leading-tight text-white drop-shadow-lg sm:text-5xl md:text-6xl lg:text-7xl">
               Areng
-              <br />
-              <span className="text-slate-200">Teanpakdeeprasat</span>
             </h1>
             <p className="mb-8 max-w-lg text-base leading-relaxed text-slate-300 drop-shadow sm:text-lg">
               I build tools and apps in my free time—from the small and quirky to the genuinely useful.

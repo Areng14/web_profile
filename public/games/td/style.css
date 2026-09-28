@@ -1,0 +1,930 @@
+:root {
+  --bg: #151312;
+  --surface: #201e1d;
+  --text: #f3f2f2;
+  --accent: #ff563c;
+  --divider: color-mix(in srgb, #f3f2f2 32%, transparent);
+  --muted: color-mix(in srgb, #f3f2f2 60%, transparent);
+  --glass: color-mix(in srgb, #151312 78%, transparent);
+  /* A greyed rust, for scrollbars and the empty part of a slider. */
+  --rust-grey: #6b5751;
+  --rust-grey-dim: #4a3d39;
+}
+/* Scrollbars in the page's own colours: a greyed rust thumb that warms to the
+   accent under the pointer, on a dark track. */
+* { scrollbar-width: thin; scrollbar-color: var(--rust-grey) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--rust-grey); border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); background-clip: padding-box; }
+::-webkit-scrollbar-corner { background: transparent; }
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Archivo, system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+}
+/* The scene fills the frame; everything else floats over it. */
+#canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: crosshair;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.hud { position: fixed; z-index: 2; pointer-events: none; }
+.hud > * { pointer-events: auto; }
+.top {
+  top: 14px; left: 14px;
+  display: flex; gap: 8px;
+}
+.stat {
+  min-width: 86px;
+  padding: 8px 12px;
+  background: var(--glass);
+  border: 1px solid var(--divider);
+  backdrop-filter: blur(6px);
+}
+h6 {
+  margin: 0 0 4px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.num {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.sub { font-size: 11px; color: var(--muted); }
+/* Lives: one block per life, dimming as they go. */
+.stat.wave { min-width: 0; }
+.stat.wave .of { font-size: 14px; font-weight: 600; color: var(--muted); letter-spacing: 0; }
+.lives { display: flex; gap: 3px; margin-top: 7px; }
+.lives i { width: 8px; height: 10px; background: var(--accent); transition: background 0.3s, opacity 0.3s; }
+.lives i.lost { background: var(--text); opacity: 0.18; }
+/* Two square icon buttons in the top right: pause, and the guide. */
+.corner { top: 14px; right: 110px; }
+.tome { top: 14px; right: 14px; z-index: 6; display: flex; gap: 8px; }
+/* The menu's own corner, opposite the tome. Hidden with the menu, so a run
+   has its wave and its gold up there instead. */
+.menu-corner { top: 14px; left: 14px; z-index: 6; display: flex; gap: 8px; }
+.menu-corner[hidden] { display: none; }
+.menu-corner .btn[data-tip]::after { right: auto; left: 0; }
+.tome .btn, .corner .btn, .menu-corner .btn { width: 40px; height: 40px; padding: 0; background: var(--glass); backdrop-filter: blur(6px); }
+.tome .ico, .corner .ico, .menu-corner .ico { width: 18px; height: 18px; display: block; }
+/* The icon buttons say what they are on hover, in a label hung underneath. */
+.tome .btn[data-tip], .corner .btn[data-tip], .menu-corner .btn[data-tip] { position: relative; }
+.tome .btn[data-tip]::after, .corner .btn[data-tip]::after, .menu-corner .btn[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute; top: calc(100% + 6px); right: 0;
+  padding: 4px 8px;
+  white-space: nowrap;
+  font-size: 12px; font-weight: 600;
+  color: var(--text);
+  background: var(--glass);
+  border: 1px solid var(--divider);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s;
+}
+.tome .btn[data-tip]:hover::after, .corner .btn[data-tip]:hover::after { opacity: 1; transition-delay: 0.25s; }
+/* Not while its own panel is open under it. */
+.tome .btn[aria-expanded="true"]::after { display: none; }
+/* Settings hang under their button, above everything but the guide. */
+.settings {
+  position: fixed; top: 62px; right: 14px; z-index: 6;
+  width: 340px;
+  padding: 12px 14px 14px;
+  background: var(--glass);
+  border: 1px solid var(--divider);
+  backdrop-filter: blur(6px);
+  font-size: 13px;
+}
+.settings h6 { margin-bottom: 10px; }
+.settings .slider, .settings .choice { display: grid; grid-template-columns: 100px 1fr 38px; align-items: center; gap: 8px; margin-top: 8px; }
+.settings .choice { grid-template-columns: 100px 1fr; }
+/* Sliders drawn by hand so every browser agrees: rust up to the thumb, greyed
+   rust after it, and a square orange thumb. --fill is set as the value moves. */
+.settings input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 16px; margin: 0;
+  background: transparent; cursor: pointer;
+}
+.settings input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  background: linear-gradient(to right, var(--accent) var(--fill, 100%), var(--rust-grey-dim) var(--fill, 100%));
+}
+.settings input[type="range"]::-moz-range-track { height: 4px; background: var(--rust-grey-dim); }
+.settings input[type="range"]::-moz-range-progress { height: 4px; background: var(--accent); }
+.settings input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 12px; height: 16px; margin-top: -6px;
+  background: var(--accent); border: 0; border-radius: 0;
+}
+.settings input[type="range"]::-moz-range-thumb { width: 12px; height: 16px; background: var(--accent); border: 0; border-radius: 0; }
+.settings input[type="range"]:hover::-webkit-slider-thumb { background: #ff7a63; }
+.settings input[type="range"]:hover::-moz-range-thumb { background: #ff7a63; }
+.settings input[type="range"]:focus-visible { outline: 1px solid var(--accent); outline-offset: 3px; }
+.settings b { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; color: var(--muted); }
+.seg { display: flex; border: 1px solid var(--divider); }
+.seg button { flex: auto; padding: 6px 10px; border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--divider); }
+.seg button:hover { color: var(--text); }
+.seg button[aria-checked="true"] { background: var(--accent); color: #fff; }
+/* The field guide overlay. */
+.book {
+  position: fixed; inset: 0; z-index: 7;
+  overflow: auto;
+  padding: 28px 32px 40px;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(6px);
+}
+.book-head { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+.book-head h2 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.015em; }
+.book-tabs { display: flex; gap: 4px; }
+.tab {
+  font: inherit; font-size: 13px; font-weight: 700;
+  padding: 7px 14px;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--divider);
+  cursor: pointer;
+}
+.tab:hover { background: color-mix(in srgb, var(--text) 7%, transparent); }
+.tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.book-grid.towers { grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); }
+.beast.tower { grid-template-columns: 80px 1fr; }
+.beast.tower img { width: 80px; height: 80px; }
+/* The numbers and the write-up each take a fixed band on a tower card, so
+   the paths start at the same height on every card in a row. */
+.beast.tower .nums { min-height: 32px; align-content: start; }
+.beast.tower p { height: calc(12px * 1.4 * 4 + 8px); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; }
+.beast .paths { grid-column: 1 / -1; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--divider); }
+.beast .path > b { font-size: 12px; }
+.beast .path div { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; color: var(--muted); }
+.beast .path div b { font-weight: 600; color: var(--text); font-size: 11px; }
+.beast .path small { display: block; font-size: 10px; color: var(--muted); margin: -1px 0 4px; line-height: 1.3; }
+/* The step that lets a tower see hidden enemies stands out. */
+.path div.sees { color: var(--accent); }
+.path div.sees span::after { content: " · sees hidden"; font-size: 10px; font-weight: 700; letter-spacing: 0.02em; }
+.path div.sees b { color: var(--accent); }
+.book-head p { margin: 0; flex: 1; color: var(--muted); font-size: 13px; }
+/* As many columns as the window will take: the cards have a floor, so a
+   wide screen gets more of them across rather than three and a lot of
+   nothing to the right. */
+.book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; align-content: start; }
+/* A labelled rule across the whole grid, to divide one group of cards from
+   the next. */
+.book-grid .shelf {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.book-grid .shelf::after { content: ""; flex: 1; height: 1px; background: var(--divider); }
+.book-grid .shelf:first-child { margin-top: 0; }
+.beast {
+  display: grid; grid-template-columns: 72px 1fr; gap: 4px 12px;
+  padding: 10px 12px;
+  background: var(--glass);
+  border: 1px solid var(--divider);
+}
+.beast img { grid-row: 1 / span 2; width: 72px; height: 72px; display: block; align-self: center; }
+.beast b { font-size: 15px; font-weight: 800; }
+.beast b small { font-weight: 400; font-size: 11px; color: var(--accent); margin-left: 8px; }
+.beast .nums { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.beast .nums i { font-style: normal; color: var(--text); }
+.beast p { grid-column: 1 / -1; margin: 8px 0 0; padding-top: 8px; border-top: 1px solid var(--divider); font-size: 12px; color: var(--muted); line-height: 1.4; }
+/* A mutation card is lit in the colour its cubes walk in wearing. */
+.beast.mutant { border-color: color-mix(in srgb, var(--mut) 45%, var(--divider)); background: linear-gradient(120deg, color-mix(in srgb, var(--mut) 9%, transparent), var(--glass) 62%); }
+.beast.mutant b { color: var(--mut); }
+.beast.mutant b small { color: var(--muted); }
+
+/* Asking before something cannot be undone. The browser's own dialog names
+   the host it came from and throws the reader out of the page, so the page
+   asks in its own voice instead. It sits above the veil, since that is what
+   it is usually asked from. */
+.ask {
+  position: fixed;
+  inset: 0;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
+}
+.ask-box {
+  width: min(360px, 100%);
+  padding: 18px 20px 16px;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--divider);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.6);
+}
+.ask h3 { margin: 0 0 7px; font-size: 18px; font-weight: 800; letter-spacing: -0.01em; }
+.ask p { margin: 0 0 14px; color: var(--muted); font-size: 13px; line-height: 1.45; }
+.ask .row { display: flex; gap: 8px; }
+.ask .row .btn { flex: 1; margin: 0; }
+
+/* The tower card: floats just above the selected tower and follows it as
+   the view turns. A small point below it marks the tower. */
+.pop {
+  left: 0; top: 0;
+  width: 320px;
+  padding: 10px 12px 12px;
+  transform: translate(-50%, calc(-100% - 12px));
+  background: var(--glass);
+  border: 1px solid var(--divider);
+  backdrop-filter: blur(6px);
+  font-size: 12px;
+  color: var(--muted);
+  pointer-events: auto;
+}
+.pop::after {
+  content: "";
+  position: absolute;
+  left: var(--arrow, 50%); bottom: -7px;
+  width: 12px; height: 12px;
+  transform: translateX(-50%) rotate(45deg);
+  background: var(--glass);
+  border-right: 1px solid var(--divider);
+  border-bottom: 1px solid var(--divider);
+}
+.pop h6 { margin-bottom: 6px; color: var(--text); }
+.pop div { display: flex; justify-content: space-between; gap: 8px; }
+.pop b { color: var(--text); font-weight: 600; }
+.pop .row { margin-top: 9px; gap: 6px; }
+.pop .row .btn { margin: 0; flex: 1; font-size: 12px; padding: 7px 8px; white-space: nowrap; }
+.pop .sub { align-self: center; }
+.pop .target { align-items: center; margin-top: 4px; }
+/* A knocked-out tower's banner, across the top of its card. */
+.pop p.down {
+  margin: -10px -12px 8px;
+  padding: 6px 12px;
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+/* The countdown keeps its own case: an upper-case "3S" reads as a number. */
+.pop p.down b { color: inherit; font-weight: 600; letter-spacing: 0; text-transform: none; }
+.pop .target .btn { padding: 3px 10px; font-size: 11px; min-width: 72px; }
+/* The enemy card: the tower card's twin, above whatever cube was clicked.
+   There is nothing on it to press, so clicks pass through to the board. */
+.pop.watch { width: 244px; pointer-events: none; }
+.pop.watch .head { justify-content: flex-start; align-items: center; gap: 10px; margin-bottom: 7px; }
+.pop.watch .head img { width: 46px; height: 46px; }
+.pop.watch .head h6 { margin: 0; }
+.pop.watch div b { max-width: 150px; text-align: right; }
+.pop.watch .now span, .pop.watch .now b { color: var(--accent); }
+.pop.below { transform: translate(-50%, 12px); }
+.pop.below::after { top: -7px; bottom: auto; border: 0; border-left: 1px solid var(--divider); border-top: 1px solid var(--divider); }
+.pop.watch p { margin: 8px 0 0; padding-top: 7px; border-top: 1px solid var(--divider); line-height: 1.4; }
+/* The two upgrade paths, side by side. */
+.paths { display: flex; gap: 8px; margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--divider); }
+.path { flex: 1; min-width: 0; }
+/* The card hangs off the tower by its bottom edge, so everything below a
+   button must keep a fixed height for that button to stay under the pointer
+   while it is pressed over and over. */
+.path > b { display: block; font-size: 12px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.path > i { display: flex; gap: 4px; margin: 4px 0 6px; }
+.path > i span { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--accent); }
+.path > i span.on { background: var(--accent); }
+/* Fixed heights, not minimums: a minimum let a long name or note push the
+   card taller, and a card hanging from its bottom edge moves its buttons up
+   when it grows. Four lines of note is the most any upgrade is given. */
+.path .btn { width: 100%; height: 40px; font-size: 11px; padding: 4px 6px; white-space: normal; line-height: 1.25; overflow: hidden; }
+.path > small { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; height: calc(11px * 1.35 * 4); font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.35; }
+/* A finished path stands in for a button and its note together, so the other
+   path's button does not move when this one runs out. */
+.path small.done { display: flex; align-items: center; height: calc(40px + 4px + 11px * 1.35 * 4); color: var(--muted); }
+/* Blank rows keeping room for stats a tower has not bought yet. */
+.pop div.pad { visibility: hidden; }
+.pop p.about { margin: 0 0 6px; line-height: 1.45; }
+.detail { width: 300px; }
+.detail .path div { font-size: 11px; }
+
+.keys { font-size: 11px; color: var(--muted); }
+.keys div { display: flex; justify-content: space-between; gap: 8px; }
+kbd { font: inherit; font-weight: 600; color: var(--text); }
+
+.bottom {
+  left: 14px; right: 14px; bottom: 14px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+/* Wave notes hang above the board, centred, and slide down into view. */
+.notes {
+  top: 14px; left: 50%;
+  /* Between the wave and gold on the left and the buttons on the right. */
+  width: clamp(320px, calc(100vw - 880px), 460px);
+  padding: 10px 14px 11px;
+  background: var(--glass);
+  border: 1px solid var(--divider);
+  border-left: 3px solid var(--muted);
+  backdrop-filter: blur(6px);
+  transform: translate(-50%, calc(-100% - 24px));
+  opacity: 0;
+  transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.1), opacity 0.3s;
+  cursor: pointer;
+}
+.notes.warn { border-left-color: var(--accent); }
+.notes.warn h6 { color: var(--accent); }
+.notes.on { transform: translate(-50%, 0); opacity: 1; }
+.notes:not(.on) { pointer-events: none; }
+.notes p { margin: 0; font-size: 13px; line-height: 1.45; }
+.notes p + p { margin-top: 5px; }
+/* Too narrow to fit between them: it hangs just under the wave and gold instead. */
+@media (max-width: 1200px) {
+  .notes { top: 80px; width: min(460px, calc(100vw - 28px)); }
+}
+.status { font-size: 13px; color: var(--muted); min-height: 20px; text-shadow: 0 1px 2px #000; }
+/* The sandbox panel: a column on the left, mirroring the shop on the right. */
+.hud.sandbox { top: 50%; left: 14px; width: 424px; max-height: calc(100vh - 120px); overflow: auto; transform: translateY(-50%); }
+.sandbox .panel {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 10px;
+  background: var(--glass);
+  border: 1px solid var(--divider);
+  backdrop-filter: blur(6px);
+  font-size: 12px; color: var(--muted);
+}
+.sandbox .panel b { color: var(--accent); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+.sandbox .panel h6 { margin: 6px 0 0; }
+.sandbox .panel .row { display: flex; gap: 6px; }
+.sandbox input, .sandbox select { min-width: 0; font: inherit; font-size: 12px; padding: 5px 6px; color: var(--text); background: var(--glass); border: 1px solid var(--divider); }
+.sandbox input { flex: 1; width: 0; }
+.sandbox select { width: 100%; }
+.sandbox input:focus-visible, .sandbox select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.sandbox .btn { margin: 0; padding: 5px 10px; font-size: 12px; }
+.sandbox .panel > .btn { margin-top: 6px; padding: 8px; font-size: 13px; }
+/* The cubes and mutations to send, each as its own model. */
+.sandbox .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+.sandbox .grid button {
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  padding: 4px 2px 5px;
+  font: inherit; font-size: 11px; font-weight: 600; line-height: 1.15; text-align: center;
+  color: var(--text); background: transparent; border: 1px solid var(--divider); cursor: pointer;
+}
+.sandbox .grid button:hover { background: color-mix(in srgb, var(--text) 7%, transparent); }
+.sandbox .grid button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.sandbox .grid img { width: 60px; height: 60px; display: block; }
+.bar {
+  display: flex; align-items: stretch; gap: 8px;
+  padding: 8px;
+  background: var(--glass);
+  border: 1px solid var(--divider);
+  backdrop-filter: blur(6px);
+}
+/* The shop: a column of towers on the right, each drawn as its own model. */
+.side { top: 50%; right: 14px; width: 236px; transform: translateY(-50%); max-height: calc(100vh - 120px); overflow: auto; }
+.shop {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 6px;
+  background: var(--glass);
+  border: 1px solid var(--divider);
+  backdrop-filter: blur(6px);
+}
+.shop button {
+  display: flex; align-items: center; gap: 10px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: left;
+  padding: 3px 12px 3px 4px;
+  border: 1px solid var(--divider);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+.shop button:hover { background: color-mix(in srgb, var(--text) 7%, transparent); }
+.shop button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.shop button:disabled { opacity: 0.45; cursor: not-allowed; }
+.shop button span { flex: 1; }
+.shop small { display: block; font-weight: 400; font-size: 11px; opacity: 0.75; }
+.shop .model { flex: none; width: 56px; height: 56px; display: block; }
+.shop small { font-size: 12px; }
+.shop kbd { font-size: 11px; opacity: 0.6; }
+.detail {
+  right: 262px;
+  width: 240px;
+  padding: 12px 14px 14px;
+  transform: translateY(-50%);
+  background: var(--glass);
+  border: 1px solid var(--divider);
+  backdrop-filter: blur(6px);
+  font-size: 12px;
+  color: var(--muted);
+}
+.detail h6 { margin-bottom: 6px; color: var(--text); font-size: 13px; }
+.detail p { margin: 0 0 10px; color: var(--text); line-height: 1.45; }
+.detail div { display: flex; justify-content: space-between; gap: 8px; }
+.detail b { color: var(--text); font-weight: 600; }
+.detail .tiers { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--divider); }
+.shop button[aria-pressed="true"] kbd { opacity: 0.8; }
+/* Wide enough for the longest thing it says — "Wave 50 under way" at 178px —
+   so counting a wave in does not shuffle the buttons beside it. */
+.start { min-width: 180px; }
+#speed { min-width: 48px; }
+#auto[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+#sound[aria-pressed="false"] { opacity: 0.5; text-decoration: line-through; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  padding: 8px 16px;
+  margin: 0;
+  font: inherit;
+  font-weight: 800;
+  font-size: 13px;
+  line-height: 1.2;
+  background: var(--accent);
+  color: var(--bg);
+}
+.btn:hover { background: #dd2b0f; }
+.btn:active { background: #ae1800; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-secondary { background: transparent; color: var(--text); border-color: var(--divider); }
+.btn-secondary:hover { background: color-mix(in srgb, var(--text) 7%, transparent); }
+
+.veil {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  padding: 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+}
+.veil.on { opacity: 1; pointer-events: auto; }
+/* While choosing a route the board shows through, so the veil is lighter
+   and its text sits on a glass panel of its own. */
+.veil.peek { background: color-mix(in srgb, var(--bg) 40%, transparent); justify-content: flex-start; padding-top: 6vh; padding-bottom: 28px; }
+.veil.peek h2, .veil.peek p { text-shadow: 0 1px 3px #000; }
+.veil.peek .keys { display: none; }
+.veil h2 { margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.015em; line-height: 1.12; }
+.veil p { margin: 0; color: var(--muted); font-size: 13px; max-width: 40ch; }
+.veil .keys { display: none; width: 100%; max-width: 260px; text-align: left; font-size: 12px; }
+.veil.intro .keys { display: block; }
+.veil.intro.peek .keys { display: none; }
+.veil .row { display: flex; gap: 8px; margin-top: 6px; }
+/* Six routes sit as two rows of three. */
+.routes { display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; gap: 10px; margin: 8px 0 4px; max-width: 930px; }
+.routes[hidden] { display: none; }
+/* Choosing a run's towers: its own step. The board slides off to the left,
+   the table comes in from the right to the middle with the tower under the
+   pointer on it, big and turning, and the rack and slots sit down the right.
+   The stage is a fixed frame: nothing in it moves when the tower changes. */
+/* The picker is a popup in front of the board: the board stays full size
+   behind a wash, and the stage sits over it in the middle. */
+/* The picker leans right rather than sitting against the edge: most of the
+   slack goes to the left of it, for the board slid over to meet it, and a
+   fifth stays on the right, which is enough that the rack is not jammed
+   against the window and little enough that the board and the panels together
+   sit square in the middle rather than bunched to one side. */
+.veil.kitstep {
+  background: color-mix(in srgb, var(--bg) 62%, transparent);
+  justify-content: center; align-items: flex-end; overflow: hidden;
+  padding: 18px 22px;
+  padding-right: calc(22px + (100vw - min(1320px, 82vw)) / 5);
+}
+.veil.kitstep > :not(.stage) { display: none; }
+.stage {
+  display: flex; align-items: stretch; gap: 22px;
+  width: min(1320px, 82vw); height: min(88vh, 820px); text-align: left;
+  transition: transform 0.5s cubic-bezier(0.3, 0, 0.2, 1), opacity 0.5s ease;
+}
+/* Looking at the board beside the picker draws the picker off to the right,
+   so the whole route can be read without leaving the step. It comes back the
+   moment the pointer returns to it. */
+.veil.kitstep.peeking .stage { transform: translateX(var(--peek, 0px)); opacity: 0.5; }
+/* On a wide window the picker keeps to a width that leaves the route room to
+   be seen whole beside it, and sits in toward the right edge to make that room. */
+@media (min-width: 1600px) {
+  .veil.kitstep { padding-right: 32px; }
+  .stage { width: min(1120px, 62vw); }
+}
+@media (prefers-reduced-motion: reduce) { .stage { transition: none; } }
+.stage .pick {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  width: min(390px, 32vw);
+  min-width: 0;
+  padding: 14px 16px 16px;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  border: 1px solid var(--divider);
+  backdrop-filter: blur(6px);
+}
+.stage h3 { margin: 0 0 4px; font-size: 19px; font-weight: 800; letter-spacing: -0.01em; }
+.stage .note { margin: 0 0 10px; font-size: 12px; color: var(--muted); max-width: none; }
+.stage .note b { color: var(--text); }
+.stage .note .how { display: block; margin-top: 3px; font-size: 11.5px; color: var(--muted); }
+.stage * { user-select: none; -webkit-user-drag: none; }
+.stage img { -webkit-user-drag: none; pointer-events: none; }
+/* Presets: a dropdown of named racks, the built-in ones first, then the
+   player's own, with a way to keep the rack as it stands beside it. */
+.presets { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.presets .label { flex: none; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.presets .select { flex: 1; min-width: 0; z-index: 6; }
+.presets .trigger { width: 100%; min-width: 0; font-size: 12px; padding: 5px 9px; }
+.presets .menu { font-size: 12px; }
+.presets .menu button { font-size: 12px; padding: 6px 9px; }
+/* The cross that removes a saved preset, inside its own row of the menu. */
+.presets .menu button i { flex: none; font-style: normal; font-size: 13px; line-height: 1; padding: 0 2px; color: var(--muted); }
+.presets .menu button i:hover { color: var(--accent); }
+.presets .menu button[aria-selected="true"] i { color: var(--bg); }
+/* Save as stands exactly as tall as the dropdown beside it: same padding,
+   same border, same line box, rather than a button sized by its own text. */
+.presets { align-items: stretch; }
+.presets .label { align-self: center; }
+.presets .saveas-btn { flex: none; margin: 0; padding: 5px 10px; font-size: 12px; line-height: normal; border-width: 1px; }
+.saveas { display: flex; gap: 6px; margin-bottom: 8px; }
+.saveas input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: 12px;
+  padding: 5px 8px;
+  color: var(--text);
+  background: var(--glass);
+  border: 1px solid var(--divider);
+}
+.saveas input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.saveas .btn { margin: 0; padding: 5px 10px; font-size: 11px; }
+
+/* The rack of everything a run could be brought with. */
+.rack { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; margin-bottom: 12px; min-height: 0; overflow-y: auto; }
+.rack button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 6px 3px 3px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: left;
+  overflow: hidden;
+  color: var(--muted);
+  background: var(--glass);
+  border: 1px solid var(--divider);
+  cursor: pointer;
+}
+.rack button { color: var(--text); position: relative; }
+.rack button { padding: 5px 8px 5px 5px; font-size: 12px; min-height: 40px; }
+.rack button img { width: 28px; height: 28px; display: block; }
+.rack button small { display: block; font-size: 10px; font-weight: 400; white-space: nowrap; color: var(--muted); }
+.rack button:hover { border-color: var(--accent); }
+/* A chosen tower wears the key that reaches it, in the corner, in place of a tick. */
+.rack button kbd { position: absolute; right: 5px; top: 4px; min-width: 16px; padding: 1px 4px; font: inherit; font-size: 10px; font-weight: 800; text-align: center; color: var(--bg); background: var(--accent); }
+.rack button kbd:empty { display: none; }
+.rack button[aria-pressed="true"] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.rack button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* Back and Start keep to the foot of the panel, whatever is above them. */
+.stage .row { display: flex; gap: 8px; margin-top: auto; padding-top: 12px; }
+.stage .row .btn { margin: 0; flex: 1; }
+/* The table: a lit field the tower turns on, and a fixed-height write-up
+   under it. It arrives from the right when the step opens. */
+.stage .show {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(ellipse 72% 58% at 50% 58%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 70%),
+    linear-gradient(180deg, color-mix(in srgb, var(--bg) 84%, transparent), color-mix(in srgb, var(--bg) 94%, transparent));
+  border: 1px solid color-mix(in srgb, var(--divider) 70%, transparent);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  /* Runs every time the stage is shown, since hiding it resets the animation. */
+  animation: tableIn 0.6s cubic-bezier(0.2, 0.85, 0.2, 1) both;
+}
+@keyframes tableIn {
+  from { transform: translateX(46vw); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+.stage .show canvas { flex: 1 1 0; min-height: 0; width: 100%; display: block; visibility: hidden; }
+/* Every band of the write-up has a fixed place, whatever tower is on the
+   table: the name line, then two rows of numbers, then the blurb in the
+   room that is left, then the paths at the foot. Nothing moves between one
+   tower and the next. */
+.stage .about {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  height: 262px;
+  overflow: hidden;
+  padding: 10px 20px 12px;
+  border-top: 1px solid var(--divider);
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.stage .about .head { flex: none; height: 40px; display: flex; align-items: baseline; gap: 12px; }
+.stage .about b { font-size: 28px; font-weight: 800; letter-spacing: -0.015em; color: var(--text); line-height: 1.1; }
+.stage .about em { font-style: normal; color: var(--accent); font-weight: 700; font-size: 14px; }
+.stage .about .nums { flex: none; height: 52px; display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 24px; gap: 2px 16px; margin: 6px 0 8px; font-size: 12.5px; align-content: start; overflow: hidden; }
+.stage .about .nums i { font-style: normal; color: var(--text); font-weight: 600; }
+.stage .about p { flex: 1 1 auto; min-height: 0; margin: 0; max-width: 70ch; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+.stage .about .paths { flex: none; margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; font-size: 11px; padding-top: 8px; border-top: 1px solid var(--divider); }
+.stage .about .paths i { display: block; font-style: normal; font-weight: 700; color: var(--text); font-size: 12px; }
+/* Too narrow for the two side by side: the table goes above the rack,
+   shorter, rather than disappearing. */
+@media (max-width: 900px) {
+  .veil.kitstep { align-items: center; padding-right: 22px; }
+  .stage { flex-direction: column; align-items: stretch; width: min(520px, 96vw); height: auto; }
+  .stage .pick { width: auto; }
+  .rack { overflow: visible; }
+  .stage .show canvas { flex: none; height: 230px; }
+  .stage .about { height: auto; min-height: 150px; }
+  .stage .about b { font-size: 22px; }
+}
+
+/* Difficulty: a dropdown of our own, since a native list comes in the
+   system's colours and this page has its own. */
+.levels { display: flex; align-items: center; gap: 10px; margin: 6px 0 2px; }
+.levels .label { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+/* Difficulty as four buttons side by side, with what the chosen one means
+   written out under them. */
+.levels { flex-wrap: wrap; justify-content: center; }
+.levels .seg { background: var(--glass); }
+.levels .seg button { padding: 7px 14px; font-size: 13px; }
+/* The difficulty buttons, and the sandbox switch standing apart beside them. */
+.levels .levelrow { display: flex; gap: 8px; align-items: stretch; }
+.levels .levelrow .seg { flex: 1; }
+/* The same height as the difficulty buttons beside it, a little wider than tall. */
+.levels .sandboxswitch { width: 48px; padding: 0; flex: none; }
+.levels .sandboxswitch .ico { width: 24px; height: 24px; display: block; }
+.levels .sandboxswitch[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.levels .sandboxswitch:disabled { opacity: 0.4; cursor: not-allowed; }
+.levels .levelnote { flex-basis: 100%; margin: 0; font-size: 12px; color: var(--muted); max-width: none; }
+/* A dropdown of our own, worn by the difficulty picker and the preset
+   picker alike. Rooted on .select so anything can carry one. */
+.select { position: relative; z-index: 3; }
+.select .trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 150px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 8px 12px;
+  text-align: left;
+  color: var(--text);
+  background: var(--glass);
+  border: 1px solid var(--divider);
+  cursor: pointer;
+}
+.select .trigger:hover,
+.select[data-open] .trigger { border-color: var(--accent); }
+.select .trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.select .chev {
+  flex: none;
+  width: 0; height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid var(--muted);
+  transition: transform 0.15s;
+}
+.select[data-open] .chev { transform: rotate(180deg); }
+.select .menu {
+  position: absolute;
+  left: 0; top: calc(100% + 4px);
+  min-width: 100%;
+  padding: 4px;
+  background: var(--surface);
+  border: 1px solid var(--divider);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+}
+.select .menu button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 8px 12px;
+  text-align: left;
+  white-space: nowrap;
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+.select .menu button:hover,
+.select .menu button:focus-visible { background: color-mix(in srgb, var(--accent) 20%, transparent); outline: none; }
+.select .menu button[aria-selected="true"] { background: var(--accent); color: var(--bg); }
+.route {
+  width: 170px;
+  padding: 12px 14px;
+  /* Cards in a row match height, so every best line sits on the same line. */
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  font: inherit;
+  color: var(--text);
+  background: var(--glass);
+  border: 1px solid var(--divider);
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s, background 0.15s;
+}
+.route:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, var(--glass)); transform: translateY(-2px); }
+.route[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+/* Shut in the sandbox until its campaign has been held at this difficulty. */
+.route:disabled { opacity: 0.42; cursor: not-allowed; }
+.route:disabled:hover { border-color: var(--divider); background: var(--glass); transform: none; }
+.route:disabled small { color: var(--muted); }
+
+/* After a loss: what leaked. It sits in the veil's own column between the
+   summary and the button, so it takes that column's width and the veil's quiet
+   surface rather than shouting in an accent box of its own. */
+.through {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: min(420px, 100%);
+  margin: 14px auto 16px;
+  padding: 14px 18px;
+  text-align: left;
+  border: 1px solid var(--divider);
+  background: var(--glass);
+  backdrop-filter: blur(6px);
+}
+.through[hidden] { display: none; }
+/* The portrait gets a tile of its own so it is not a cube floating on a panel. */
+.through img {
+  width: 56px; height: 56px;
+  flex: none;
+  display: block;
+  padding: 4px;
+  border: 1px solid var(--divider);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+.through div { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.through small { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+.through b { font-size: 17px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.15; }
+.through span { font-size: 12px; line-height: 1.4; color: var(--muted); }
+
+/* The changes list: what has moved about the way a run plays. The panel wears
+   the field guide's wash and head; the entries read as a column rather than
+   stretching across a wide window, because they are sentences, not cards. */
+.changes { display: flex; flex-direction: column; gap: 12px; max-width: 760px; }
+.change { border: 1px solid var(--divider); background: var(--glass); padding: 14px 16px; }
+.change.now { border-color: var(--accent); }
+.change h3 { margin: 0 0 8px; font-size: 15px; font-weight: 800; display: flex; align-items: baseline; gap: 10px; }
+.change h3 small { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.change.now h3 small { color: var(--accent); }
+.change ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+.change li { font-size: 13px; line-height: 1.5; color: var(--muted); }
+.veil.peek .row .btn { min-width: 160px; font-size: 15px; padding: 11px 24px; letter-spacing: 0.04em; text-transform: uppercase; }
+.route b { display: block; font-size: 15px; font-weight: 800; }
+.route > span { display: block; flex: 1; font-size: 12px; color: var(--muted); margin: 2px 0 8px; }
+.route small { display: block; font-size: 11px; color: var(--accent); }
+/* Choosing a route on a wide window: a panel down the left holds the routes
+   as a list, the difficulty and Next, over a wash that fades out to the
+   right, and the board previews in the space beside it. */
+.chooser { display: contents; }
+@media (min-width: 901px) {
+  /* The same wash as the tower picker: the board can be looked at, not used. */
+  /* It leans in from the left edge as the window widens, the way the tower
+     picker leans in from the right. */
+  .veil.choosing {
+    align-items: flex-start; justify-content: center; text-align: left;
+    padding: 18px 22px 18px calc(32px + max(0px, (100vw - 1500px) / 14));
+    background: color-mix(in srgb, var(--bg) 62%, transparent);
+  }
+  .veil.choosing .chooser {
+    display: flex; flex-direction: column; gap: 8px;
+    width: clamp(440px, 27vw, 560px); max-height: 100%; overflow-y: auto; overflow-x: hidden;
+    padding: 18px 20px 20px;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    border: 1px solid var(--divider);
+    backdrop-filter: blur(6px);
+  }
+  .veil.choosing h2 { font-size: 24px; }
+  .veil.choosing .chooser > p { max-width: none; }
+  .veil.choosing .routes, .veil.choosing .levels, .veil.choosing .row { width: 100%; max-width: none; }
+  .veil.choosing .routes { flex-direction: column; flex-wrap: nowrap; gap: 5px; margin: 8px 0 4px; }
+  .veil.choosing .route {
+    width: 100%; display: grid; grid-template-columns: 1fr auto; column-gap: 12px; align-items: baseline;
+    padding: 6px 12px;
+  }
+  .veil.choosing .route:hover { transform: translateX(3px); }
+  .veil.choosing .route b { font-size: 13px; line-height: 1.3; }
+  .veil.choosing .route small { grid-column: 2; grid-row: 1; text-align: right; white-space: nowrap; }
+  .veil.choosing .route > span { grid-column: 1 / -1; margin: 0; font-size: 11px; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .veil.choosing .levels { flex-direction: column; align-items: stretch; gap: 6px; margin: 6px 0 2px; }
+  .veil.choosing .levels .seg button { flex: 1; }
+  /* Room for the longest note, a difficulty's and the sandbox's together, so
+     switching either never changes the panel's height. */
+  .veil.choosing .levels .levelnote { flex-basis: auto; line-height: 1.45; height: calc(1.45em * 3); overflow: hidden; }
+  .veil.choosing .row .btn { flex: 1; }
+}
+/* The route card: the chooser itself on a wide window. One route at a time,
+   stepped through with the arrows or jumped to from the dots, with what its
+   board is made of and the best held on it at each difficulty. */
+.routecard { display: none; }
+@media (min-width: 901px) {
+  .veil.choosing .routes { display: none; }
+  .veil.choosing .routecard { display: block; width: 100%; margin: 8px 0 4px; padding: 16px 18px 18px; border: 1px solid var(--divider); background: var(--glass); }
+  .routecard .nav { display: flex; align-items: center; gap: 10px; }
+  .routecard .nav h6 { flex: 1; margin: 0; color: var(--accent); }
+  .routecard .step { width: 36px; height: 36px; padding: 0; }
+  .routecard .step .ico { width: 18px; height: 18px; display: block; }
+  /* Every route's card the same height: the name kept to one line and the
+     note to a fixed three, however long either is. */
+  .routecard h3 { margin: 10px 0 0; font-size: 26px; font-weight: 800; letter-spacing: -0.015em; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .routecard p { margin: 6px 0 14px; font-size: 13px; line-height: 1.45; max-width: none; height: calc(1.45em * 3); overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+  .routecard dl { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px 14px; margin: 0; }
+  .routecard dl div { border-top: 1px solid var(--divider); padding-top: 6px; }
+  .routecard dt { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .routecard dd { margin: 0; font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.2; }
+  .routecard .bests { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 14px; }
+  .routecard .bests span { display: block; padding: 6px 9px; border: 1px solid var(--divider); font-size: 11px; color: var(--muted); }
+  .routecard .bests b { display: block; font-size: 16px; color: var(--text); font-variant-numeric: tabular-nums; }
+  .routecard .bests .held b { color: var(--accent); }
+  /* One dot a route: the one on show filled, the one picked ringed. */
+  /* Each dot is a tall, easy target with a thin bar drawn in its middle. */
+  .routecard .dots { display: flex; gap: 4px; margin-top: 8px; }
+  .routecard .dots button { flex: 1; position: relative; height: 24px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+  .routecard .dots button::before { content: ""; position: absolute; left: 0; right: 0; top: 8px; height: 8px; background: var(--divider); transition: background 0.12s, transform 0.12s; }
+  .routecard .dots button:hover::before { background: var(--text); transform: scaleY(1.5); }
+  .routecard .dots button[aria-current="true"]::before { background: var(--accent); }
+  .routecard .dots button:focus-visible { outline: 1px solid var(--accent); outline-offset: 1px; }
+  .routecard .dotname { height: 1.4em; line-height: 1.4em; margin-top: 2px; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}
+@media (min-width: 1600px) and (min-height: 820px) {
+  .veil.choosing .routecard { padding: 20px 22px 22px; }
+  .routecard h3 { font-size: 32px; }
+  .routecard p { font-size: 14px; }
+  .routecard dd { font-size: 26px; }
+  .routecard .bests b { font-size: 18px; }
+}
+/* On a big window there is room for it all to be read at a comfortable size. */
+@media (min-width: 1600px) and (min-height: 820px) {
+  .veil.choosing .chooser { padding: 24px 26px 26px; gap: 10px; }
+  .veil.choosing h2 { font-size: 30px; }
+  .veil.choosing .chooser > p { font-size: 14px; }
+  .veil.choosing .routes { gap: 6px; }
+  .veil.choosing .route { padding: 10px 14px; }
+  .veil.choosing .route b { font-size: 15px; }
+  .veil.choosing .route small { font-size: 12px; }
+  .veil.choosing .route > span { font-size: 12.5px; }
+  .veil.choosing .levels .label { font-size: 13px; }
+  .veil.choosing .levels .seg button { font-size: 14px; padding: 9px 12px; }
+  .veil.choosing .levels .levelnote { font-size: 13px; }
+  .veil.choosing .row .btn { font-size: 16px; padding: 13px 24px; }
+}
+
+@media (max-width: 900px) {
+  .top .stat { min-width: 70px; padding: 6px 9px; }
+  .num { font-size: 18px; }
+  .lives i { width: 6px; height: 8px; }
+  .side { top: auto; bottom: 88px; left: 14px; right: 14px; width: auto; transform: none; }
+  .shop { flex-direction: row; }
+  .shop button { flex: 1; padding: 3px; }
+  .shop .model { width: 40px; height: 40px; }
+  .shop kbd { display: none; }
+  .detail { display: none !important; }
+  .shop small { display: none; }
+}

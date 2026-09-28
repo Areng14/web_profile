@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<title>SO/01 Signalling Operations</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#525659;padding:28px 0;font-family:Arial,Helvetica,sans-serif;color:#111;font-size:11px;line-height:1.42;overflow-x:auto}
+  .page{width:794px;height:1123px;overflow:hidden;margin:0 auto 28px;background:#fff;box-shadow:0 3px 10px rgba(0,0,0,.45);padding:36px 56px 70px;position:relative}
+  table{border-collapse:collapse;width:100%}
+  .hdr{margin-bottom:6px}
+  /* Tables are ruled in half-pixel lines: each cell its top and left, the last row's cells the
+     bottom and the last column's the right. Every line is drawn by a cell over its own
+     background, and no cell painted after it covers it. On screen a border that thin is drawn
+     one pixel of the screen wide, sharp at any scale. In print Chromium draws it a whole CSS
+     pixel wide, so the PDF is printed from pages laid out at twice their size, where half a
+     pixel is a whole one (scripts/rule-book-pdf.mjs). */
+  .hdr{border-collapse:separate;border-spacing:0}
+  .hdr td{border:0;border-top:.5px solid #000;border-left:.5px solid #000;padding:6px 8px;font-size:10.5px;vertical-align:middle}
+  .logo{width:120px;text-align:center}
+  .logo .mk{display:inline-block;background:#d8391c;color:#fff;font-weight:700;font-size:15px;letter-spacing:.06em;padding:5px 9px}
+  .logo .nm{display:block;font-size:8.5px;font-weight:700;letter-spacing:.12em;margin-top:4px}
+  .hdr .t{font-weight:700;font-size:13px;text-align:center}
+  .hdr .meta{width:170px;line-height:1.55}
+  .foot{position:absolute;left:56px;right:56px;bottom:26px;border-top:1px solid #000;padding-top:6px;font-size:9.5px;display:flex;justify-content:space-between}
+  .foot b{letter-spacing:.08em}
+  h1{font-size:26px;margin:70px 0 4px}
+  .sub{font-size:15px;margin:0 0 40px}
+  h2{font-size:14px;margin:18px 0 8px;text-transform:uppercase;border-bottom:2px solid #000;padding-bottom:3px}
+  h3{font-size:12px;margin:11px 0 4px}
+  .cl{display:grid;grid-template-columns:48px 1fr;margin:2px 0}
+  .cl .n{font-weight:700}
+  .cl p{margin:0}
+  .cl ul,.cl ol{margin:2px 0 0;padding-left:18px}
+  .box{border:1px solid #000;padding:8px 10px;margin:10px 0}
+  .warn{border:2px solid #000;margin:9px 0}
+  .warn .h{background:#000;color:#fff;font-weight:700;padding:4px 10px;letter-spacing:.1em;font-size:11px}
+  .warn .b{padding:9px 12px}
+  .note{font-style:italic;margin:6px 0 6px 52px}
+  .grid{margin:8px 0}
+  .grid{border-collapse:separate;border-spacing:0}
+  .grid td,.grid th{border:0;border-top:.5px solid #000;border-left:.5px solid #000;padding:3px 7px;text-align:left;vertical-align:top}
+  .grid tr:last-child>*,.hdr tr:last-child>*{border-bottom:.5px solid #000}
+  .grid tr>:last-child,.hdr tr>:last-child{border-right:.5px solid #000}
+  .grid th{background:#e6e6e6;font-size:11px}
+  .grid td:first-child{font-weight:700;white-space:nowrap}
+  .grid.plain td:first-child{font-weight:400;white-space:normal}
+  .grid tr.group th{background:#f4f4f4;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase}
+  .cap{font-size:9.5px;margin:1px 0 6px;font-style:italic}
+  .sig{display:inline-flex;flex-direction:column;gap:3px;background:#111;border-radius:3px;padding:4px}
+  .l{width:13px;height:13px;border-radius:50%;background:#444}
+  .R{background:#e3261b}.Y{background:#f5b800}.G{background:#1aa84a}
+  .toc td{padding:4px 0;border-bottom:1px dotted #777}
+  a.xr{color:#0b3d91;text-decoration:none}
+  a.xr:hover{text-decoration:underline}
+  .toc a{color:inherit;text-decoration:none;display:block}
+  .toc a:hover{text-decoration:underline}
+  .toc td:last-child{text-align:right;width:40px}
+  .sign{margin-top:36px;display:grid;grid-template-columns:1fr 1fr;gap:30px}
+  .sign div{border-top:1px solid #000;padding-top:4px;font-size:10.5px}
+  .stamp{position:absolute;right:70px;top:250px;transform:rotate(-8deg);border:3px solid #c0281a;color:#c0281a;font-weight:700;padding:6px 12px;letter-spacing:.1em;font-size:13px;opacity:.8}
+  code,.mono{font-family:"Courier New",monospace;font-weight:700}
+  .hc{display:flex;gap:34px;justify-content:center;margin:14px 0 4px}
+  .hc .c{text-align:center}
+  .hc .ch{display:block;border:2px solid #000;font-family:"Courier New",monospace;font-weight:700;font-size:28px;padding:4px 14px;margin-bottom:6px}
+  .hc .lb{font-size:10.5px;line-height:1.3;display:block;max-width:130px}
+  .sw{display:inline-block;width:34px;height:0;border-top:4px solid;vertical-align:middle}
+  .fig{border:1px solid #000;padding:10px;margin:10px 0 2px;text-align:center}
+  @page{size:A4;margin:0}
+  @media print{body{background:#fff;padding:0}.page{width:210mm;height:297mm;box-shadow:none;margin:0;break-after:page}}
+</style>
+</head>
+<body>
+<!-- ============ COVER ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Rule Book Module SO/01<br>Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+<h1>Signalling Operations</h1>
+<p class="sub">Working a desk on the Chattanooga network</p>
+<table class="grid">
+<tbody><tr><td>Document number</td><td>CR/OPS/SO01</td></tr>
+<tr><td>Issue</td><td>01</td></tr>
+<tr><td>Compliance date</td><td>Before taking charge of a desk</td></tr>
+<tr><td>Applies to</td><td>All eight desks, Whiteside to Cleveland</td></tr>
+<tr><td>Supersedes</td><td>None</td></tr>
+<tr><td>Owner</td><td>Head of Signalling Operations, Chattanooga</td></tr>
+</tbody></table>
+<h2>Issue record</h2>
+<table class="grid">
+<tbody><tr><th>Issue</th><th>Date</th><th>Comments</th></tr>
+<tr><td>01</td><td>September 2026</td><td>First issue.</td></tr>
+</tbody></table>
+<div class="box"><b>Before you start.</b> Read this module before taking charge of a desk. A live shift cannot be paused.</div>
+<div class="sign">
+<div>Authorised by: Head of Signalling Operations</div>
+<div>Date: 26/09/2026</div>
+</div>
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 1 of 20</span></div></div>
+<!-- ============ CONTENTS + 1 ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+<h2>Contents</h2>
+<table class="toc">
+<tbody><tr><td><a href="#s-1">1 &nbsp; Purpose and scope</a></td><td><a href="#s-1">2</a></td></tr>
+<tr><td><a href="#s-2">2 &nbsp; The train describer and headcodes</a></td><td><a href="#s-2">5</a></td></tr>
+<tr><td><a href="#s-3">3 &nbsp; Signals and the panel</a></td><td><a href="#s-3">6</a></td></tr>
+<tr><td><a href="#s-4">4 &nbsp; Routes and interlocking</a></td><td><a href="#s-4">9</a></td></tr>
+<tr><td><a href="#s-5">5 &nbsp; Regulating trains</a></td><td><a href="#s-5">12</a></td></tr>
+<tr><td><a href="#s-6">6 &nbsp; Faults and the phone</a></td><td><a href="#s-6">13</a></td></tr>
+<tr><td><a href="#s-7">7 &nbsp; Degraded working</a></td><td><a href="#s-7">15</a></td></tr>
+<tr><td><a href="#s-8">8 &nbsp; Information on the desk</a></td><td><a href="#s-8">16</a></td></tr>
+<tr><td><a href="#s-9">9 &nbsp; Performance and discipline</a></td><td><a href="#s-9">17</a></td></tr>
+<tr><td><a href="#s-appendix-a">Appendix A &nbsp; Keys</a></td><td><a href="#s-appendix-a">19</a></td></tr>
+<tr><td><a href="#s-appendix-b">Appendix B &nbsp; Glossary</a></td><td><a href="#s-appendix-b">20</a></td></tr>
+</tbody></table>
+<h2 id="s-1">1 &nbsp; Purpose and scope</h2>
+<div class="cl" id="s-1-1"><span class="n">1.1</span><p>This module sets out what a signaller must know before taking charge of a desk on the Chattanooga network, and how to deal with the situations that arise during a shift.</p></div>
+<div class="cl" id="s-1-2"><span class="n">1.2</span><p>It applies to all eight desks.</p></div>
+<div class="cl" id="s-1-3"><span class="n">1.3</span><p>Terms are explained in <b>bold</b> where they are first used, and collected in Appendix B.</p></div>
+<h3 id="s-1-4">1.4 &nbsp; Your role</h3>
+<div class="cl" id="s-1-4-1"><span class="n">1.4.1</span><p>You take charge of one desk for the whole shift. The other seven desks are worked by <b>automatic route setting (ARS)</b> and by the signallers on those desks. See Section <a class="xr" href="#s-5-1">5.1</a>.</p></div>
+<div class="cl" id="s-1-4-2"><span class="n">1.4.2</span><p>Nothing on your desk is set automatically except automatic signals. Every route from a controlled signal on your desk must be set by you.</p></div>
+<div class="cl" id="s-1-4-3"><span class="n">1.4.3</span><p>You are responsible for setting routes, regulating trains, and reporting faults on your area.</p></div>
+<h3 id="s-1-5">1.5 &nbsp; Direction of travel</h3>
+<div class="cl" id="s-1-5-1"><span class="n">1.5.1</span><p><b>Down</b> is eastbound, from Bridgeport towards Dalton, and is shown as the upper line of a pair on the panel. <b>Up</b> is westbound and is shown as the lower line.</p></div>
+<div class="cl" id="s-1-5-2"><span class="n">1.5.2</span><p>On the Cleveland branch, Down is from Chattanooga towards Cleveland.</p></div>
+<div class="cl" id="s-1-5-3"><span class="n">1.5.3</span><p>Trains keep left.</p></div>
+<h3 id="s-1-6">1.6 &nbsp; Where trains enter and leave</h3>
+<div class="cl" id="s-1-6-1"><span class="n">1.6.1</span><p>Trains enter and leave the network at <b>fringes</b>: Bridgeport (west of Whiteside), Dalton (east of Tunnel Hill) and Calhoun (the high-speed line, on the Lovell Field desk).</p></div>
+<div class="cl" id="s-1-6-2"><span class="n">1.6.2</span><p>Cleveland and Lovell Field Airport are termini and have no fringe. Trains also start from and finish in depots: the Chattanooga carriage siding, Ooltewah TMD, Cleveland depot and the air cargo roads at Lovell Field.</p></div>
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 2 of 20</span></div></div>
+<!-- ============ 1 cont ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+<h3 id="s-1-7">1.7 &nbsp; The desks</h3>
+<table class="grid">
+<tbody><tr><th>Code</th><th>Desk</th><th>Principal features</th></tr>
+<tr><td>WS</td><td>Whiteside</td><td>Slygo Road level crossing; Whiteside platforms 1–2; crossovers 603 and 605</td></tr>
+<tr><td>WH</td><td>Wauhatchie</td><td>Tiftonia and Wauhatchie platforms; Wauhatchie up loop (P3)</td></tr>
+<tr><td>RS</td><td>Riverside</td><td>Lookout Valley and St Elmo platforms; Cummings Highway crossing; down goods loop; Riverside yard</td></tr>
+<tr><td>CT</td><td>Chattanooga</td><td>Through platforms P1–P4; bay P5; carriage siding; branch junction and diamond; Brainerd platforms</td></tr>
+<tr><td>LF</td><td>Lovell Field</td><td>High-speed line; fast and slow lines; airport junction and flyover; Lovell Field Parkway; Lovell Field Airport; air cargo roads</td></tr>
+<tr><td>ER</td><td>East Ridge</td><td>Lovell Field Junction and diamond; East Ridge and Ringgold platforms; Enterprise South plant siding; crossovers 511 and 513; Nashville Street crossing</td></tr>
+<tr><td>TH</td><td>Tunnel Hill</td><td>Tunnel Hill platforms; Clisby Austin Road crossing; Chetoogeta tunnel; up goods loop</td></tr>
+<tr><td>CL</td><td>Cleveland</td><td>Ooltewah and Collegedale platforms; Ooltewah TMD; single line into Cleveland terminus P1–P5; Cleveland depot</td></tr>
+</tbody></table>
+<p class="cap" id="t-1">Table 1: The desks</p>
+<div class="cl" id="s-1-7-1"><span class="n">1.7.1</span><p>The main line runs Whiteside, Wauhatchie, Riverside, Chattanooga, East Ridge, Tunnel Hill. The Cleveland branch leaves Chattanooga. The high-speed line to Calhoun leaves East Ridge through Lovell Field.</p></div>
+<h3 id="s-1-8">1.8 &nbsp; The shift</h3>
+<div class="cl" id="s-1-8-1"><span class="n">1.8.1</span><p>You may clock in on any half hour from 06:00 to 20:00. A shift covers every train due to start in the following two hours, and the workings they form up to a quarter of an hour after that. The desk is handed over running: trains already out when you clock in are yours to signal, but only the shift's own trains are scored.</p></div>
+<div class="cl" id="s-1-8-2"><span class="n">1.8.2</span><p>The shift ends when the last train has run, or 45 minutes after the two hours at the latest. It also ends early:</p></div>
+<div class="cl"><span class="n"></span><ul><li>once nothing more is coming to your desk (the rest of the railway is then worked through to the end);</li><li>on a third black mark (Section <a class="xr" href="#s-9-5">9.5</a>);</li><li>when you choose <i>End the shift now</i> from the menu.</li></ul></div>
+<div class="cl" id="s-1-8-3"><span class="n">1.8.3</span><p>A shift cannot be paused. The clock may be run at 1×, 2×, 4× or 8×.</p></div>
+<div class="cl" id="s-1-8-4"><span class="n">1.8.4</span><p>Traffic is heaviest in the rush hours, 07:00–09:30 and 16:00–19:00, when extra trains run.</p></div>
+<div class="cl" id="s-1-8-5"><span class="n">1.8.5</span><p>The timetable is the same every day. The date, the weather and what goes wrong change every shift.</p></div>
+<h3 id="s-1-9">1.9 &nbsp; Conditions</h3>
+<table class="grid">
+<tbody><tr><th></th><th>Calm</th><th>Mixed</th><th>Rough</th></tr>
+<tr><td>Late trains</td><td>Up to 3</td><td>Up to 5</td><td>Up to 7</td></tr>
+<tr><td>Ground failures</td><td>None</td><td>A track circuit; on the high-speed line, a track circuit or points</td><td>Track circuits and points</td></tr>
+<tr><td>Failed trains</td><td>Possible on the airport line</td><td>Yes</td><td>Yes</td></tr>
+<tr><td>Trains with no description</td><td>None</td><td>One</td><td>Up to three</td></tr>
+<tr><td>Possessions</td><td>None</td><td>None</td><td>On your own desk, from the start of the shift</td></tr>
+<tr><td>Other events</td><td>None</td><td>One of: signal failure, missing driver, line blocked, leaf fall in season</td><td>All of them</td></tr>
+<tr><td>Weather</td><td>No</td><td>No</td><td>Yes</td></tr>
+<tr><td>Faults you do not report</td><td colspan="3">See Section <a class="xr" href="#s-6-6">6.6</a></td></tr>
+</tbody></table>
+<p class="cap" id="t-2">Table 2: Conditions</p>
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 3 of 20</span></div></div>
+<!-- ============ 1 network map ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+  <h3 id="s-1-10">1.10 &nbsp; The passenger network</h3>
+  <div class="cl" id="s-1-10-1"><span class="n">1.10.1</span><p>Figure 1 shows the passenger network and the operators that run over it. It is the same map shown on the desk with <b>M</b>. The key uses each passenger operator's symbol; see <a class="xr" href="#t-5">Table 5</a>.</p></div>
+  <div class="fig" style="background:#141212;border-color:#141212;padding:0;margin-top:6px"><img src="network-map.jpg" style="width:100%;display:block"></div>
+  <p class="cap" id="f-1">Figure 1: The Chattanooga passenger network</p>
+  <div class="cl" id="s-1-10-2"><span class="n">1.10.2</span><p>The map shows stations, not desks. Use <a class="xr" href="#t-1">Table 1</a> to find which desk covers each station. Freight lines, loops, sidings and depots are not shown.</p></div>
+  <div class="cl" id="s-1-10-3"><span class="n">1.10.3</span><p>Trains shown running to Bridgeport, Dalton and Calhoun leave the network at those fringes (<a class="xr" href="#s-1-6">1.6</a>). Cleveland and Lovell Field Airport are termini.</p></div>
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 4 of 20</span></div></div>
+
+<!-- ============ 2 ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+<h2 id="s-2">2 &nbsp; The train describer and headcodes</h2>
+<h3 id="s-2-1">2.1 &nbsp; Headcodes</h3>
+<div class="cl" id="s-2-1-1"><span class="n">2.1.1</span><p>Every train carries a four-character <b>headcode</b>: a class digit, a destination letter and a two-digit train number.</p></div>
+<div class="fig">
+<div class="hc">
+<div class="c"><span class="ch">1</span><span class="lb">Class<br>(<a class="xr" href="#t-3">Table 3</a>)</span></div>
+<div class="c"><span class="ch">A</span><span class="lb">Where the train finishes<br>(<a class="xr" href="#t-4">Table 4</a>)</span></div>
+<div class="c"><span class="ch">23</span><span class="lb">Train number</span></div>
+</div>
+</div>
+<p class="cap" id="f-2">Figure 2: Reading a headcode</p>
+<div class="cl" id="s-2-1-2"><span class="n">2.1.2</span><p>The train number identifies the train only. Do not rely on it to tell direction.</p></div>
+<table class="grid">
+<tbody><tr><th>Digit</th><th>Class</th><th>Top speed</th><th>Length</th><th>Minimum stop</th></tr>
+<tr><td>9</td><td>High-speed passenger</td><td>125 mph</td><td>200 m</td><td>90 s</td></tr>
+<tr><td>1</td><td>Express passenger</td><td>90 mph</td><td>160 m</td><td>60 s</td></tr>
+<tr><td>2</td><td>Stopping passenger</td><td>75 mph</td><td>80 m</td><td>40 s</td></tr>
+<tr><td>3</td><td>Railhead treatment train</td><td>60 mph</td><td>90 m</td><td>—</td></tr>
+<tr><td>4</td><td>Freight, 75 mph</td><td>75 mph</td><td>320 m</td><td>—</td></tr>
+<tr><td>6</td><td>Freight, 60 mph</td><td>60 mph</td><td>400 m</td><td>—</td></tr>
+<tr><td>5</td><td>Empty stock</td><td>75 mph, or as formed</td><td>80 m, or as formed</td><td>—</td></tr>
+<tr><td>0</td><td>Light locomotive</td><td>75 mph</td><td>20 m</td><td>—</td></tr>
+</tbody></table>
+<p class="cap" id="t-3">Table 3: Classes of train</p>
+<div class="cl" id="s-2-1-3"><span class="n">2.1.3</span><p>Freight trains accelerate and brake far more slowly than passenger trains. Allow for this when planning a path.</p></div>
+<div class="cl" id="s-2-1-4"><span class="n">2.1.4</span><p>The class sets how much lateness costs (Section <a class="xr" href="#s-9-1">9.1</a>). It does not change how trains are routed on other desks.</p></div>
+<table class="grid">
+<tbody><tr><th>Letter</th><th>Train finishes at</th><th>Letter</th><th>Train finishes at</th></tr>
+<tr><td>A</td><td>Atlanta (via Dalton or Calhoun)</td><td>M</td><td>Ooltewah TMD</td></tr>
+<tr><td>B</td><td>Bridgeport</td><td>N</td><td>Nashville (via Bridgeport)</td></tr>
+<tr><td>C</td><td>Cleveland and its depot</td><td>P</td><td>Enterprise South plant</td></tr>
+<tr><td>D</td><td>Dalton</td><td>R</td><td>Riverside yard</td></tr>
+<tr><td>L</td><td>Lovell Field Airport and cargo terminal</td><td>T</td><td>Chattanooga and its carriage siding</td></tr>
+<tr><td>S</td><td>Stringers Ridge (training desk only)</td><td>W</td><td>Williams Island (training desk only)</td></tr>
+</tbody></table>
+<p class="cap" id="t-4">Table 4: Destination letters</p>
+<table class="grid">
+<tbody><tr><th>Operator</th><th>Runs</th></tr>
+<tr><td style="width:170px;vertical-align:middle;padding:4px 8px"><img src="op-ridgeline.png" alt="Ridgeline" style="height:24px;display:block"></td><td style="vertical-align:middle">Expresses between Nashville and Atlanta (class 1)</td></tr>
+<tr><td style="width:170px;vertical-align:middle;padding:4px 8px"><img src="op-peachline.png" alt="Peachline" style="height:24px;display:block"></td><td style="vertical-align:middle">High-speed trains between Chattanooga and Atlanta (class 9)</td></tr>
+<tr><td style="width:170px;vertical-align:middle;padding:4px 8px"><img src="op-valley-rail.png" alt="Valley Rail" style="height:24px;display:block"></td><td style="vertical-align:middle">Stopping and semi-fast trains, the Cleveland branch, the bay shuttle and their empty stock (classes 2 and 5)</td></tr>
+<tr><td style="width:170px;vertical-align:middle;padding:4px 8px"><img src="op-lovell-link.png" alt="Lovell Link" style="height:24px;display:block"></td><td style="vertical-align:middle">Airport trains from the Chattanooga bay to Lovell Field Airport</td></tr>
+<tr><td style="width:170px;vertical-align:middle;padding:4px 8px"><img src="op-lookout-freight.png" alt="Lookout Freight" style="height:24px;display:block"></td><td style="vertical-align:middle">Coal, through freight, air cargo, light engines and the railhead treatment train (classes 0, 3, 4 and 6)</td></tr>
+</tbody></table>
+<p class="cap" id="t-5">Table 5: Operators</p>
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 5 of 20</span></div></div>
+<!-- ============ 2 cont ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+<h3 id="s-2-2">2.2 &nbsp; The describer</h3>
+<div class="cl" id="s-2-2-1"><span class="n">2.2.1</span><p>Every signal and fringe has a <b>berth</b>, a small box that shows the headcode of the train approaching it. The headcode steps from berth to berth as the train passes each signal.</p></div>
+<div class="cl" id="s-2-2-2"><span class="n">2.2.2</span><p>Hover over a berth to see the train's operator, journey, lateness and where it is next due on your desk. Click it to open the train's timetable card.</p></div>
+<div class="cl" id="s-2-2-3"><span class="n">2.2.3</span><p>When a train forms its next working, its berth changes to the new headcode.</p></div>
+<h3 id="s-2-3">2.3 &nbsp; Trains without a description</h3>
+<div class="cl" id="s-2-3-1"><span class="n">2.3.1</span><p>A train may enter with no headcode. It shows on the track as normal but its berth stays empty. The describer raises an alarm when it enters, and again after it has stood 30 s at a signal.</p></div>
+<div class="cl" id="s-2-3-2"><span class="n">2.3.2</span><p>Automatic route setting will not route an undescribed train. On other desks a colleague interposes it after about a minute. On your desk nobody will: that is your job.</p></div>
+<div class="cl" id="s-2-3-3"><span class="n">2.3.3</span><p>You can still route an undescribed train by hand.</p></div>
+<div style="display:grid;grid-template-columns:1fr 270px;gap:12px;align-items:start">
+<div>
+<div class="cl" id="s-2-3-4"><span class="n">2.3.4</span><p>To <b>interpose</b> a description:</p></div>
+<div class="cl"><span class="n"></span><ol><li>Find the correct headcode in the Timetable or Trains tab.</li><li>Click the empty berth, or right-click it and choose <i>Interpose a description</i>.</li><li>Type the headcode and choose <i>Interpose</i>.</li></ol></div>
+</div>
+<div><img src="fig-interpose.png" style="width:100%;display:block;border:1px solid #000"><p class="cap" id="f-3">Figure 3: Interposing 2W08 at MB2</p></div>
+</div>
+<div class="warn"><div class="h">CAUTION</div><div class="b">Any correctly formed headcode is accepted, whether or not it is right. A train given another train's headcode will be routed on other desks towards that train's destinations, and may be lost. Check the timetable before interposing. To remove a description, right-click the berth and choose <i>Cancel the description</i>.</div></div>
+<h2 id="s-3">3 &nbsp; Signals and the panel</h2>
+<h3 id="s-3-1">3.1 &nbsp; Blocks and track circuits</h3>
+<div class="cl" id="s-3-1-1"><span class="n">3.1.1</span><p>The line is divided into <b>blocks</b>. Each block may be occupied by one train only.</p></div>
+<div class="cl" id="s-3-1-2"><span class="n">3.1.2</span><p><b>Track circuits</b> detect trains. An occupied track circuit is shown red on the panel. A signal will clear only into a clear block.</p></div>
+<h3 id="s-3-2">3.2 &nbsp; Signal aspects</h3>
+<div class="cl" id="s-3-2-1"><span class="n">3.2.1</span><p>Signals on the network are four-aspect. The aspect shows how many blocks are clear ahead of the train.</p></div>
+<table class="grid">
+<tbody><tr><th style="width:60px">Signal</th><th style="width:170px">Aspect</th><th>Meaning</th></tr>
+<tr><td><span class="sig"><span class="l"></span><span class="l"></span><span class="l"></span><span class="l R"></span></span></td><td>DANGER</td><td>The signal cannot clear. Stop.</td></tr>
+<tr><td><span class="sig"><span class="l"></span><span class="l"></span><span class="l Y"></span><span class="l"></span></span></td><td>CAUTION</td><td>One block clear. The next signal is at danger, or the route ends at a buffer stop.</td></tr>
+<tr><td><span class="sig"><span class="l Y"></span><span class="l"></span><span class="l Y"></span><span class="l"></span></span></td><td>PRELIMINARY CAUTION</td><td>Two blocks clear. The next signal is at caution.</td></tr>
+<tr><td><span class="sig"><span class="l"></span><span class="l G"></span><span class="l"></span><span class="l"></span></span></td><td>CLEAR</td><td>Three or more blocks clear, or the route runs off the desk at a fringe or to a shunt signal.</td></tr>
+</tbody></table>
+<p class="cap" id="t-6">Table 6: Signal aspects</p>
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 6 of 20</span></div></div>
+<!-- ============ 3 cont ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+<div class="cl" id="s-3-2-2"><span class="n">3.2.2</span><p>A train takes up its route as soon as its signal clears, and runs to the end of that route. The aspect is for the signaller to read the line ahead. Shunt signals show only <i>on</i> or <i>off</i>.</p></div>
+<h3 id="s-3-3">3.3 &nbsp; Types of signal</h3>
+<table class="grid">
+<tbody><tr><th>Type</th><th>Drawn as</th><th>Worked by</th></tr>
+<tr><td>Controlled</td><td>A post with a hooked arm and a round head</td><td>You. Routes are set from it.</td></tr>
+<tr><td>Automatic</td><td>A straight post with a smaller head, no arm</td><td>Itself. It clears whenever the block ahead is free.</td></tr>
+<tr><td>Shunt</td><td>A post and arm with a square head</td><td>You. Used for depots, sidings and necks.</td></tr>
+</tbody></table>
+<p class="cap" id="t-7">Table 7: Types of signal</p>
+<div class="cl" id="s-3-3-1"><span class="n">3.3.1</span><p>All controlled and shunt signals stand at danger unless a route has been set from them.</p></div>
+<h3 id="s-3-4">3.4 &nbsp; Reading the panel</h3>
+<table class="grid plain">
+<tbody><tr><th style="width:150px">Track shown</th><th>Meaning</th></tr>
+<tr><td><span class="sw" style="border-color:#7a7a7a"></span> Grey</td><td>Nothing set</td></tr>
+<tr><td><span class="sw" style="border-color:#bbb;border-top-style:double;border-top-width:5px"></span> White</td><td>A route has been set</td></tr>
+<tr><td><span class="sw" style="border-color:#ff2d23"></span> Red, solid</td><td>A train</td></tr>
+<tr><td><span class="sw" style="border-color:#ff2d23;border-top-style:dashed"></span> Red, dash-dot</td><td>A failed track circuit with no train on it</td></tr>
+<tr><td><span class="sw" style="border-color:#2c6ed5;border-top-style:dashed"></span> Blue, dashed</td><td>Blocked: a possession, something on the line, or being mended</td></tr>
+<tr><td><span class="sw" style="border-color:#2c6ed5;border-top-style:dotted"></span> Dotted</td><td>The fault team is waiting to take it</td></tr>
+</tbody></table>
+<p class="cap" id="t-8">Table 8: Track indications</p>
+<table class="grid plain">
+<tbody><tr><th style="width:150px">Signal shown</th><th>Meaning</th></tr>
+<tr><td>Blinking white ring</td><td>Selected as the entrance of a route</td></tr>
+<tr><td>Purple ring</td><td>Reminder applied</td></tr>
+<tr><td>Yellow ring</td><td>Driver authorised to pass at danger</td></tr>
+<tr><td>Blinking head</td><td>Approach locked</td></tr>
+<tr><td>Dark head, red outline</td><td>Signal failed, showing nothing</td></tr>
+<tr><td>Platform box flashing yellow</td><td>Train ready to start (Section <a class="xr" href="#s-4-9">4.9</a>)</td></tr>
+<tr><td>Points number blinking</td><td>Points moving (blinking red: points failed)</td></tr>
+</tbody></table>
+<p class="cap" id="t-9">Table 9: Signal and equipment indications</p>
+<div class="cl" id="s-3-4-1"><span class="n">3.4.1</span><p>Click any track to have the panel report what is on that track circuit.</p></div>
+<h3 id="s-3-5">3.5 &nbsp; Reminders</h3>
+<div class="cl" id="s-3-5-1"><span class="n">3.5.1</span><p>A <b>reminder</b> holds a signal at danger. No route may be set from it until the reminder is removed. Use it to protect a line you do not want a train sent onto.</p></div>
+<div class="cl" id="s-3-5-2"><span class="n">3.5.2</span><p>Right-click the signal and choose <i>Apply a reminder</i>. A controlled signal must have its route cancelled first. On an automatic signal, applying a reminder replaces it to danger.</p></div>
+<h3 id="s-3-6">3.6 &nbsp; Other items on the panel</h3>
+<div class="cl" id="s-3-6-1"><span class="n">3.6.1</span><p><b>Fringes</b> are shown as arrow boxes at the edge of the desk. Boundary markers show where the line runs on to the next desk, with that desk's first signal.</p></div>
+<div class="cl" id="s-3-6-2"><span class="n">3.6.2</span><p>Level crossings are shown as an LC box across a dashed road: dark with the barriers up, blinking red while they move, solid red when down.</p></div>
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 7 of 20</span></div></div>
+<!-- ============ 3 panel figure ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+<h3 id="s-3-7">3.7 &nbsp; The panel illustrated</h3>
+<div class="cl" id="s-3-7-1"><span class="n">3.7.1</span><p><a class="xr" href="#f-4">Figure 4</a> shows part of an example panel at Moccasin Bend, with nothing set. The same symbols are used on every desk.</p></div>
+<div class="fig" style="background:#141212;border-color:#141212;padding:0;border:1px solid #000"><img src="fig-panel.png" style="width:100%;display:block"></div>
+<p class="cap" id="f-4">Figure 4: Example panel, Moccasin Bend. Down line above, Up line below.</p>
+<table class="grid plain">
+<tbody><tr><th style="width:30px">No.</th><th style="width:180px">Item</th><th>Notes</th></tr>
+<tr><td><b>1</b></td><td>Berth</td><td>Shows the headcode of the train approaching the signal. Empty here: no train. See <a class="xr" href="#s-2-2">2.2</a>.</td></tr>
+<tr><td><b>2</b></td><td>Controlled signal (MB1)</td><td>Hooked arm, at danger. Click it to start a route. See <a class="xr" href="#s-3-3">3.3</a> and <a class="xr" href="#s-4-1">4.1</a>.</td></tr>
+<tr><td><b>3</b></td><td>Level crossing (Moccasin Road)</td><td>Dark: barriers up. See <a class="xr" href="#s-4-11">4.11</a>.</td></tr>
+<tr><td><b>4</b></td><td>Crossover</td><td>Shown lying normal: the diagonal is not connected to either line. See <a class="xr" href="#s-4-7">4.7</a>.</td></tr>
+<tr><td><b>5</b></td><td>Platform number box</td><td>White while a train loads, flashing yellow at TRTS. See <a class="xr" href="#s-4-9">4.9</a>.</td></tr>
+<tr><td><b>6</b></td><td>Automatic signal (MB9)</td><td>Straight post, clears on its own. See <a class="xr" href="#s-3-3">3.3</a>.</td></tr>
+<tr><td><b>7</b></td><td>Fringe</td><td>Where trains enter and leave the desk, labelled with the next place. See <a class="xr" href="#s-1-6">1.6</a>.</td></tr>
+<tr><td><b>8</b></td><td>Points number (801)</td><td>Click the points to swing them. Blinks while moving, blinks red if failed.</td></tr>
+</tbody></table>
+<p class="cap">Table 9a: Key to <a class="xr" href="#f-4">Figure 4</a></p>
+<div class="cl" id="s-3-7-2"><span class="n">3.7.2</span><p>Nothing on the panel is occupied or set. Grey track is clear with no route. Compare with <a class="xr" href="#t-8">Table 8</a> once a train is on the desk.</p></div>
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 8 of 20</span></div></div>
+<!-- ============ 4 ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+<h2 id="s-4">4 &nbsp; Routes and interlocking</h2>
+<div class="cl" id="s-4-0-1"><span class="n">4.0.1</span><p>The <b>interlocking</b> prevents conflicting routes from being set. It will not allow two trains to be routed into each other. It will not stop you routing a train the wrong way, holding it too long, or sending it into the wrong platform.</p></div>
+<h3 id="s-4-1">4.1 &nbsp; Setting a route</h3>
+<div class="cl" id="s-4-1-1"><span class="n">4.1.1</span><p>A <b>route</b> is the path from an <b>entrance signal</b> to an <b>exit</b>. To set a route:</p></div>
+<div class="cl"><span class="n"></span><ol><li>Click the entrance signal. Its ring blinks white.</li><li>Click the exit.</li></ol></div>
+<div class="cl" id="s-4-1-2"><span class="n">4.1.2</span><p>The exit may be a signal, a buffer stop, a fringe arrow box, or the boundary marker to the next desk.</p></div>
+<div class="cl" id="s-4-1-3"><span class="n">4.1.3</span><p>If the route is available, the points move, the route locks and the entrance signal clears. If it is refused, the reason is shown in the Last box (<a class="xr" href="#t-10">Table 10</a>).</p></div>
+<div class="fig" style="background:#141212;border-color:#141212;padding:0"><img src="fig-route.png" style="width:100%;display:block"></div>
+<p class="cap" id="f-5">Figure 5: 2S01 ready to start in platform 1, with its route set from MB5. (1) Train, shown red. (2) Berth with the train's headcode. (3) MB5 cleared. (4) Route set, shown white. (5) Moccasin Road barriers down, shown red.</p>
+<div class="cl" id="s-4-1-4"><span class="n">4.1.4</span><p>Clicking an automatic signal as the entrance selects the next controlled signal beyond it instead.</p></div>
+<div class="cl" id="s-4-1-5"><span class="n">4.1.5</span><p>To put down a selected entrance without setting a route, press <b>C</b> or click the signal again.</p></div>
+<div class="cl" id="s-4-1-6"><span class="n">4.1.6</span><p>A route to a signal beyond one or more automatic signals is set as far as the first automatic. The automatics then clear on their own.</p></div>
+<h3 id="s-4-2">4.2 &nbsp; Choice of path</h3>
+<div class="cl" id="s-4-2-1"><span class="n">4.2.1</span><p>There is one route between any entrance and exit. Where more than one path exists, the straighter one is used.</p></div>
+<div class="cl" id="s-4-2-2"><span class="n">4.2.2</span><p>To send a train another way, route it to an intermediate signal on the path you want, then on from there.</p></div>
+<h3 id="s-4-3">4.3 &nbsp; When a signal will clear</h3>
+<div class="cl" id="s-4-3-1"><span class="n">4.3.1</span><p>A signal clears only when all of these are met:</p></div>
+<div class="cl"><span class="n"></span><ul>
+<li>no reminder is applied and the signal has not failed;</li>
+<li>every set of points in the route is lying correctly and has stopped moving;</li>
+<li>every track circuit in the route is clear, not blocked and not held by another route;</li>
+<li>the barriers at every level crossing in the route are down;</li>
+<li>the overlap is clear.</li>
+</ul></div>
+<h3 id="s-4-4">4.4 &nbsp; Overlaps</h3>
+<div class="cl" id="s-4-4-1"><span class="n">4.4.1</span><p>The <b>overlap</b> is the track circuit immediately beyond the exit signal. It must be clear before the entrance signal will clear, in case a train runs past the exit.</p></div>
+<div class="fig">
+<svg font-family="Arial" font-size="11" height="95" viewBox="0 0 600 120" width="100%" xmlns="http://www.w3.org/2000/svg">
+<line stroke="#999" stroke-width="5" x1="20" x2="120" y1="60" y2="60"></line>
+<line stroke="#111" stroke-width="5" x1="120" x2="420" y1="60" y2="60"></line>
+<line stroke="#f5b800" stroke-width="5" x1="420" x2="510" y1="60" y2="60"></line>
+<line stroke="#999" stroke-width="5" x1="510" x2="580" y1="60" y2="60"></line>
+<g stroke="#111" stroke-width="2"><line x1="120" x2="120" y1="50" y2="30"></line><line x1="120" x2="132" y1="30" y2="30"></line></g>
+<circle cx="138" cy="30" fill="#1aa84a" r="6" stroke="#111"></circle>
+<g stroke="#111" stroke-width="2"><line x1="420" x2="420" y1="50" y2="30"></line><line x1="420" x2="432" y1="30" y2="30"></line></g>
+<circle cx="438" cy="30" fill="#e3261b" r="6" stroke="#111"></circle>
+<text text-anchor="middle" x="120" y="18">Entrance</text>
+<text text-anchor="middle" x="420" y="18">Exit</text>
+<text text-anchor="middle" x="270" y="85">Route (locked)</text>
+<text text-anchor="middle" x="465" y="85">Overlap</text>
+<text text-anchor="middle" x="465" y="100">(must be clear)</text>
+<polygon fill="#999" points="580,60 570,52 570,68"></polygon>
+</svg>
+</div>
+<p class="cap" id="f-6">Figure 6: Route and overlap. Direction of travel left to right.</p>
+<div class="cl" id="s-4-4-2"><span class="n">4.4.2</span><p>A route is refused if a train is standing in its overlap. If the overlap track circuit has failed, the route sets but the signal stays at danger.</p></div>
+<div class="cl" id="s-4-4-3"><span class="n">4.4.3</span><p>There is no overlap beyond a fringe, a buffer stop or an automatic signal.</p></div>
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 9 of 20</span></div></div>
+<!-- ============ 4 cont ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+<h3 id="s-4-5">4.5 &nbsp; Route locking and release</h3>
+<div class="cl" id="s-4-5-1"><span class="n">4.5.1</span><p>Once set, a route locks its track circuits and points. Once a train has taken up the route, it keeps it even if the signal returns to danger, unless the route is cancelled (<a class="xr" href="#s-4-6">4.6</a>).</p></div>
+<div class="cl" id="s-4-5-2"><span class="n">4.5.2</span><p>The route releases section by section as the tail of the train clears each track circuit. The entrance signal is free for a new route as soon as the first section has released.</p></div>
+<h3 id="s-4-6">4.6 &nbsp; Cancelling a route and approach locking</h3>
+<div class="cl" id="s-4-6-1"><span class="n">4.6.1</span><p>To cancel a route, right-click the entrance signal and choose <i>Cancel the route</i>.</p></div>
+<div class="cl" id="s-4-6-2"><span class="n">4.6.2</span><p>If a train is within 1,200 m of the signal and approaching it, the signal returns to danger at once but the route stays locked for <b>2 minutes</b>. This is <b>approach locking</b>. The signal head blinks while it is in force.</p></div>
+<div class="cl" id="s-4-6-3"><span class="n">4.6.3</span><p>Cancelling a route also cancels any routes set on from its exit for the same train, including a route onto the next desk.</p></div>
+<div class="warn"><div class="h">IMPORTANT</div><div class="b">Do not set a route you may need to take back. A route cancelled in front of an approaching train holds its points and track circuits for 2 minutes.</div></div>
+<h3 id="s-4-7">4.7 &nbsp; Points</h3>
+<div class="cl" id="s-4-7-1"><span class="n">4.7.1</span><p>Points take <b>4 seconds</b> to move. Both ends of a crossover move together. A signal will not clear over points that are still moving.</p></div>
+<div class="cl" id="s-4-7-2"><span class="n">4.7.2</span><p>Points normally move when a route is set. To move them by hand, click them and choose <i>Swing to reverse</i> or <i>Swing to normal</i>. This is refused if they are locked by a route or have failed.</p></div>
+<div class="cl" id="s-4-7-3"><span class="n">4.7.3</span><p>On the panel, the leg the points are not set for is shown broken off at the points.</p></div>
+<h3 id="s-4-8">4.8 &nbsp; Why a route will not set</h3>
+<table class="grid plain">
+<tbody><tr><th style="width:250px">Message</th><th>Cause</th></tr>
+<tr><td>No route from X to Y</td><td>There is no route between those two points. Check the exit.</td></tr>
+<tr><td>X already has a route set</td><td>Cancel it first, or wait for the train to pass.</td></tr>
+<tr><td>X has a reminder applied</td><td>Remove the reminder.</td></tr>
+<tr><td>… is blocked</td><td>A possession or something on the line (Section <a class="xr" href="#s-7">7</a>).</td></tr>
+<tr><td>the fault team has / is waiting for …</td><td>The track circuit is being mended or is about to be (Section <a class="xr" href="#s-6-3">6.3</a>).</td></tr>
+<tr><td>… is occupied</td><td>A train is in the route.</td></tr>
+<tr><td>conflicts with route …</td><td>Another route holds part of this one.</td></tr>
+<tr><td>points … are locked normal / reverse</td><td>Another route holds the points the other way.</td></tr>
+<tr><td>points … have failed</td><td>The route needs the points the other way (Section <a class="xr" href="#s-6">6</a>).</td></tr>
+<tr><td>overlap … is occupied</td><td>A train is standing beyond the exit signal.</td></tr>
+</tbody></table>
+<p class="cap" id="t-10">Table 10: Route refusals</p>
+<div class="cl" id="s-4-8-1"><span class="n">4.8.1</span><p>In these cases the route sets but the signal stays at danger, with no message. Right-click the signal: the title will say <i>set, waiting</i>.</p></div>
+<div class="cl"><span class="n"></span><ul><li>a failed track circuit, in the route or its overlap;</li><li>a failed signal (the title says <i>failed, showing nothing</i> instead);</li><li>level crossing barriers not down (<i>waiting for the barriers at …</i>);</li><li>points still moving.</li></ul></div>
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 10 of 20</span></div></div>
+<!-- ============ 4 cont 2 ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+<h3 id="s-4-9">4.9 &nbsp; Train Ready To Start</h3>
+<div class="cl" id="s-4-9-1"><span class="n">4.9.1</span><p>When a train standing in a platform is ready to leave, the platform number box flashes yellow. This is <b>Train Ready To Start (TRTS)</b>. Before that the box is white, showing the train is loading.</p></div>
+<table style="margin:6px 0 2px"><tbody><tr>
+<td style="width:50%;padding-right:6px"><img src="fig-trts-loading.png" style="width:100%;display:block;border:1px solid #000"></td>
+<td style="width:50%;padding-left:6px"><img src="fig-trts-ready.png" style="width:100%;display:block;border:1px solid #000"></td></tr>
+<tr><td style="text-align:center;font-size:10px;padding-top:2px">Loading: box white</td><td style="text-align:center;font-size:10px;padding-top:2px">Ready to start: box flashing yellow</td></tr></tbody></table>
+<p class="cap" id="f-7">Figure 7: Platform 1 before and at TRTS</p>
+<div class="cl" id="s-4-9-2"><span class="n">4.9.2</span><p>TRTS shows from 30 s before the train is due away. It is due away at its booked departure, or once its minimum stop has passed if it arrived late. A train turning round to form its next working is due away at that working's booked departure, or once its turnround has passed if it arrived late. It does not show while the train has a fault or no driver.</p></div>
+<div class="cl" id="s-4-9-3"><span class="n">4.9.3</span><p>Only numbered platforms show TRTS. Sidings, necks and the reception line do not.</p></div>
+<div class="cl" id="s-4-9-4"><span class="n">4.9.4</span><p>Set the departure route when TRTS shows. A departure route set early holds its points and track circuits, and may block other moves.</p></div>
+<h3 id="s-4-10">4.10 &nbsp; Authorising a train past a signal at danger</h3>
+<div class="cl" id="s-4-10-1"><span class="n">4.10.1</span><p>Where a signal cannot clear because of a failure, the driver may be authorised to pass it at danger. To do so:</p></div>
+<div class="cl"><span class="n"></span><ol><li>Set the route from the signal, so that the points lock.</li><li>Lower the barriers at any level crossing in the route.</li><li>Right-click the signal and choose <i>Authorise the driver past at danger</i>.</li></ol></div>
+<div class="cl" id="s-4-10-2"><span class="n">4.10.2</span><p>Authority is refused unless a route is set, the points are lying for it, any barriers are down, and a train is standing at the signal. A route being cancelled under approach locking (Section <a class="xr" href="#s-4-6">4.6</a>) is not set: wait for it to go, and set it again.</p></div>
+<div class="cl" id="s-4-10-3"><span class="n">4.10.3</span><p>The train proceeds at caution, about 11 mph, until it passes the next signal. It stops short of the exit if that signal is at danger, or behind any train ahead.</p></div>
+<div class="warn"><div class="h">WARNING</div><div class="b">Never authorise a train past a signal until you have confirmed why the signal is at danger. Check the track and the alarms first.</div></div>
+<h3 id="s-4-11">4.11 &nbsp; Level crossings</h3>
+<div class="cl" id="s-4-11-1"><span class="n">4.11.1</span><p>There are four level crossings on the network: Slygo Road (WS), Cummings Highway (RS), Nashville Street (ER) and Clisby Austin Road (TH).</p></div>
+<div class="cl" id="s-4-11-2"><span class="n">4.11.2</span><p>Barriers are worked by hand on your desk. Click the crossing and choose <i>Lower the barriers</i> or <i>Raise the barriers</i>. Lowering takes 20 s and raising 10 s.</p></div>
+<div class="cl" id="s-4-11-3"><span class="n">4.11.3</span><p>A route may be set over the crossing with the barriers up, but its signal will not clear until they are down.</p></div>
+<div class="cl" id="s-4-11-4"><span class="n">4.11.4</span><p>Barriers cannot be raised while a route is set over the crossing or a train is on it.</p></div>
+<div class="cl" id="s-4-11-5"><span class="n">4.11.5</span><p>Raise the barriers once trains are clear. If they are left down for more than 4 minutes with nothing signalled over them, the police will report that the road is queueing.</p></div>
+<div class="cl" id="s-4-11-6"><span class="n">4.11.6</span><p>Crossings on other desks are worked automatically.</p></div>
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 11 of 20</span></div></div>
+<!-- ============ 5 ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+<h2 id="s-5">5 &nbsp; Regulating trains</h2>
+<h3 id="s-5-1">5.1 &nbsp; The other desks</h3>
+<div class="cl" id="s-5-1-1"><span class="n">5.1.1</span><p>Automatic route setting works the other seven desks. It sets routes for the train nearest each signal, towards that train's next booked place.</p></div>
+<div class="cl" id="s-5-1-2"><span class="n">5.1.2</span><p>It takes trains in order of booked time, not by class. An earlier-booked train due within 4 minutes will hold a later train that wants a conflicting route, for up to 2½ minutes. Empty stock going to a depot gives way to any booked train due within 4 minutes, for up to 5 minutes.</p></div>
+<div class="cl" id="s-5-1-3"><span class="n">5.1.3</span><p>It will not route a train beyond a booked stop until 60 s before its departure.</p></div>
+<div class="cl" id="s-5-1-4"><span class="n">5.1.4</span><p>Where a train's route is blocked for 2 minutes, the other desk will move it to another platform or run it past an optional loop call.</p></div>
+<div class="cl" id="s-5-1-5"><span class="n">5.1.5</span><p>You cannot see the other desks. The Trains tab lists what is coming your way.</p></div>
+<h3 id="s-5-2">5.2 &nbsp; Deciding which train goes first</h3>
+<div class="cl" id="s-5-2-1"><span class="n">5.2.1</span><p>When two trains want conflicting routes, send first the one whose delay costs most (Section <a class="xr" href="#s-9-1">9.1</a>):</p></div>
+<table class="grid">
+<tbody><tr><th>Classes</th><th>Cost of each minute late</th></tr>
+<tr><td>1, 9</td><td>Highest</td></tr>
+<tr><td>2, 3</td><td>Half as much</td></tr>
+<tr><td>4, 5, 6, 0</td><td>A quarter as much</td></tr>
+</tbody></table>
+<p class="cap" id="t-11">Table 11: Priority by class</p>
+<div class="cl" id="s-5-2-2"><span class="n">5.2.2</span><p>A train kept waiting at one of your controlled signals for 10 minutes will earn a black mark (Section <a class="xr" href="#s-9-4">9.4</a>). Do not hold a low-priority train indefinitely.</p></div>
+<h3 id="s-5-3">5.3 &nbsp; Loops</h3>
+<div class="cl" id="s-5-3-1"><span class="n">5.3.1</span><p>A loop allows a slower train to be put aside while a faster train passes. Release the slower train once the faster one has cleared.</p></div>
+<div class="cl" id="s-5-3-2"><span class="n">5.3.2</span><p>Booked loop calls are:</p></div>
+<div class="cl"><span class="n"></span><ul><li>Wauhatchie up loop (P3): up stopping trains wait for the express to pass;</li><li>Riverside down goods loop: 6D and 6P freights stand about 16 minutes.</li></ul></div>
+<div class="cl" id="s-5-3-3"><span class="n">5.3.3</span><p>Goods loop calls are optional. A freight run through instead of into the loop is not counted as a missed call.</p></div>
+<div class="cl" id="s-5-3-4"><span class="n">5.3.4</span><p>The Tunnel Hill up goods loop has no booked calls but may be used.</p></div>
+<h3 id="s-5-4">5.4 &nbsp; Platforms</h3>
+<div class="cl" id="s-5-4-1"><span class="n">5.4.1</span><p>Each train is booked into a platform at each call. Using another platform is permitted but is a platform change (Section <a class="xr" href="#s-9-3">9.3</a>). So is using another road of the same depot or cargo terminal.</p></div>
+<div class="cl" id="s-5-4-2"><span class="n">5.4.2</span><p>A train that runs past a booked call without stopping is a missed call, which costs more than a platform change.</p></div>
+<h3 id="s-5-5">5.5 &nbsp; The single line into Cleveland</h3>
+<div class="cl" id="s-5-5-1"><span class="n">5.5.1</span><p>Do not send a train onto the single line unless a platform is free for it at the far end. Keep the last free platform at Collegedale for any train already on the single line in the opposite direction.</p></div>
+<h3 id="s-5-6">5.6 &nbsp; Empty stock and depots</h3>
+<div class="cl" id="s-5-6-1"><span class="n">5.6.1</span><p>A train that finishes its work at Chattanooga or Cleveland runs empty to a depot about 5 minutes after arriving. Each depot road holds one train. If every depot it can go to is full, the train stays in its platform, except a Peachline train at Chattanooga, which runs empty to Atlanta.</p></div>
+<div class="cl" id="s-5-6-2"><span class="n">5.6.2</span><p>Its way to the depot is booked from the platform it was booked into. If it finishes in a platform that way does not start from, Control books it again from where it is, usually up the branch to Ooltewah TMD, under a new headcode, and the alarm says so. The carriage siding at Chattanooga can only be reached from platform 1 and the bay.</p></div>
+<div class="cl" id="s-5-6-3"><span class="n">5.6.3</span><p>Stabled trains are listed in the Trains tab after the running ones, above the next five due.</p></div>
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 12 of 20</span></div></div>
+<!-- ============ 6 ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+<h2 id="s-6">6 &nbsp; Faults and the phone</h2>
+<h3 id="s-6-1">6.1 &nbsp; Types of fault</h3>
+<table class="grid plain">
+<tbody><tr><th style="width:110px">Fault</th><th style="width:190px">On the panel</th><th>Working round it</th></tr>
+<tr><td><b>Track circuit</b></td><td>Red dash-dot with no train. Alarm from the Interlocking.</td><td>Set the route so the points lock, then authorise the driver past (<a class="xr" href="#s-4-10">4.10</a>). Ring it in.</td></tr>
+<tr><td><b>Points</b></td><td>Number blinks red. Cannot be swung.</td><td>Routes over the way the points are lying still work. Routes needing the other way are refused. Ring it in.</td></tr>
+<tr><td><b>Frozen points</b></td><td>As failed points.</td><td>As failed points. They thaw when the cold ends.</td></tr>
+<tr><td><b>Controlled signal</b></td><td>Dark head, red outline.</td><td>Set the route, then authorise the driver past. Ring it in.</td></tr>
+<tr><td><b>Automatic signal</b></td><td>Dark head, red outline.</td><td>The driver stops for 1 minute, then goes on at caution if the block ahead is clear. Ring it in.</td></tr>
+<tr><td><b>Failed train</b></td><td>Trains tab: <i>fault, N min</i>.</td><td>Ring the driver (<a class="xr" href="#s-6-4">6.4</a>).</td></tr>
+<tr><td><b>Missing driver</b></td><td>Trains tab: <i>no driver, N min</i>.</td><td>Nothing. The relief driver is on the way.</td></tr>
+<tr><td><b>No description</b></td><td>Empty berth.</td><td>Interpose it (<a class="xr" href="#s-2-3">2.3</a>).</td></tr>
+</tbody></table>
+<p class="cap" id="t-12">Table 12: Faults</p>
+<div class="fig" style="background:#141212;border-color:#141212;padding:0;margin-top:4px"><img src="fig-failed-circuit.png" style="width:100%;display:block"></div>
+<p class="cap" id="f-8">Figure 8: A failed track circuit beyond MB5. Red dash-dot with no train on it and no headcode in any berth. MB5 will not clear over it.</p>
+<div class="warn"><div class="h">WARNING</div><div class="b">A track circuit, points or signal failure will not be repaired until it has been reported. Report every fault as soon as you have identified it.</div></div>
+<h3 id="s-6-2">6.2 &nbsp; Ringing in a fault</h3>
+<div style="display:grid;grid-template-columns:1fr 210px;gap:14px;align-items:start">
+<div>
+<div class="cl" id="s-6-2-1"><span class="n">6.2.1</span><p>Press <b>P</b>, or the phone at the top of the screen. Then:</p></div>
+<div class="cl"><span class="n"></span><ol><li>Choose what is wrong, 1 to 4:<br>1 A signal showing nothing<br>2 Points that will not move<br>3 A circuit red with nothing on it<br>4 A failed train, to go on slowly</li><li>Type the signal, points number, track circuit or headcode.</li><li>Press <b>Enter</b>.</li></ol></div>
+</div>
+<div><img src="fig-phone.png" style="width:100%;display:block;border:1px solid #000"><p class="cap" id="f-9">Figure 9: The phone</p></div>
+</div>
+<div class="cl" id="s-6-2-2"><span class="n">6.2.2</span><p>Points may be given by the number shown on the panel. Where a track circuit name is used on more than one desk, prefix the desk code, for example <code>RS.UM6</code>.</p></div>
+<div class="cl" id="s-6-2-3"><span class="n">6.2.3</span><p>Fault control reads back what you have reported and when the team will arrive. Check the read-back against the fault.</p></div>
+<div class="warn"><div class="h">CAUTION</div><div class="b">If you give the wrong item, the fault team will still go to it. They will look for 2 minutes and find nothing wrong, which wastes their time and costs 25 points. Ringing the driver of a train with nothing wrong with it costs the same.</div></div>
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 13 of 20</span></div></div>
+<!-- ============ 6 cont ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+<div class="cl" id="s-6-2-4"><span class="n">6.2.4</span><p>The clock keeps running while the phone is open.</p></div>
+<h3 id="s-6-3">6.3 &nbsp; The fault team</h3>
+<div class="cl" id="s-6-3-1"><span class="n">6.3.1</span><p>The fault team travels from Chattanooga. Travel times are:</p></div>
+<table class="grid">
+<tbody><tr><th>Desk</th><td>CT</td><td>RS</td><td>ER</td><td>WH</td><td>LF</td><td>CL</td><td>TH</td><td>WS</td></tr>
+<tr><th>Minutes</th><td style="font-weight:400">6</td><td style="font-weight:400">8</td><td style="font-weight:400">8</td><td style="font-weight:400">10</td><td style="font-weight:400">10</td><td style="font-weight:400">12</td><td style="font-weight:400">14</td><td style="font-weight:400">14</td></tr>
+</tbody></table>
+<p class="cap" id="t-13">Table 13: Fault team travel times</p>
+<div class="cl" id="s-6-3-2"><span class="n">6.3.2</span><p>On arrival the team asks for a track circuit to itself, and mends the fault as soon as it has it: 3 minutes for a signal, 5 for a track circuit, 6 for points.</p></div>
+<div class="cl" id="s-6-3-3"><span class="n">6.3.3</span><p>The track circuit needed is:</p></div>
+<div class="cl"><span class="n"></span><ul><li>for a track circuit, the circuit itself;</li><li>for points, the circuit at the points;</li><li>for a signal, the circuit in front of it. At some signals this is a platform: CT13 (Chattanooga P2), CT4 (Chattanooga P3), RS3 (Lookout Valley P1), ER7 (East Ridge P1), TH3 (Tunnel Hill P1), CL8 (Collegedale P2).</li></ul></div>
+<table class="grid plain">
+<tbody><tr><th style="width:130px">Stage</th><th>What happens</th></tr>
+<tr><td><b>Waiting</b></td><td>Shown dotted. No new routes may be set over it. A route already set still works.</td></tr>
+<tr><td><b>Mending</b></td><td>Begins once no train is on the circuit and no route holds it. Shown blue dashed. Nothing may be routed over it.</td></tr>
+<tr><td><b>Handed back</b></td><td>The team reports the repair and the circuit is returned to use.</td></tr>
+</tbody></table>
+<p class="cap" id="t-14">Table 14: Stages of a repair</p>
+<div class="cl" id="s-6-3-4"><span class="n">6.3.4</span><p>Keep the circuit clear so the team can start. A train booked to start from a platform the team needs will start from another platform instead.</p></div>
+<h3 id="s-6-4">6.4 &nbsp; Failed trains</h3>
+<div class="cl" id="s-6-4-1"><span class="n">6.4.1</span><p>A failed train stands in its platform for 8 to 14 minutes at Chattanooga, or 3 to 10 minutes for an airport train at Lovell Field, then continues normally.</p></div>
+<div class="cl" id="s-6-4-2"><span class="n">6.4.2</span><p>If you ring the driver (option 4, with the headcode), the driver isolates the fault in 1 minute. The train then runs at 25 mph for the rest of its working, freeing the platform sooner.</p></div>
+<div class="cl" id="s-6-4-3"><span class="n">6.4.3</span><p>Decide which is better. A train at 25 mph clears the platform but may delay trains behind it.</p></div>
+<h3 id="s-6-5">6.5 &nbsp; Missing drivers</h3>
+<div class="cl" id="s-6-5-1"><span class="n">6.5.1</span><p>Crew control reports a train with no driver and when the relief will arrive. There is nobody to ring. Plan around the occupied platform.</p></div>
+<h3 id="s-6-6">6.6 &nbsp; Faults that are not reported</h3>
+<table class="grid">
+<tbody><tr><th>Conditions</th><th>Who reports a fault on your desk</th></tr>
+<tr><td>Calm</td><td style="font-weight:400">No ground faults occur</td></tr>
+<tr><td>Mixed</td><td style="font-weight:400">A driver, 2 minutes after standing at a failed signal. Otherwise Control, 10 minutes after the fault begins</td></tr>
+<tr><td>Rough</td><td style="font-weight:400">Control only, 20 minutes after the fault begins</td></tr>
+</tbody></table>
+<p class="cap" id="t-15">Table 15: Reporting of faults not rung in</p>
+<div class="cl" id="s-6-6-1"><span class="n">6.6.1</span><p>Faults on other desks are reported by their signallers a minute after they begin.</p></div>
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 14 of 20</span></div></div>
+<!-- ============ 7 ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+<h2 id="s-7">7 &nbsp; Degraded working</h2>
+<h3 id="s-7-1">7.1 &nbsp; Engineering possessions</h3>
+<div class="cl" id="s-7-1-1"><span class="n">7.1.1</span><p>A <b>possession</b> is a section of line handed to engineers. No train may enter it. Possessions occur in Rough conditions only and are in force from the start of the shift: one on your own desk, and one elsewhere. If a train is on the line or routed over it when you clock in, the Engineer waits: clear it, and route nothing more onto it.</p></div>
+<div class="cl" id="s-7-1-2"><span class="n">7.1.2</span><p>A possessed track circuit is shown blue dashed. The Engineer reports it at the start and when it is handed back. It may last from 45 to 85 minutes.</p></div>
+<div class="cl" id="s-7-1-3"><span class="n">7.1.3</span><p>Possessions are taken on platforms, loops, the fast lines, and the Down Main between the crossovers at Whiteside and East Ridge. Plan other platforms for trains booked into a platform under possession. On the high-speed line, trains may be taken round on the slow lines. At Whiteside and East Ridge, take each down train over the Up Main and back: WS3 to WS7 to WS5 over 603 and 605, or ER11 to ER29 to ER13 over 511 and 513.</p></div>
+<div class="fig" style="background:#141212;border-color:#141212;padding:0;margin-top:4px"><img src="fig-possession.png" style="width:100%;display:block"></div>
+<p class="cap" id="f-10">Figure 10: Wauhatchie up loop (platform 3) under possession, shown blue dashed. Up trains booked into the loop will need another platform.</p>
+<h3 id="s-7-2">7.2 &nbsp; Line blocked</h3>
+<div class="cl" id="s-7-2-1"><span class="n">7.2.1</span><p>The line may be blocked in both directions by trespassers, cattle, a fallen tree, a person on the line, children on the embankment or a road vehicle through the fence. The blockage lasts 8 to 14 minutes.</p></div>
+<div class="cl" id="s-7-2-2"><span class="n">7.2.2</span><p>It is shown blue dashed. Hold trains clear of it.</p></div>
+<div class="cl" id="s-7-2-3"><span class="n">7.2.3</span><p>Once Mobile operations report the line clear, the first train in each direction examines the line and runs at caution to the next signal.</p></div>
+<h3 id="s-7-3">7.3 &nbsp; Leaf fall</h3>
+<div class="cl" id="s-7-3-1"><span class="n">7.3.1</span><p>From late September to the end of November, leaves may make the railhead slippery at one of: Tiftonia cutting, Whiteside climb, the Chetoogeta approaches, or Ringgold to East Ridge.</p></div>
+<div class="cl" id="s-7-3-2"><span class="n">7.3.2</span><p>Trains are restricted to 35 mph over the affected section. This is not shown on the panel: it is reported as an alarm.</p></div>
+<div class="cl" id="s-7-3-3"><span class="n">7.3.3</span><p>A railhead treatment train, 3D11 from Bridgeport or 3B12 from Dalton, is booked 40 minutes into the shift. Once it has run over the section, normal running resumes. Give it a clear path.</p></div>
+<h3 id="s-7-4">7.4 &nbsp; Adverse weather</h3>
+<div class="cl" id="s-7-4-1"><span class="n">7.4.1</span><p>Weather occurs in Rough conditions only. It begins 10 to 80 minutes into the shift, rail heat not before 12:00, and lasts 30 to 49 minutes.</p></div>
+<table class="grid">
+<tbody><tr><th>Weather</th><th>Season</th><th>Effect</th></tr>
+<tr><td>High winds</td><td style="font-weight:400">Spring, autumn</td><td style="font-weight:400">60 mph over the whole railway</td></tr>
+<tr><td>Rail heat</td><td style="font-weight:400">Summer, 12:00–19:00</td><td style="font-weight:400">60 mph over the whole railway</td></tr>
+<tr><td>Snow</td><td style="font-weight:400">Winter</td><td style="font-weight:400">50 mph over the whole railway</td></tr>
+<tr><td>Flood</td><td style="font-weight:400">Spring to autumn</td><td style="font-weight:400">10 mph at one place: Riverside, Chetoogeta, the Ooltewah branch or Slygo Road</td></tr>
+<tr><td>Ice</td><td style="font-weight:400">Winter</td><td style="font-weight:400">Two sets of points freeze (Section <a class="xr" href="#s-6-1">6.1</a>)</td></tr>
+</tbody></table>
+<p class="cap" id="t-16">Table 16: Weather</p>
+<div class="cl" id="s-7-4-2"><span class="n">7.4.2</span><p>Weather restrictions are not shown on the panel. The start screen forecast warns of gales, flooding, heat, snow, frost and leaf fall.</p></div>
+<h3 id="s-7-5">7.5 &nbsp; Combined restrictions</h3>
+<div class="cl" id="s-7-5-1"><span class="n">7.5.1</span><p>Where more than one speed restriction applies, the lowest applies. Caution and a failed train's 25 mph limit apply on top.</p></div>
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 15 of 20</span></div></div>
+<!-- ============ 8 ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+<h2 id="s-8">8 &nbsp; Information on the desk</h2>
+<h3 id="s-8-1">8.1 &nbsp; Alarms</h3>
+<div class="cl" id="s-8-1-1"><span class="n">8.1.1</span><p>Alarms on your desk sound a chime and are listed in the Alarms tab with the time and who reported them. Click an alarm to bring the panel round to the place it concerns.</p></div>
+<div class="cl" id="s-8-1-2"><span class="n">8.1.2</span><p>Acknowledge each alarm once you have dealt with it. <b>K</b> acknowledges all of them.</p></div>
+<table class="grid plain">
+<tbody><tr><th style="width:170px">Reported by</th><th>Reports</th></tr>
+<tr><td>Interlocking</td><td>Equipment failures</td></tr>
+<tr><td>Fault control / Fault team</td><td>Faults rung in by others; repairs: booked, on site, mending, handed back</td></tr>
+<tr><td>Driver of a train</td><td>Train faults; standing at a signal for more than 4 minutes; needing a platform to reverse in; cattle, a fallen tree or a person on the line</td></tr>
+<tr><td>Drivers</td><td>Leaf fall</td></tr>
+<tr><td>Crew control</td><td>Missing drivers</td></tr>
+<tr><td>Describer</td><td>Trains without a description</td></tr>
+<tr><td>Dispatcher</td><td>Late starts; trains started from another platform</td></tr>
+<tr><td>Control</td><td>Late running, wrong exits, weather, the end of leaf fall</td></tr>
+<tr><td>Engineer</td><td>Possessions</td></tr>
+<tr><td>Mobile operations</td><td>Line clear after a blockage; floods</td></tr>
+<tr><td>Police / public</td><td>Something on the line; crossings left down</td></tr>
+<tr><td>Shift manager</td><td>Black marks; calls about nothing</td></tr>
+</tbody></table>
+<p class="cap" id="t-17">Table 17: Who reports what</p>
+<h3 id="s-8-2">8.2 &nbsp; The top bar</h3>
+<div class="cl" id="s-8-2-1"><span class="n">8.2.1</span><p>The top bar shows the clock and its rate, the percentage of trains on time, your black marks, the next train due on your desk, and the last message. A bell sounds when a train comes onto your desk.</p></div>
+<h3 id="s-8-3">8.3 &nbsp; The side panel</h3>
+<table class="grid plain">
+<tbody><tr><th style="width:130px">Tab</th><th>Shows</th></tr>
+<tr><td><b>Timetable</b></td><td>Every train in the shift booked at or through your desk: headcode, journey, booked time, platform and where it is now. Trains 5 minutes or more late are flagged.</td></tr>
+<tr><td><b>Trains</b></td><td>Trains on your desk (those waiting on you first), coming your way, elsewhere, and stabled, with the next five due on your desk.</td></tr>
+<tr><td><b>Alarms</b></td><td>See <a class="xr" href="#s-8-1">8.1</a>.</td></tr>
+</tbody></table>
+<p class="cap" id="t-18">Table 18: Side panel</p>
+<div class="cl" id="s-8-3-1"><span class="n">8.3.1</span><p>The finder (<b>F</b>) searches by headcode, operator or place.</p></div>
+<div class="cl" id="s-8-3-2"><span class="n">8.3.2</span><p>A train's card shows each place it calls at or passes, with booked and actual times and platform. Places far from your desk are folded into one row until it is clicked. While the card is open, the train's berth and next booked platform are outlined on the panel.</p></div>
+<h3 id="s-8-4">8.4 &nbsp; The network map</h3>
+<div class="cl" id="s-8-4-1"><span class="n">8.4.1</span><p><b>M</b> shows a diagram of the passenger network. It is for reference only and shows no trains.</p></div>
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 16 of 20</span></div></div>
+<!-- ============ 9 ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+<h2 id="s-9">9 &nbsp; Performance and discipline</h2>
+<h3 id="s-9-1">9.1 &nbsp; Scoring</h3>
+<div class="cl" id="s-9-1-1"><span class="n">9.1.1</span><p>Each train is scored out of 100. Points are deducted for lateness, platform changes and missed calls.</p></div>
+<div class="box" style="font-family:'Courier New',monospace;font-weight:700;text-align:center">
+    Train = 100 − (weight × minutes late × 10) − 15 × platform changes − 40 × missed calls
+  </div>
+<div class="cl" id="s-9-1-2"><span class="n">9.1.2</span><p>The lateness deduction cannot take a train below zero, but platform changes and missed calls can.</p></div>
+<table class="grid">
+<tbody><tr><th>Classes</th><th>Weight</th><th>Points lost per minute late</th><th>No lateness points left at</th></tr>
+<tr><td>1, 9</td><td style="font-weight:400">2</td><td style="font-weight:400">20</td><td style="font-weight:400">5 minutes</td></tr>
+<tr><td>2, 3</td><td style="font-weight:400">1</td><td style="font-weight:400">10</td><td style="font-weight:400">10 minutes</td></tr>
+<tr><td>4, 5, 6, 0</td><td style="font-weight:400">½</td><td style="font-weight:400">5</td><td style="font-weight:400">20 minutes</td></tr>
+</tbody></table>
+<p class="cap" id="t-19">Table 19: Lateness by class</p>
+<div class="cl" id="s-9-1-3"><span class="n">9.1.3</span><p>Lateness is measured once, where the train finishes: on arrival if it terminates, or as it leaves the network. Early running counts as on time.</p></div>
+<div class="cl" id="s-9-1-4"><span class="n">9.1.4</span><p>A train sent off the wrong way, still on the railway at the end of the shift, or never run, scores zero.</p></div>
+<div class="cl" id="s-9-1-5"><span class="n">9.1.5</span><p>The shift total is the sum of all trains, less 25 points for every call about nothing (<a class="xr" href="#s-6-2">6.2</a>), and cannot fall below zero. Points are shown only at the end of the shift.</p></div>
+<h3 id="s-9-2">9.2 &nbsp; On time</h3>
+<div class="cl" id="s-9-2-1"><span class="n">9.2.1</span><p>A train is on time if it is less than 5 minutes late. The top bar shows the percentage of finished trains on time. At the end of the shift, trains still running and trains never run are counted as late.</p></div>
+<h3 id="s-9-3">9.3 &nbsp; Penalties</h3>
+<table class="grid plain">
+<tbody><tr><th style="width:170px">Penalty</th><th style="width:60px">Points</th><th>Incurred by</th></tr>
+<tr><td><b>Platform change</b></td><td>−15</td><td>Calling at a platform other than the booked one; starting from another platform; leaving at the right place on the other line</td></tr>
+<tr><td><b>Missed call</b></td><td>−40</td><td>Running past a booked stop (goods loop calls excepted)</td></tr>
+<tr><td><b>Call about nothing</b></td><td>−25</td><td>Sending the fault team to the wrong item; ringing the driver of a train with nothing wrong</td></tr>
+</tbody></table>
+<p class="cap" id="t-20">Table 20: Penalties</p>
+<div class="cl" id="s-9-3-1"><span class="n">9.3.1</span><p>Calls about nothing are not black marks.</p></div>
+<h3 id="s-9-4">9.4 &nbsp; Black marks</h3>
+<table class="grid plain">
+<tbody><tr><th style="width:200px">Black mark</th><th>When</th></tr>
+<tr><td><b>Train kept standing</b></td><td>A train stands 10 minutes at one of your controlled signals, or 10 minutes past its stop time, without moving on. This includes a train waiting to be authorised past a failure. Time standing with a fault or no driver does not count: the 10 minutes start once the train is free. Nor does time with every way on shut by the engineers, or by points failed the wrong way once they are rung in: the 10 minutes start once a way opens.</td></tr>
+<tr><td><b>Train delayed</b></td><td>A train leaves your desk 10 minutes or more later than it arrived on it, or than it started, if it formed its next working there. Lateness it brought with it, what a turnround could not make up, and time it was shut in as above, do not count.</td></tr>
+<tr><td><b>Wrong exit</b></td><td>A train is sent off your desk at a fringe that is not where it is going.</td></tr>
+<tr><td><b>Train sent the wrong way</b></td><td>A train you routed can reach none of the places it is still booked to.</td></tr>
+</tbody></table>
+<p class="cap" id="t-21">Table 21: Black marks</p>
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 17 of 20</span></div></div>
+<!-- ============ 9 cont + 10 ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+<h3 id="s-9-5">9.5 &nbsp; Relief from duty</h3>
+<div class="cl" id="s-9-5-1"><span class="n">9.5.1</span><p>On receipt of a third black mark, the signaller is relieved. The shift ends at once and cannot count as a best.</p></div>
+<h3 id="s-9-6">9.6 &nbsp; Results</h3>
+<div class="cl" id="s-9-6-1"><span class="n">9.6.1</span><p>At the end of the shift the results show the percentage on time, points, average lateness, black marks, and every train with its lateness and any penalties. A relieved shift shows no points or average lateness, and a shift in which no train finished shows <i>No score</i>.</p></div>
+<div class="cl" id="s-9-6-2"><span class="n">9.6.2</span><p>The best shift on each desk is kept, whatever the conditions. A shift replaces it with a higher percentage on time, or the same percentage and more points.</p></div>
+
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 18 of 20</span></div></div>
+<!-- ============ Appendix A ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+<h2 id="s-appendix-a">Appendix A &nbsp; Keys</h2>
+<table class="grid plain" id="keys"><tbody><tr><th style="width:62px">Key</th><th>Action</th><th style="width:62px">Key</th><th>Action</th></tr><tr class="group"><th colspan="4">The clock</th></tr><tr><td><b>0</b></td><td>Hold the clock, on the training desk</td><td><b>1</b></td><td>Real time</td></tr><tr><td><b>2</b></td><td>Twice real time</td><td><b>4</b></td><td>Four times real time</td></tr><tr><td><b>8</b></td><td>Eight times real time</td><td></td><td></td></tr><tr class="group"><th colspan="4">The board</th></tr><tr><td><b>←</b></td><td>Look further west</td><td><b>→</b></td><td>Look further east</td></tr><tr><td><b>↑</b></td><td>Look further up</td><td><b>↓</b></td><td>Look further down</td></tr><tr><td><b>I</b></td><td>Zoom in</td><td><b>O</b></td><td>Zoom out</td></tr><tr><td><b>B</b></td><td>The board back as it opened</td><td><b>Z</b></td><td>The whole desk in view</td></tr><tr><td><b>C</b></td><td>Put down a signal chosen for a route</td><td><b>M</b></td><td>The network diagram, and back</td></tr><tr class="group"><th colspan="4">The panel</th></tr><tr><td><b>T</b></td><td>Timetable</td><td><b>R</b></td><td>Trains</td></tr><tr><td><b>A</b></td><td>Alarms</td><td><b>K</b></td><td>Acknowledge every alarm</td></tr><tr><td><b>F</b></td><td>Find a train, operator or place</td><td></td><td></td></tr><tr class="group"><th colspan="4">The phone</th></tr><tr><td><b>P</b></td><td>The phone, where the pointer is, and hang up</td><td></td><td></td></tr><tr class="group"><th colspan="4">Help</th></tr><tr><td><b>H</b></td><td>The written guide, and back</td><td><b>L</b></td><td>Learn the desk: the lesson</td></tr><tr><td><b>S</b></td><td>The menu: sound, the shift and the lesson</td><td><b>Enter</b></td><td>Next, in the lesson</td></tr></tbody></table>
+<p class="cap" id="t-22">Table 22: Keys</p>
+<div class="cl"><span class="n">A.1</span><p>On the phone: <b>1–4</b> choose, <b>Enter</b> rings, <b>Backspace</b> in an empty box goes back, and <b>P</b>, from the list, hangs up.</p></div>
+<h3>A.2 &nbsp; Mouse</h3>
+<table class="grid plain">
+<tbody><tr><th style="width:190px">Action</th><th>Result</th></tr>
+<tr><td>Click a signal, then an exit</td><td>Set a route</td></tr>
+<tr><td>Right-click a signal</td><td>Cancel the route, reminders, authorise past at danger</td></tr>
+<tr><td>Click points or a crossing</td><td>Swing points; raise or lower barriers</td></tr>
+<tr><td>Click a berth</td><td>Train card, or interpose if empty</td></tr>
+<tr><td>Right-click a berth</td><td>Timetable, interpose, cancel description</td></tr>
+<tr><td>Click track</td><td>Report what is on the track circuit</td></tr>
+<tr><td>Wheel</td><td>Zoom about the pointer</td></tr>
+<tr><td>Drag empty panel</td><td>Move the view</td></tr>
+<tr><td>Double-click empty panel</td><td>Reset the view</td></tr>
+</tbody></table>
+<p class="cap" id="t-23">Table 23: Mouse</p>
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 19 of 20</span></div></div>
+<!-- ============ Appendix B ============ -->
+<div class="page"><table class="hdr"><tbody><tr><td class="logo"><img src="logo-mark.png" alt="" style="width:34px;height:34px;display:block;margin:0 auto 5px"><img src="logo-wordmark.png" alt="Chattanooga Rail" style="width:100px;display:block;margin:0 auto"></td><td class="t">Signalling Operations</td><td class="meta">Doc no: CR/OPS/SO01<br>Issue: 01<br>Date: September 2026</td></tr></tbody></table>
+<h2 id="s-appendix-b">Appendix B &nbsp; Glossary</h2>
+<table class="grid">
+<tbody><tr><th>Term</th><th>Meaning</th><th style="width:50px">See</th></tr>
+<tr><td>Approach locking</td><td style="font-weight:400">A cancelled route held for 2 minutes because a train is approaching</td><td style="font-weight:400"><a class="xr" href="#s-4-6">4.6</a></td></tr>
+<tr><td>ARS</td><td style="font-weight:400">Automatic route setting, which works the other desks</td><td style="font-weight:400"><a class="xr" href="#s-5-1">5.1</a></td></tr>
+<tr><td>Aspect</td><td style="font-weight:400">What a signal is showing</td><td style="font-weight:400"><a class="xr" href="#s-3-2">3.2</a></td></tr>
+<tr><td>Berth</td><td style="font-weight:400">The box by a signal showing the headcode of the train approaching it</td><td style="font-weight:400"><a class="xr" href="#s-2-2">2.2</a></td></tr>
+<tr><td>Black mark</td><td style="font-weight:400">A record of a serious error. Three and the signaller is relieved</td><td style="font-weight:400"><a class="xr" href="#s-9-4">9.4</a></td></tr>
+<tr><td>Block</td><td style="font-weight:400">A section of line that may hold one train</td><td style="font-weight:400"><a class="xr" href="#s-3-1">3.1</a></td></tr>
+<tr><td>Control</td><td style="font-weight:400">The office overseeing the whole network</td><td style="font-weight:400"><a class="xr" href="#s-6-6">6.6</a></td></tr>
+<tr><td>Down / Up</td><td style="font-weight:400">Eastbound / westbound</td><td style="font-weight:400"><a class="xr" href="#s-1-5">1.5</a></td></tr>
+<tr><td>Entrance signal</td><td style="font-weight:400">The signal a route starts from</td><td style="font-weight:400"><a class="xr" href="#s-4-1">4.1</a></td></tr>
+<tr><td>Exit</td><td style="font-weight:400">Where a route ends: a signal, buffer stop, fringe or boundary</td><td style="font-weight:400"><a class="xr" href="#s-4-1">4.1</a></td></tr>
+<tr><td>Fringe</td><td style="font-weight:400">Where trains enter or leave the network</td><td style="font-weight:400"><a class="xr" href="#s-1-6">1.6</a></td></tr>
+<tr><td>Headcode</td><td style="font-weight:400">The four-character train identity</td><td style="font-weight:400"><a class="xr" href="#s-2-1">2.1</a></td></tr>
+<tr><td>Interlocking</td><td style="font-weight:400">The system preventing conflicting routes</td><td style="font-weight:400"><a class="xr" href="#s-4">4</a></td></tr>
+<tr><td>Interpose</td><td style="font-weight:400">To enter a headcode into a berth by hand</td><td style="font-weight:400"><a class="xr" href="#s-2-3">2.3</a></td></tr>
+<tr><td>Overlap</td><td style="font-weight:400">The track circuit beyond an exit signal that must be clear</td><td style="font-weight:400"><a class="xr" href="#s-4-4">4.4</a></td></tr>
+<tr><td>Points</td><td style="font-weight:400">Moveable track that lets a train change lines</td><td style="font-weight:400"><a class="xr" href="#s-4-7">4.7</a></td></tr>
+<tr><td>Possession</td><td style="font-weight:400">Line handed to engineers. No trains may enter</td><td style="font-weight:400"><a class="xr" href="#s-7-1">7.1</a></td></tr>
+<tr><td>Reminder</td><td style="font-weight:400">A hold keeping a signal at danger</td><td style="font-weight:400"><a class="xr" href="#s-3-5">3.5</a></td></tr>
+<tr><td>Route</td><td style="font-weight:400">The locked path from an entrance signal to an exit</td><td style="font-weight:400"><a class="xr" href="#s-4-1">4.1</a></td></tr>
+<tr><td>Route locking</td><td style="font-weight:400">Locking of a route's track and points until the train has passed</td><td style="font-weight:400"><a class="xr" href="#s-4-5">4.5</a></td></tr>
+<tr><td>TMD</td><td style="font-weight:400">Traction Maintenance Depot</td><td style="font-weight:400"><a class="xr" href="#s-1-6">1.6</a></td></tr>
+<tr><td>Track circuit</td><td style="font-weight:400">Equipment that detects a train on a section of line</td><td style="font-weight:400"><a class="xr" href="#s-3-1">3.1</a></td></tr>
+<tr><td>TRTS</td><td style="font-weight:400">Train Ready To Start</td><td style="font-weight:400"><a class="xr" href="#s-4-9">4.9</a></td></tr>
+</tbody></table>
+<div class="box" style="margin-top:28px;text-align:center">
+<b>END OF MODULE</b>
+  </div>
+<div class="foot"><b>UNCONTROLLED WHEN PRINTED</b><span>CR/OPS/SO01 · Issue 01</span><span>Page 20 of 20</span></div></div>
+
+
+
+</body></html>
