@@ -1,0 +1,708 @@
+/* Scheduling. The unit repeats the site's palette in its own :root so it
+   stands alone in a frame and still looks like a page of AlgebraLoop. The
+   signalling display inside it keeps the colours a control centre uses,
+   because those mean things. */
+:root {
+  --bg: #151312;
+  --surface: #201e1d;
+  --text: #f3f2f2;
+  --accent: #ff563c;
+  --divider: color-mix(in srgb, #f3f2f2 32%, transparent);
+  --muted: color-mix(in srgb, #f3f2f2 60%, transparent);
+  --glass: color-mix(in srgb, #151312 82%, transparent);
+  --rust-grey: #6b5751;
+  /* The display. */
+  --screen: #070707;
+  --track: #7a7a7a;
+  --route: #f2f2f2;
+  --occupied: #ff2d23;
+  --blocked: #4d8dff;
+  --danger: #ff2d23;
+  --clear: #2fd35a;
+  --berth: #d9d9d9;
+  --berth-box: #1b1b1b;
+  --berth-line: #4a4a4a;
+  --label: #8a8a8a;
+  --station: #b8b8b8;
+  --platform: #3c3c3c;
+  --reminder: #d86bff;
+  --authorised: #ffd34d;
+  --select: #ffffff;
+  /* Each operator's line, on the network map and down a train's card. */
+  --line-ridgeline: var(--accent);
+  --line-valley: color-mix(in srgb, var(--text) 62%, var(--bg));
+  --line-lovell: color-mix(in srgb, var(--text) 86%, var(--bg));
+  --line-peachline: color-mix(in srgb, var(--accent) 45%, var(--text));
+  --line-lookout: color-mix(in srgb, var(--rust-grey) 70%, var(--text));
+}
+* { scrollbar-width: thin; scrollbar-color: var(--rust-grey) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--rust-grey); border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); background-clip: padding-box; }
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Archivo, system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+}
+h1 { margin: 0 0 8px; font-size: 26px; font-weight: 800; letter-spacing: -0.015em; line-height: 1.12; }
+h6 {
+  margin: 0 0 4px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+p { margin: 0 0 10px; }
+.num { font-size: 20px; font-weight: 800; letter-spacing: -0.015em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.sub { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); font-size: 13px; }
+/* Words for a screen reader that the eye reads off the layout instead, such as a place a train only passes. */
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+button { font: inherit; color: inherit; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn {
+  padding: 8px 14px;
+  border: 1px solid var(--divider);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.btn:hover { border-color: var(--text); }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: #151312; font-weight: 600; }
+.btn-primary:hover { background: color-mix(in srgb, var(--accent) 85%, #fff); }
+.btn-secondary:hover { background: var(--surface); }
+.seg { display: inline-flex; border: 1px solid var(--divider); }
+.seg button {
+  padding: 6px 10px;
+  border: 0;
+  border-right: 1px solid var(--divider);
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+}
+.seg button:last-child { border-right: 0; }
+.seg button[aria-checked="true"] { background: var(--accent); color: #151312; font-weight: 600; }
+.seg button:hover:not([aria-checked="true"]) { background: var(--surface); }
+
+/* ---- The bar across the top --------------------------------------------- */
+.bar {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--divider);
+}
+.stat { min-width: 104px; padding: 6px 12px; border: 1px solid var(--divider); background: var(--glass); }
+.stat.wide { flex: 1; min-width: 0; }
+.stat.clock { min-width: 130px; }
+.stat.next { min-width: 150px; }
+.stat.next .num.code { font-family: "SFMono-Regular", Menlo, Consolas, monospace; font-size: 18px; letter-spacing: 0.04em; }
+.stat.next .sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 250px; }
+/* Two lines at most, so a long answer on the phone never makes the bar taller and moves the board. */
+.say { display: -webkit-box; min-height: 42px; overflow: hidden; font-size: 13px; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.say.bad { color: var(--accent); }
+.num.bad { color: var(--accent); }
+.pickLabel { margin: 14px 0 6px; }
+.marksList { margin: 4px 0 8px; font-size: 13px; }
+.list .row.head { padding-top: 10px; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+.marksList div { padding: 2px 0; border-bottom: 1px solid color-mix(in srgb, #f3f2f2 10%, transparent); }
+.marksList .when { color: var(--muted); font-variant-numeric: tabular-nums; margin-right: 6px; }
+.tabs .badge {
+  display: inline-block;
+  min-width: 18px;
+  margin-left: 6px;
+  padding: 0 5px;
+  border-radius: 0;
+  background: var(--accent);
+  color: #151312;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 18px;
+  text-align: center;
+}
+/* The clock's speed sits in a box the height of the others. */
+.seg.rate { align-self: stretch; }
+.seg.rate button { padding: 0 12px; }
+/* The two buttons at the end of the bar are icons the height of the boxes beside them. */
+.acts { display: flex; gap: 8px; align-items: stretch; }
+.btn.icon { display: grid; place-items: center; width: 52px; padding: 0; }
+.btn.icon svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.btn.icon svg .dot { fill: currentColor; stroke: none; }
+.btn.icon[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
+
+/* ---- The display and the side panel ------------------------------------- */
+.work { flex: 1; min-height: 0; display: flex; }
+/* The board column: the board, the strip of the whole desk under it, and
+   the network diagram over both. */
+.board { position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; border-right: 1px solid var(--divider); }
+/* The board fills the room above the strip and is looked at through a
+   camera rather than scrolled: it opens as tall as its zone, which makes
+   every desk two or three screens wide, and the wheel zooms it, the middle
+   button (or the left, off anything to click) drags it, two fingers pinch
+   it and a double-click puts it back. */
+.display {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  background: var(--screen);
+  overflow: hidden;
+  touch-action: none;
+}
+.display.dragging { cursor: grabbing; user-select: none; }
+/* Out past the drawing the screen fills with arrows back to it, and fades
+   them in as the last of it goes and out as it comes back. */
+.beyond { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: opacity 0.35s ease-in-out; }
+.beyond.on { opacity: 1; }
+.beyond path { fill: none; stroke: var(--label); stroke-width: 4; stroke-linecap: square; stroke-linejoin: miter; }
+.beyond text { fill: var(--muted); font: 600 13px Archivo, system-ui, sans-serif; }
+/* The lesson over the board on the training desk: which step and how far
+   through the lesson, what the step waits on, what it teaches, and what it
+   asks for, a line each that takes a tick once done; Next for the ones that
+   only have to be read. A step done turns the bar green a moment, and the
+   next arrives in its place. */
+.tutor { flex: none; display: flex; align-items: flex-start; gap: 14px; padding: 8px 14px; background: var(--surface); border-bottom: 1px solid var(--divider); border-left: 3px solid var(--accent); font-size: 13px; line-height: 1.45; transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out; }
+.tutorHead { flex: none; width: 156px; display: flex; flex-direction: column; gap: 6px; padding-top: 2px; }
+.tutorBar { height: 3px; background: var(--divider); }
+.tutorFill { height: 100%; width: 0; background: var(--accent); transition: width 0.35s ease-in-out; }
+.tutorPhase { align-self: flex-start; padding: 1px 6px; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--divider); }
+.tutor[data-phase="do"] .tutorPhase { color: #000; background: var(--accent); border-color: var(--accent); }
+.tutor[data-phase="watch"] .tutorPhase { color: var(--text); border-color: var(--text); }
+.tutor[data-phase="free"] .tutorPhase, .tutor[data-phase="done"] .tutorPhase { color: #000; background: var(--clear); border-color: var(--clear); }
+.tutor[data-phase="done"] { background: color-mix(in srgb, var(--clear) 14%, var(--surface)); border-left-color: var(--clear); }
+.tutor[data-phase="done"] .tutorStep { color: var(--clear); }
+/* What the step asks for, a line each: a tick once done, and the one it wants now in full and marked. */
+.tutorActs { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 2px; }
+.tutorActs li { position: relative; padding-left: 20px; color: var(--muted); }
+.tutorActs li::before { content: ""; position: absolute; left: 0; top: 4px; width: 10px; height: 10px; border: 1px solid var(--divider); font-size: 10px; line-height: 10px; text-align: center; }
+.tutorActs li.now { color: var(--text); font-weight: 600; }
+.tutorActs li.now::before { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 40%, transparent); }
+.tutorActs li.watch.now::before { border-color: var(--text); background: var(--text); animation: blink 1s steps(1) infinite; }
+.tutorActs li.done::before { content: "✓"; border-color: var(--clear); color: var(--clear); }
+/* What a refused click was told: what the step wants instead. */
+.tutorHint { color: var(--authorised); font-weight: 600; }
+.tutor.arrive .tutorBody, .tutor.arrive .tutorPhase { animation: tutorIn 0.4s ease-in-out; }
+.tutor.nudge { animation: tutorNudge 0.35s ease-in-out; }
+@keyframes tutorIn { from { opacity: 0; transform: translateY(6px); } }
+@keyframes tutorNudge { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+/* A control off the board that the lesson wants pressed. */
+.lessonSpot { outline: 2px solid var(--accent); outline-offset: 2px; animation: spotPulse 0.8s steps(1) infinite; }
+@keyframes spotPulse { 50% { outline-color: transparent; } }
+.panelBar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.panelBar h6 { margin: 0; }
+.tutorStep { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tutorBody { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.tutor .btn { flex: none; padding: 3px 10px; font-size: 12px; }
+/* What the lesson, or an alarm, points at on the board. */
+.signal.shown .ring { stroke: var(--accent); animation: blink 0.6s steps(1) infinite; }
+.lc.shown .lc-text { fill: var(--accent); animation: blink 0.6s steps(1) infinite; }
+.berth.shown .berth-box { stroke: var(--accent); stroke-width: 2; animation: blink 0.6s steps(1) infinite; }
+/* A block pointed at: drawn thick in its own colour and blinking, so grey, white and red still mean what they say. */
+.tc.shown { stroke-width: 8; animation: blink 0.6s steps(1) infinite; }
+.point-num.shown { fill: var(--accent); font-weight: 700; animation: blink 0.6s steps(1) infinite; }
+.fringe.shown .fringe-arrow { stroke: var(--accent); stroke-width: 2; animation: blink 0.6s steps(1) infinite; }
+.screen { position: absolute; inset: 0; display: block; width: 100%; height: 100%; font-family: Archivo, system-ui, sans-serif; }
+/* Under the board, the whole desk drawn small and cut to the band the track
+   runs in, with the part on screen framed: a click or a drag on it moves
+   the board there. */
+.overview { position: relative; flex: none; height: 96px; display: flex; justify-content: center; align-items: center; background: var(--screen); border-top: 1px solid var(--divider); overflow: hidden; }
+.overviewPic { position: relative; flex: none; cursor: pointer; touch-action: none; }
+.overviewPic svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.overviewPic .layer-labels, .overviewPic .note { display: none; }
+.overviewFrame { position: absolute; border: 1px solid var(--berth); background: color-mix(in srgb, var(--text) 8%, transparent); pointer-events: none; }
+
+.tc { stroke: var(--track); stroke-width: 3; stroke-linecap: butt; }
+.tc.set { stroke: var(--route); }
+.tc.occupied { stroke: var(--occupied); }
+/* A failed circuit, occupied with nothing on it: red, but dash and dot, where a train is solid and work on the line is dashed. */
+.tc.failed { stroke-dasharray: 9 3 2 3; }
+/* Work on the line, the fault team's included: blue and dashed, red only where a train is on it. */
+.tc.blocked { stroke: var(--blocked); stroke-dasharray: 6 4; }
+.tc.blocked.occupied:not(.failed) { stroke: var(--occupied); }
+/* A circuit the fault team is waiting for: dotted, unless a possession's dashes are on it already, and blue once nothing is on it or set over it. */
+.tc.wanted:not(.blocked) { stroke-dasharray: 2 3; }
+.tc.wanted:not(.occupied):not(.set) { stroke: var(--blocked); }
+.buffer { stroke: var(--track); stroke-width: 3; }
+/* The gap a flyover cuts in each line it crosses, in the screen's own black. */
+.bridge { stroke: var(--screen); stroke-width: 13; stroke-linecap: butt; }
+.platform { fill: var(--platform); }
+.platform-box { fill: var(--berth-box); stroke: var(--berth-line); stroke-width: 1; }
+.platform-num { fill: var(--station); font-size: 12px; font-weight: 800; }
+/* The platform says what the train in it is doing: white loading, yellow
+   flashing for a train ready to start, until it goes. */
+.platform-box.loading { fill: var(--text); stroke: var(--text); }
+.platform-num.loading { fill: #151312; }
+.platform-box.trts { fill: var(--authorised); stroke: var(--authorised); animation: blink 0.7s steps(1) infinite; }
+.platform-num.trts { fill: #151312; animation: blink 0.7s steps(1) infinite; }
+/* The platform the picked train is booked into, while its card is open. */
+.platform-box.wanted { stroke: var(--accent); stroke-width: 2; }
+.note { fill: var(--label); font-size: 10px; letter-spacing: 0.1em; }
+.point-num { fill: var(--label); font-size: 10px; font-variant-numeric: tabular-nums; }
+.point-num.locked { fill: var(--station); }
+.point-num.failed { fill: var(--danger); animation: blink 0.8s steps(1) infinite; }
+.point-num.moving { animation: blink 0.4s steps(1) infinite; }
+.label-station { fill: var(--station); font-size: 15px; font-weight: 800; letter-spacing: 0.16em; }
+.label-edge { fill: var(--label); font-size: 11px; letter-spacing: 0.12em; }
+.label-note { fill: var(--label); font-size: 10px; letter-spacing: 0.1em; }
+.shed { fill: color-mix(in srgb, var(--label) 7%, transparent); stroke: color-mix(in srgb, var(--label) 45%, transparent); stroke-width: 1; stroke-dasharray: 5 3; }
+.signal .stem { stroke: var(--track); stroke-width: 2; fill: none; }
+.signal .head { fill: var(--danger); stroke: #000; stroke-width: 1; }
+.signal.off .head { fill: var(--clear); }
+.signal.off.yellow .head { fill: var(--authorised); }
+/* A double yellow, the next signal showing one: two yellow lamps side by side. A controlled
+   signal's pair stands in for its head; an automatic keeps its head on the pin and lights one beyond it. */
+.signal .lamp { display: none; fill: var(--authorised); stroke: #000; stroke-width: 1; }
+.signal.off.double .head { fill: var(--authorised); }
+.signal.kind-main.off.double .head { display: none; }
+.signal.off.double .lamp { display: inline; }
+.signal.kind-shunt .head { fill: #111; stroke: var(--berth); stroke-width: 1.5; }
+.signal.kind-shunt.off .head { fill: var(--berth); }
+.signal .ring { fill: none; stroke: transparent; stroke-width: 2; }
+.signal.selected .ring { stroke: var(--select); animation: blink 0.6s steps(1) infinite; }
+.signal.reminder .ring { stroke: var(--reminder); }
+/* A failed signal shows nothing: a dark head with the danger colour round it. */
+.signal.failed .head { fill: #111; stroke: var(--danger); stroke-width: 1.5; }
+.signal.authorised .ring { stroke: var(--authorised); }
+.signal.cancelling .head { animation: blink 0.5s steps(1) infinite; }
+.signal-id { fill: var(--label); font-size: 10px; letter-spacing: 0.04em; }
+.signal-arrow { fill: var(--label); }
+.berth-box { fill: var(--berth-box); stroke: var(--berth-line); stroke-width: 1; }
+.berth-text { fill: var(--berth); font-family: "SFMono-Regular", Menlo, Consolas, monospace; font-size: 12.5px; font-weight: 600; letter-spacing: 0.06em; }
+.berth.full .berth-box { stroke: var(--berth); }
+.berth.picked .berth-box { stroke: var(--accent); stroke-width: 2; }
+.fringe-arrow { fill: var(--berth-box); stroke: var(--berth-line); stroke-width: 1; }
+.fringe-name { fill: var(--label); font-size: 10px; letter-spacing: 0.1em; }
+/* What is coming that way, under the name of a way in. */
+.lc .road { stroke: var(--label); stroke-width: 2; stroke-dasharray: 5 4; }
+.lc .box { fill: var(--berth-box); stroke: var(--berth-line); stroke-width: 1; }
+.lc.down .box { fill: var(--occupied); stroke: var(--occupied); }
+.lc.lowering .box, .lc.raising .box { fill: var(--occupied); animation: blink 0.5s steps(1) infinite; }
+.lc-text { fill: var(--berth); font-size: 10px; font-weight: 800; letter-spacing: 0.06em; }
+.lc.down .lc-text, .lc.lowering .lc-text, .lc.raising .lc-text { fill: #fff; }
+.hit { fill: transparent; stroke: transparent; cursor: pointer; }
+.hit-track { stroke-width: 14; }
+@keyframes blink { 50% { opacity: 0.15; } }
+@media (prefers-reduced-motion: reduce) {
+  .signal.selected .ring, .signal.cancelling .head, .point-num.failed, .point-num.moving, .lc.lowering .box, .lc.raising .box, .platform-box.trts, .platform-num.trts, .signal.shown .ring, .lc.shown .lc-text, .berth.shown .berth-box, .tc.shown, .point-num.shown, .fringe.shown .fringe-arrow, .tutor.arrive .tutorBody, .tutor.arrive .tutorPhase, .tutor.nudge, .tutorActs li.watch.now::before, .lessonSpot { animation: none; }
+  .tutor, .tutorFill { transition: none; }
+  .platform-box.trts { stroke: var(--text); stroke-width: 2; }
+  .beyond { transition: none; }
+}
+
+/* Wide enough on a laptop for a timetable row to stay on one line, and no wider than it needs. */
+.side { width: clamp(400px, 32vw, 480px); flex: none; display: flex; flex-direction: column; min-height: 0; background: var(--glass); }
+.tabs { display: flex; border-bottom: 1px solid var(--divider); }
+.tabs button {
+  flex: 1;
+  padding: 8px 6px;
+  border: 0;
+  border-right: 1px solid var(--divider);
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+.tabs button:last-child { border-right: 0; }
+.tabs button[aria-selected="true"] { box-shadow: inset 0 -2px 0 var(--accent); }
+.pane { flex: 1; min-height: 0; overflow: auto; padding: 8px 10px; }
+.tt { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
+.tt th { text-align: left; font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 4px 4px; border-bottom: 1px solid var(--divider); }
+.tt td { padding: 4px 4px; border-bottom: 1px solid color-mix(in srgb, #f3f2f2 10%, transparent); white-space: nowrap; }
+/* When a row is short of room the journey wraps, never the time: the Now column is the one read at a glance. */
+.tt td.journey { white-space: normal; }
+/* The heading stays over a long timetable as it scrolls, over the pane's own padding too. */
+.pane > .tt > thead th { position: sticky; top: -8px; z-index: 1; background: var(--bg); }
+.tt tr.done td { color: var(--muted); }
+.tt tr.here td { color: var(--text); font-weight: 600; }
+.tt tr.late td.now { color: var(--accent); }
+.tt tr.picked td { background: var(--surface); }
+.tt tr.waiting td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+.tt tr:hover td { background: var(--surface); cursor: pointer; }
+.tt .code { font-family: "SFMono-Regular", Menlo, Consolas, monospace; font-weight: 600; letter-spacing: 0.04em; }
+.list { display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+.row { padding: 6px 8px; border: 1px solid var(--divider); background: var(--glass); }
+.row.alarm { border-left: 3px solid var(--accent); }
+.row.alarm.ack { border-left-color: var(--divider); color: var(--muted); }
+.row .when { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; margin-right: 6px; }
+/* Who reported an alarm, on the first line with the time, and what they said under it. */
+.row .from { font-weight: 600; margin-right: 6px; }
+.row .said { margin-top: 2px; clear: both; }
+.row .code { font-family: "SFMono-Regular", Menlo, Consolas, monospace; font-weight: 600; }
+.row .ackBtn { float: right; padding: 0 6px; border: 1px solid var(--divider); background: transparent; font-size: 11px; cursor: pointer; }
+.row .ackBtn:hover { border-color: var(--text); }
+.row.alarm.at { cursor: pointer; }
+.row.alarm.at:hover { border-color: var(--text); }
+.row.alarm.at:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+/* The finder under the tabs, and one train's timetable when a train is picked. */
+.finder { padding: 6px 10px; border-bottom: 1px solid var(--divider); }
+.finder input { width: 100%; padding: 5px 8px; border: 1px solid var(--divider); background: var(--surface); color: var(--text); font: inherit; font-size: 12px; }
+.finder input:focus-visible { outline: 1px solid var(--accent); outline-offset: -1px; }
+.row.train { cursor: pointer; }
+.row.train:hover { border-color: var(--text); }
+.row.waiting { border-left: 3px solid var(--accent); }
+.row .late { float: right; font-size: 11px; font-weight: 800; color: var(--accent); font-variant-numeric: tabular-nums; }
+.trainBar { display: flex; gap: 8px; margin-bottom: 8px; }
+.trainHead { margin-bottom: 8px; font-size: 13px; }
+.trainHead .trainTitle .code { font-family: "SFMono-Regular", Menlo, Consolas, monospace; font-weight: 600; font-size: 15px; }
+.trainPane .tt tr.done td { color: var(--muted); }
+.trainPane .tt tr.next td { color: var(--text); font-weight: 600; }
+.trainPane .tt td.eta { color: var(--muted); font-style: italic; }
+.trainPane .tt tr:hover td { background: transparent; cursor: default; }
+.trainPane .tt td.place { white-space: normal; }
+/*
+ * A train's timetable drawn as its line, in its operator's colour (--line,
+ * from the operator trainCard() puts on the table): a circle at each stop, a tick at each place it only
+ * passes, a solid dot at either end, and what it has run over dimmed. Where
+ * the train stands its mark is filled; running, it is a berth on the line
+ * just short of where it is going. Each row draws the half of the line
+ * above its mark and the half below, so a row can be half run over; the far
+ * part of the journey is one dotted row.
+ */
+.trainPane .tt { --line: var(--text); --card: var(--bg); --gone: color-mix(in srgb, var(--line) 30%, var(--card)); }
+.trainPop .tt { --card: var(--surface); }
+.trainPane .tt[data-operator="ridgeline"] { --line: var(--line-ridgeline); }
+.trainPane .tt[data-operator="valley"] { --line: var(--line-valley); }
+.trainPane .tt[data-operator="lookout"] { --line: var(--line-lookout); }
+.trainPane .tt[data-operator="peachline"] { --line: var(--line-peachline); }
+.trainPane .tt[data-operator="lovell"] { --line: var(--line-lovell); }
+.trainPane .tt td.rail { position: relative; padding-left: 28px; }
+.trainPane .tt td.rail::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: -1px;
+  width: 4px;
+  background: linear-gradient(var(--up) 50%, var(--down) 50%);
+}
+.trainPane .tt td.rail { --up: var(--line); --down: var(--line); }
+.trainPane .tt td.rail.upGone { --up: var(--gone); }
+.trainPane .tt td.rail.downGone { --down: var(--gone); }
+.trainPane .tt tr:first-child td.rail::before { top: 50%; background: var(--down); }
+.trainPane .tt tr:last-child td.rail::before { bottom: 50%; background: var(--up); }
+.trainPane .tt td.rail .mark { position: absolute; left: 12px; top: 50%; transform: translate(-50%, -50%); box-sizing: border-box; }
+.trainPane .tt td.stop .mark { width: 13px; height: 13px; border: 3px solid var(--line); border-radius: 50%; background: var(--card); }
+.trainPane .tt td.end .mark { width: 14px; height: 14px; border-radius: 50%; background: var(--line); }
+.trainPane .tt td.pass .mark { width: 8px; height: 3px; transform: translate(2px, -50%); background: var(--line); }
+.trainPane .tt td.stop.gone .mark { border-color: var(--gone); }
+.trainPane .tt td.end.gone .mark, .trainPane .tt td.pass.gone .mark { background: var(--gone); }
+.trainPane .tt td.at .mark { width: 15px; height: 15px; border: 3px solid var(--line); border-radius: 50%; background: var(--berth); transform: translate(-50%, -50%); }
+.trainPane .tt td.rail .train { position: absolute; left: 12px; top: 0; width: 14px; height: 8px; transform: translate(-50%, -50%); border: 2px solid var(--card); background: var(--berth); }
+/* The platform to the right of the place, lined up down the card as on a departure board. */
+.trainPane .tt td.place { padding-right: 14px; }
+.trainPane .tt .placeRow { display: flex; align-items: baseline; gap: 10px; }
+.trainPane .tt .placeRow .plat { margin-left: auto; white-space: nowrap; }
+.trainPane .tt td.folded::before { background: repeating-linear-gradient(var(--down) 0 3px, transparent 3px 7px); }
+.trainPane .tt .foldBtn { display: block; width: 100%; padding: 2px 0; border: 0; background: none; color: var(--muted); font: inherit; font-style: italic; text-align: left; cursor: pointer; }
+.trainPane .tt .foldBtn:hover { color: var(--text); }
+
+/* ---- The network diagram, over the board -------------------------------- */
+/* The one on the station walls, so this is the one place the unit rounds a
+   corner: the diagram is a printed thing, and its panels and chips are
+   drawn as the printer draws them. The bands are the site's own colours. */
+.network { position: absolute; inset: 0; z-index: 5; background: var(--bg); }
+.networkPic { position: absolute; inset: 0; }
+.networkClose { position: absolute; top: 12px; right: 14px; }
+.map {
+  display: block;
+  width: 100%;
+  height: 100%;
+  font-family: Archivo, system-ui, sans-serif;
+  --line-cleveland: color-mix(in srgb, var(--text) 34%, var(--bg));
+}
+.map-band { fill: none; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
+.band-ridgeline { stroke: var(--line-ridgeline); }
+.band-valley { stroke: var(--line-valley); }
+.band-cleveland { stroke: var(--line-cleveland); }
+.band-lovell { stroke: var(--line-lovell); }
+.band-peachline { stroke: var(--line-peachline); }
+.band-school { stroke: var(--accent); }
+.map-dot { fill: var(--text); stroke: var(--bg); stroke-width: 1.5; }
+.map-dot.ring { fill: var(--bg); stroke: var(--text); stroke-width: 2.5; }
+.map-beyond { fill: var(--text); opacity: 0.8; font-size: 13px; font-weight: 600; }
+.map-name { fill: var(--text); font-size: 14px; font-weight: 600; }
+.map-panel { fill: color-mix(in srgb, var(--text) 9%, var(--bg)); }
+.map-wordmark { fill: color-mix(in srgb, var(--text) 88%, var(--bg)); font-size: 52px; font-weight: 400; letter-spacing: -0.02em; }
+.map-keychip text { font-size: 14px; font-weight: 800; letter-spacing: 0.02em; fill: var(--bg); }
+/* An operator's symbol sits in a box of its own, darker than the key it is in. */
+.key-operator rect { fill: var(--bg); }
+.key-school rect { fill: var(--accent); }
+.key-school text { fill: var(--bg); }
+.key-dot rect { fill: color-mix(in srgb, var(--text) 18%, var(--bg)); }
+.key-dot text { fill: var(--text); }
+
+/* ---- The tray along the bottom ----------------------------------------- */
+.tray { display: flex; gap: 12px; align-items: center; padding: 6px 14px; border-top: 1px solid var(--divider); font-size: 12px; color: var(--muted); min-height: 34px; }
+.tray .btn { flex: none; padding: 3px 10px; font-size: 12px; }
+.tray .btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+.hint { flex: none; }
+.log { flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+.log .bad { color: var(--accent); }
+
+/* ---- Menus and the interpose box ---------------------------------------- */
+.ctx {
+  position: fixed;
+  z-index: 20;
+  min-width: 200px;
+  padding: 4px 0;
+  border: 1px solid var(--divider);
+  background: var(--surface);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+.ctx h6 { padding: 4px 12px 2px; margin: 0; }
+.ctx button { display: block; width: 100%; padding: 6px 12px; border: 0; background: transparent; text-align: left; cursor: pointer; font-size: 13px; }
+.ctx button:hover { background: var(--bg); color: var(--accent); }
+/* The keyboard's place in the menu is a rule, not the pointer's colour. */
+.ctx button:focus-visible { outline: 1px solid var(--accent); outline-offset: -1px; }
+.ctx button:disabled { color: var(--muted); cursor: default; }
+.ctx button:disabled:hover { background: transparent; color: var(--muted); }
+/* A train's timetable over the board, where its headcode was clicked, kept up to date until the next click elsewhere. */
+.trainPop {
+  position: fixed;
+  z-index: 20;
+  width: min(380px, calc(100vw - 16px));
+  max-height: min(460px, calc(100vh - 16px));
+  overflow: auto;
+  padding: 10px 12px;
+  border: 1px solid var(--divider);
+  background: var(--surface);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+.interpose {
+  position: fixed;
+  z-index: 20;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid var(--divider);
+  background: var(--surface);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  font-size: 13px;
+}
+.interpose input {
+  width: 64px;
+  margin-left: 6px;
+  padding: 4px 6px;
+  border: 1px solid var(--divider);
+  background: var(--bg);
+  color: var(--text);
+  font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+.interpose .btn { padding: 5px 10px; font-size: 12px; }
+
+/* ---- Panels and veils --------------------------------------------------- */
+.panel {
+  position: fixed;
+  top: 64px;
+  right: 14px;
+  z-index: 15;
+  width: min(440px, calc(100vw - 28px));
+  max-height: calc(100vh - 90px);
+  overflow: auto;
+  padding: 16px 18px;
+  border: 1px solid var(--divider);
+  background: var(--glass);
+  backdrop-filter: blur(6px);
+}
+/* The phone: who answered and what they said, over the calls and the box for where. It keeps one
+   height whatever it says, so nothing moves under the pointer between the list and the box. */
+.phone { width: min(520px, calc(100vw - 28px)); }
+.phoneReply { display: flex; flex-direction: column; gap: 3px; margin: 10px 0 12px; padding: 8px 10px; border: 1px solid var(--divider); background: var(--surface); }
+.phoneFrom { font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.phoneSaid { display: -webkit-box; min-height: calc(4 * 1.45em); overflow: hidden; font-size: 15px; line-height: 1.45; -webkit-line-clamp: 4; -webkit-box-orient: vertical; }
+.phoneReply.asks .phoneSaid { color: var(--accent); }
+.phoneList { display: grid; gap: 6px; }
+.phoneCall { display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: 12px; width: 100%; min-height: 46px; padding: 8px 12px; border: 1px solid var(--divider); background: transparent; color: var(--text); font: inherit; font-size: 15px; text-align: left; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+.phoneCall:hover { border-color: var(--muted); }
+.phoneCall[aria-pressed="true"] { border-color: var(--text); background: var(--surface); }
+.phoneCall:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.phoneCall kbd { padding: 2px 6px; border: 1px solid var(--divider); background: var(--surface); font: 600 13px/1.5 "SFMono-Regular", Menlo, Consolas, monospace; text-align: center; color: var(--text); }
+.phoneTo { font-size: 12px; color: var(--muted); white-space: nowrap; }
+/* The box and its two buttons are one row of one height, the buttons one width, whatever they say. */
+.phoneWhere { display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; margin-top: 14px; }
+.phoneWhere label { flex: 1 0 100%; font-size: 14px; color: var(--muted); }
+.phoneWhere .btn { flex: 0 0 5.5em; padding-inline: 0; text-align: center; }
+.phoneWhere input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--divider);
+  background: var(--bg);
+  color: var(--text);
+  font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 17px;
+  text-transform: uppercase;
+}
+.phoneWhere input:disabled, .phoneWhere .btn:disabled { opacity: 0.45; cursor: default; }
+.phoneKeys { margin: 12px 0 0; font-size: 13px; color: var(--muted); }
+/* The question Learn the desk asks in the middle of a shift, before it takes the signaller off the desk. */
+.ask p { font-size: 14px; }
+.askActs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+/* The written guide is the rule book: its pages at the size they are printed where there is
+   room, on the reader's grey its own styles paint, down the right of the board, with the bar
+   that closes it kept in view. */
+.guide { width: min(850px, calc(100vw - 28px)); height: calc(100vh - 90px); padding: 0; }
+.guide .panelBar { position: sticky; top: 0; z-index: 1; padding: 10px 14px; border-bottom: 1px solid var(--divider); background: var(--surface); }
+.guideDoc { display: block; }
+/* The bar's two actions side by side: the rule book in a tab of its own, and Close. */
+.panelActs { display: flex; gap: 8px; }
+a.btn { color: inherit; text-decoration: none; }
+.settings .slider { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 6px 0; font-size: 13px; }
+.settings input[type="range"] { width: 200px; accent-color: var(--accent); }
+/* Said to a screen reader and not shown: what the start screen is doing while it is held. */
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.veil {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, #151312 78%, transparent);
+  backdrop-filter: blur(6px);
+}
+.card { width: min(520px, calc(100vw - 32px)); padding: 24px 26px; border: 1px solid var(--divider); background: var(--bg); }
+.card.wide { width: min(760px, calc(100vw - 32px)); }
+/* The start card never runs past the screen: the title and the start buttons
+   stay put, and only the desks and conditions between them scroll. */
+.card.start { display: flex; flex-direction: column; width: min(1500px, calc(100vw - 32px)); max-height: calc(100vh - 24px); max-height: calc(100dvh - 24px); overflow: hidden; padding: 20px 26px 22px; }
+.startHead, .startRow { flex: none; }
+.startBody { flex: 1 1 auto; min-height: 0; overflow: auto; margin: 0 -8px; padding: 0 8px 2px; }
+.startHead { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+.startHead p { margin: 0; }
+.startHead .sub { flex: none; max-width: 320px; text-align: right; }
+.forecast { margin-top: 6px !important; font-size: 13px; }
+.veilActions { display: flex; gap: 8px; margin-top: 14px; }
+/* The three desks, each drawn the way its screen draws it, small. */
+.deskGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 10px; }
+.deskCard { display: flex; flex-direction: column; align-items: stretch; width: 100%; padding: 0; text-align: left; border: 1px solid var(--divider); background: var(--surface); cursor: pointer; transition: border-color 0.15s; }
+.deskCard:hover { border-color: var(--text); }
+.deskCard[aria-checked="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+/* The picture is taken out of the flow so a taller zone cannot stretch its box: every card's preview is the same height. */
+.deskPreview { position: relative; flex: none; aspect-ratio: 1600 / 560; background: var(--screen); border-bottom: 1px solid var(--divider); }
+.deskPreview svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.deskName { padding: 8px 12px 0; font-weight: 800; }
+.deskCard[aria-checked="true"] .deskName { color: var(--accent); }
+.deskNote { flex: 1; min-height: 46px; padding: 2px 12px 10px; font-size: 12px; line-height: 1.45; color: var(--muted); }
+/* A zone drawn small: thicker track, bigger marks, and none of the small print. */
+.screen.preview .tc, .screen.preview .buffer { stroke-width: 7; }
+.screen.preview .bridge { stroke-width: 22; }
+.screen.preview .signal { transform-box: fill-box; transform-origin: center; transform: scale(2.4); }
+.screen.preview .signal-id, .screen.preview .point-num, .screen.preview .berth, .screen.preview .fringe, .screen.preview .platform-box { display: none; }
+.screen.preview .platform { transform-box: fill-box; transform-origin: center; transform: scaleY(2.2); }
+.screen.preview .platform-num { font-size: 30px; }
+.screen.preview .label-station { font-size: 38px; }
+.screen.preview .label-edge, .screen.preview .label-note, .screen.preview .note { font-size: 24px; }
+.screen.preview .hit { pointer-events: none; }
+/* The three conditions along the bottom. */
+.levelGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.levelGrid button { padding: 10px 12px; text-align: left; border: 1px solid var(--divider); background: transparent; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+.levelGrid button:hover { border-color: var(--text); }
+.levelGrid button b { display: block; font-weight: 800; }
+.levelGrid button span { font-size: 12px; line-height: 1.45; color: var(--muted); }
+.levelGrid button[aria-checked="true"] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.levelGrid button[aria-checked="true"] b { color: var(--accent); }
+.startRow { display: flex; align-items: center; gap: 16px; margin-top: 16px; }
+.startRow .veilActions { margin: 0 0 0 auto; }
+.seedRow { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
+.seedRow select { padding: 4px 6px; border: 1px solid var(--divider); border-radius: 0; background: var(--surface); color: var(--text); font: inherit; font-variant-numeric: tabular-nums; }
+.seedHint { max-width: 380px; font-size: 12px; }
+/* On a shorter screen the start card tightens up, most of all the pictures of
+   the desks, so the whole of it fits on a laptop without scrolling. */
+@media (max-height: 940px) {
+  .card.start { padding: 14px 22px 16px; }
+  .card.start h1 { font-size: 22px; margin-bottom: 4px; }
+  .card.start .pickLabel { margin: 10px 0 5px; }
+  .deskPreview { aspect-ratio: 1600 / 400; }
+  .deskName { padding-top: 6px; }
+  .deskNote { min-height: 0; padding-bottom: 8px; }
+  .levelGrid button { padding: 8px 10px; }
+  .startRow { margin-top: 12px; }
+}
+/* On a laptop's short screen the notes are cut to a few lines, and the whole
+   note comes back in the page's own label on a hover. */
+@media (max-height: 740px) {
+  .deskNote { flex: none; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; padding-bottom: 0; margin-bottom: 8px; }
+  .levelGrid button span { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+  .deskCard[data-full], .levelGrid button[data-full] { position: relative; }
+  .deskCard[data-full]:hover::after, .levelGrid button[data-full]:hover::after {
+    content: attr(data-full);
+    position: absolute; z-index: 5; left: 8px; right: 8px; top: calc(100% + 4px);
+    padding: 6px 8px; border: 1px solid var(--divider); background: var(--surface);
+    color: var(--text); font-size: 12px; font-weight: 400; line-height: 1.45; white-space: normal; pointer-events: none;
+  }
+  .levelGrid button[data-full]:hover::after { top: auto; bottom: calc(100% + 4px); }
+}
+@media (max-height: 760px) {
+  .card.start h1 { font-size: 20px; }
+  .card.start .startHead p:not(.forecast) { font-size: 13px; }
+  .deskPreview { aspect-ratio: 1600 / 220; }
+  .deskNote { font-size: 11.5px; line-height: 1.4; }
+  .levelGrid button span { font-size: 11.5px; line-height: 1.4; }
+}
+@media (max-height: 620px) {
+  .card.start { padding-top: 10px; padding-bottom: 12px; }
+  .card.start .pickLabel { margin: 7px 0 4px; }
+  .deskGrid, .levelGrid { gap: 8px; }
+  .startRow { margin-top: 8px; }
+}
+.resultsWrap { max-height: 46vh; overflow: auto; margin-top: 8px; border: 1px solid var(--divider); }
+.results td.late-bad { color: var(--accent); }
+
+/* ---- Tooltips from data-tip, in the page's own label -------------------- */
+[data-tip] { position: relative; }
+[data-tip]:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 6px);
+  transform: translateX(-50%);
+  z-index: 40;
+  padding: 3px 8px;
+  border: 1px solid var(--divider);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 400;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  animation: tip 0.15s 0.5s forwards;
+}
+@keyframes tip { to { opacity: 1; } }
+/* Along the bottom the tip has nowhere to drop to, so it rises, and keeps to the left edge. */
+.tray [data-tip]:hover::after { top: auto; bottom: calc(100% + 6px); left: 0; transform: none; }
+
+@media (max-width: 980px) {
+  .side { width: 300px; }
+  .stat.wide, .stat.next { display: none; }
+}
+
+/* A phone gets the start card stacked rather than squeezed: the title above
+   its note, and the shift number and the two buttons wrapping onto lines of
+   their own instead of one word to a line. The bar across the top wraps, and
+   the tray puts its hint on a line above the log rather than running off. */
+@media (max-width: 600px) {
+  .bar { flex-wrap: wrap; }
+  .bar .stat { min-width: 0; flex: 1 1 96px; }
+  .card.start { padding: 16px; }
+  .startHead { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .startHead .sub { max-width: none; text-align: left; }
+  .startRow { flex-wrap: wrap; }
+  .levelGrid { grid-template-columns: minmax(0, 1fr); }
+  .tray { flex-wrap: wrap; }
+  .hint { flex: 1 1 100%; min-width: 0; }
+}
