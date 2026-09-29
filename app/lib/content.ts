@@ -330,4 +330,15 @@ export const projects: ApiProject[] = [
     skillId: ["python"],
     graveyard: true,
   },
+  {
+    id: "17",
+    name: "Chaos Encryptor",
+    description:
+      "A toy cipher that pads a message with random characters at prime positions, then shifts, reverses and XORs it over key-driven rounds before shuffling the result. It decrypts every message before handing it over to prove it round-trips.",
+    gradientColor: ["#4B8BBE", "#10B981"],
+    gradientAngle: 45,
+    gitRepo: "",
+    skillId: ["python"],
+    graveyard: true,
+  },
 ];
