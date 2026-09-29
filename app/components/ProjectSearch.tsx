@@ -235,6 +235,7 @@ export default function ProjectSearch({
               activeTech={activeChip?.name}
               onTechClick={handleTagClick}
               faded={faded}
+              causeOfDeath={project.causeOfDeath}
             />
           ))}
         </div>
