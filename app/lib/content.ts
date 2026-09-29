@@ -10,8 +10,8 @@ import { SkillType } from "./types";
 
 // Ways to reach me, shown on the contact page. Leave a field empty to hide it.
 export const contact = {
-  email: "",
-  discord: "",
+  email: "contact@arengdev.com",
+  discord: "arengdev",
   github: "Areng14",
 };
 
