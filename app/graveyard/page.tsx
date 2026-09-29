@@ -1,10 +1,11 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import ProjectCard from "../components/ProjectCard";
+import TombstoneIcon from "../components/TombstoneIcon";
 import { fetchProjectsForDisplay } from "../lib/data";
 
 export const metadata: Metadata = {
-  title: "Graveyard",
+  title: "Cutting Room Floor",
   description: "Older projects that were finished, replaced or left behind",
 };
 
@@ -25,9 +26,11 @@ export default async function Graveyard() {
             Back to projects
           </Link>
 
-          <div className="mb-12 mt-8 sm:mb-16">
-            <h1 className="text-4xl font-bold text-white sm:text-5xl">Graveyard</h1>
-            <p className="mt-3 max-w-xl text-slate-400">
+          {/* Centered like the home page's section headers */}
+          <div className="mb-12 mt-6 text-center sm:mb-16">
+            <TombstoneIcon className="mx-auto h-10 w-10 text-slate-500" />
+            <h1 className="mt-4 text-3xl font-bold text-white sm:text-4xl md:text-5xl">Cutting Room Floor</h1>
+            <p className="mx-auto mt-3 max-w-xl text-slate-400">
               Older projects that were finished, replaced or left behind. Kept here for the record.
             </p>
           </div>
