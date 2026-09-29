@@ -13,6 +13,8 @@ export interface ApiProject {
   playUrl?: string;
   // Finished, replaced or abandoned; shown in the graveyard instead of the main grid
   graveyard?: boolean;
+  // Why a graveyard project ended, shown on its card
+  causeOfDeath?: string;
 }
 
 // Matches API skill type
@@ -47,6 +49,7 @@ export interface Project {
   hasUsers?: boolean;
   playUrl?: string;
   graveyard?: boolean;
+  causeOfDeath?: string;
   technologies: string[];
 }
 
@@ -61,6 +64,7 @@ export function apiProjectToProject(api: ApiProject, skillIdToName: Record<strin
     hasUsers: api.hasUsers,
     playUrl: api.playUrl,
     graveyard: api.graveyard,
+    causeOfDeath: api.causeOfDeath,
     technologies: (api.skillId ?? []).map((id) => skillIdToName[id] || id),
   };
 }

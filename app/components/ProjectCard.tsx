@@ -43,6 +43,7 @@ interface ProjectCardProps {
     // Greyed out until hovered (cutting room floor). Applied to this element, not a wrapper,
     // so the view-transition snapshot of the card keeps the fade while it animates.
     faded?: boolean;
+    causeOfDeath?: string;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
@@ -56,6 +57,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     activeTech,
     onTechClick,
     faded = false,
+    causeOfDeath,
 }) => {
     // A playable version wins the card's main link; otherwise the repo
     const primaryLink = playUrl
@@ -107,6 +109,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 )}
             </div>
             <p className="mt-2 text-sm leading-relaxed text-slate-400">{description}</p>
+            {causeOfDeath && (
+                <p className="mt-3 text-sm text-slate-500">
+                    <span className="font-medium text-slate-400">Cause of death:</span> {causeOfDeath}
+                </p>
+            )}
 
             {technologies.length > 0 && (
                 <ul className="mt-auto flex flex-wrap gap-2 pt-5">

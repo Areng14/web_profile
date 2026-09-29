@@ -237,12 +237,13 @@ export const projects: ApiProject[] = [
     id: "1",
     name: "BPE",
     description:
-      "The original Python editor for BEEmod item packages, with plugin support in v3. Now deprecated and replaced by BeePEE.",
+      "The original Python editor for BEEmod item packages, with plugin support in v3.",
     gradientColor: ["rgb(217, 211, 43)", "rgb(216, 141, 94)"],
     gradientAngle: 45,
     gitRepo: "BeePackageEditor",
     skillId: ["python"],
     graveyard: true,
+    causeOfDeath: "Replaced by BeePEE, a full rewrite.",
   },
   {
     id: "2",
