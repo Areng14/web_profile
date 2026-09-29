@@ -1,5 +1,6 @@
 import ImageSlider from "./components/ImageSlider";
 import ProjectSearch from "./components/ProjectSearch";
+import TombstoneIcon from "./components/TombstoneIcon";
 import SkillCard from "./components/SkillCard";
 import { fetchProjects, fetchProjectsForDisplay, fetchPublicSkills } from "./lib/data";
 import { SkillType } from "./lib/types";
@@ -18,7 +19,9 @@ export default async function Home({ searchParams }: HomeProps) {
     "/misc/mainslide/img4.png",
   ];
 
+  // Per skill: projects in the main grid, and retired ones in the graveyard
   const projectCounts: Record<string, number> = {};
+  const graveyardCounts: Record<string, number> = {};
   let projects: Awaited<ReturnType<typeof fetchProjectsForDisplay>> = [];
   let skillsByType: { type: SkillType; title: string; skills: Awaited<ReturnType<typeof fetchPublicSkills>> }[] = [];
   try {
@@ -28,12 +31,12 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchProjectsForDisplay(),
     ]);
     projects = displayProjects.filter((p) => !p.graveyard);
-    // Skill cards filter the main grid, so only count the projects that are in it
-    allProjects.filter((p) => !p.graveyard).forEach((p) =>
+    allProjects.forEach((p) => {
+      const counts = p.graveyard ? graveyardCounts : projectCounts;
       p.skillId.forEach((id) => {
-        projectCounts[id] = (projectCounts[id] ?? 0) + 1;
-      })
-    );
+        counts[id] = (counts[id] ?? 0) + 1;
+      });
+    });
     const order = [SkillType.Lang, SkillType.Framework, SkillType.Tools, SkillType.DesignTools];
     const titles: Record<SkillType, string> = {
       [SkillType.Lang]: "Languages",
@@ -108,10 +111,8 @@ export default async function Home({ searchParams }: HomeProps) {
               href="/graveyard"
               className="inline-flex items-center gap-2 rounded-xl border border-white/[0.06] bg-card-bg px-5 py-3 text-sm font-medium text-slate-300 transition-colors hover:border-white/20 hover:text-white"
             >
-              Look at the graveyard
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m-6-6l6 6-6 6" />
-              </svg>
+              <TombstoneIcon className="h-4 w-4" />
+              Browse the cutting room floor
             </Link>
           </div>
         </div>
@@ -150,7 +151,9 @@ export default async function Home({ searchParams }: HomeProps) {
                       description={s.description}
                       icon={s.icon}
                       projectCount={projectCounts[s.id] ?? 0}
+                      graveyardCount={graveyardCounts[s.id] ?? 0}
                       techId={projectCounts[s.id] ? s.id : undefined}
+                      href={!projectCounts[s.id] && graveyardCounts[s.id] ? "/graveyard" : undefined}
                     />
                   ))}
                 </div>

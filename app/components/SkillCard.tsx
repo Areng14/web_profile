@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { selectProjectTech } from "./ProjectSearch";
 
 interface SkillCardProps {
@@ -9,8 +10,11 @@ interface SkillCardProps {
   icon: string;
   color: string;
   projectCount?: number;
+  graveyardCount?: number;
   // When set, clicking the card filters the projects section to this skill
   techId?: string;
+  // Otherwise, a page to link to (the graveyard, for skills with only retired projects)
+  href?: string;
 }
 
 const SkillCard: React.FC<SkillCardProps> = ({
@@ -19,25 +23,31 @@ const SkillCard: React.FC<SkillCardProps> = ({
   icon,
   color,
   projectCount,
+  graveyardCount = 0,
   techId,
+  href,
 }) => {
+  const clickable = Boolean(techId || href);
   const imageSrc = !icon
     ? null
     : icon.startsWith("http") || icon.startsWith("data:") || icon.startsWith("/")
       ? icon
       : `/${icon}`;
 
+  const plural = (n: number) => `${n} project${n === 1 ? "" : "s"}`;
   const countLabel =
     projectCount === undefined
       ? "Find projects"
-      : projectCount === 0
-        ? "No projects yet"
-        : `${projectCount} project${projectCount === 1 ? "" : "s"}`;
+      : projectCount > 0
+        ? plural(projectCount) + (graveyardCount ? ` · ${graveyardCount} retired` : "")
+        : graveyardCount > 0
+          ? `${graveyardCount} retired project${graveyardCount === 1 ? "" : "s"}`
+          : "No projects yet";
 
   const content = (
     <div
       className={`relative flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg p-5 transition-colors duration-200 ${
-        techId ? "group hover:border-[var(--skill)]" : ""
+        clickable ? "group hover:border-[var(--skill)]" : ""
       }`}
       style={{ ["--skill" as string]: color }}
     >
@@ -70,7 +80,7 @@ const SkillCard: React.FC<SkillCardProps> = ({
 
       <div className="mt-auto flex items-center justify-between gap-3 pt-5">
         <p className="text-sm text-slate-500">{countLabel}</p>
-        {techId && (
+        {clickable && (
           <svg
             className="h-5 w-5 shrink-0 -translate-x-1 text-slate-600 transition-all duration-200 group-hover:translate-x-0 group-hover:text-white"
             fill="none"
@@ -94,6 +104,17 @@ const SkillCard: React.FC<SkillCardProps> = ({
       >
         {content}
       </button>
+    );
+  }
+
+  if (href) {
+    return (
+      <Link
+        href={href}
+        className="block h-full rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      >
+        {content}
+      </Link>
     );
   }
 
