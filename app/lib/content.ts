@@ -255,6 +255,7 @@ export const projects: ApiProject[] = [
     gitRepo: "TestRunner",
     skillId: ["python", "javascript", "electron", "nodejs"],
     graveyard: true,
+    causeOfDeath: "Grading season ended.",
   },
   {
     id: "3",
@@ -266,6 +267,7 @@ export const projects: ApiProject[] = [
     gitRepo: "blank",
     skillId: ["python"],
     graveyard: true,
+    causeOfDeath: "Turned out to make files larger, not smaller.",
   },
   {
     id: "4",
@@ -287,6 +289,7 @@ export const projects: ApiProject[] = [
     gitRepo: "GraphIMG",
     skillId: ["python"],
     graveyard: true,
+    causeOfDeath: "Desmos and SVG already do this, and better.",
   },
   {
     id: "6",
@@ -308,6 +311,7 @@ export const projects: ApiProject[] = [
     gitRepo: "",
     skillId: ["javascript", "electron", "nodejs"],
     graveyard: true,
+    causeOfDeath: "Discord exists, and the motivation didn't.",
   },
   {
     id: "8",
@@ -319,6 +323,7 @@ export const projects: ApiProject[] = [
     gitRepo: "",
     skillId: ["java"],
     graveyard: true,
+    causeOfDeath: "Ran out of motivation.",
   },
   {
     id: "15",
@@ -330,6 +335,7 @@ export const projects: ApiProject[] = [
     gitRepo: "",
     skillId: ["python"],
     graveyard: true,
+    causeOfDeath: "Never found a real use for it.",
   },
   {
     id: "17",
@@ -341,5 +347,6 @@ export const projects: ApiProject[] = [
     gitRepo: "",
     skillId: ["python"],
     graveyard: true,
+    causeOfDeath: "Used on one project, then lost its charm.",
   },
 ];
