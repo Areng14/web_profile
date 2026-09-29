@@ -108,7 +108,7 @@ export default async function Home({ searchParams }: HomeProps) {
 
           <div className="mt-12 text-center">
             <Link
-              href="/graveyard"
+              href="/cutting-room-floor"
               className="inline-flex items-center gap-2 rounded-xl border border-white/[0.06] bg-card-bg px-5 py-3 text-sm font-medium text-slate-300 transition-colors hover:border-white/20 hover:text-white"
             >
               <TombstoneIcon className="h-4 w-4" />
@@ -153,7 +153,7 @@ export default async function Home({ searchParams }: HomeProps) {
                       projectCount={projectCounts[s.id] ?? 0}
                       graveyardCount={graveyardCounts[s.id] ?? 0}
                       techId={projectCounts[s.id] ? s.id : undefined}
-                      href={!projectCounts[s.id] && graveyardCounts[s.id] ? "/graveyard" : undefined}
+                      href={!projectCounts[s.id] && graveyardCounts[s.id] ? "/cutting-room-floor" : undefined}
                     />
                   ))}
                 </div>
