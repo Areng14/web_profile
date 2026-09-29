@@ -298,4 +298,15 @@ export const projects: ApiProject[] = [
     skillId: ["java"],
     graveyard: true,
   },
+  {
+    id: "15",
+    name: "Music Visualizer",
+    description:
+      "Turns an MP3 into a video of a cube bouncing to the beat. Bass sets its size, treble rounds its corners and volume controls how bright it glows.",
+    gradientColor: ["#4B8BBE", "#A855F7"],
+    gradientAngle: 45,
+    gitRepo: "",
+    skillId: ["python"],
+    graveyard: true,
+  },
 ];
