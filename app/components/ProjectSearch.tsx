@@ -10,6 +10,8 @@ interface ProjectSearchProps {
   projects: Project[];
   initialTech: string | null;
   initialSearch: string;
+  // Fade cards until hovered, for the cutting room floor
+  faded?: boolean;
 }
 
 const skillColor = (s: (typeof skills)[number]) => s.color ?? s.gradientColor?.[0] ?? "#94a3b8";
@@ -54,6 +56,7 @@ export default function ProjectSearch({
   projects,
   initialTech,
   initialSearch,
+  faded = false,
 }: ProjectSearchProps) {
   const [tech, setTech] = useState<string | null>(initialTech);
   // searchTerm drives the input; query is the debounced value used for filtering
@@ -220,18 +223,26 @@ export default function ProjectSearch({
       {filteredProjects.length > 0 ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredProjects.map((project) => (
-            <ProjectCard
+            <div
               key={project.id}
-              id={project.id}
-              name={project.name}
-              description={project.description}
-              gitRepo={project.gitRepo}
-              hasUsers={project.hasUsers}
-              playUrl={project.playUrl}
-              technologies={project.technologies}
-              activeTech={activeChip?.name}
-              onTechClick={handleTagClick}
-            />
+              className={
+                faded
+                  ? "opacity-60 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0 focus-within:opacity-100 focus-within:grayscale-0"
+                  : undefined
+              }
+            >
+              <ProjectCard
+                id={project.id}
+                name={project.name}
+                description={project.description}
+                gitRepo={project.gitRepo}
+                hasUsers={project.hasUsers}
+                playUrl={project.playUrl}
+                technologies={project.technologies}
+                activeTech={activeChip?.name}
+                onTechClick={handleTagClick}
+              />
+            </div>
           ))}
         </div>
       ) : (

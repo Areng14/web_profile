@@ -177,7 +177,7 @@ export const projects: ApiProject[] = [
     gradientColor: ["#659AD2", "#00ADD8"],
     gradientAngle: 45,
     gitRepo: "",
-    skillId: ["cpp", "go", "nextjs", "docker"],
+    skillId: ["cpp", "go", "nextjs", "docker", "claudecode"],
   },
   {
     id: "11",

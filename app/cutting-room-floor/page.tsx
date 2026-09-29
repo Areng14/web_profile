@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import ProjectCard from "../components/ProjectCard";
+import ProjectSearch from "../components/ProjectSearch";
 import TombstoneIcon from "../components/TombstoneIcon";
 import { fetchProjectsForDisplay } from "../lib/data";
 
@@ -9,7 +9,12 @@ export const metadata: Metadata = {
   description: "Older projects that were finished, replaced or left behind",
 };
 
-export default async function Graveyard() {
+interface CuttingRoomFloorProps {
+  searchParams: Promise<{ tech?: string; search?: string }>;
+}
+
+export default async function CuttingRoomFloor({ searchParams }: CuttingRoomFloorProps) {
+  const { tech, search } = await searchParams;
   const projects = (await fetchProjectsForDisplay()).filter((p) => p.graveyard);
 
   return (
@@ -35,25 +40,13 @@ export default async function Graveyard() {
             </p>
           </div>
 
-          {/* Faded and greyed out until hovered */}
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project) => (
-              <div
-                key={project.id}
-                className="opacity-60 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0 focus-within:opacity-100 focus-within:grayscale-0"
-              >
-                <ProjectCard
-                  id={project.id}
-                  name={project.name}
-                  description={project.description}
-                  gitRepo={project.gitRepo}
-                  hasUsers={project.hasUsers}
-                  playUrl={project.playUrl}
-                  technologies={project.technologies}
-                />
-              </div>
-            ))}
-          </div>
+          {/* Same search and filter chips as the home page, with the cards faded until hovered */}
+          <ProjectSearch
+            projects={projects}
+            initialTech={tech ?? null}
+            initialSearch={search ?? ""}
+            faded
+          />
         </div>
       </section>
     </div>
