@@ -1,13 +1,8 @@
 import { Metadata } from "next";
-import ImageSlider from "../components/ImageSlider";
 import Link from "next/link";
-
-const images: string[] = [
-  "/misc/mainslide/img5.png",
-  "/misc/mainslide/img6.png",
-  "/misc/mainslide/img7.png",
-  "/misc/mainslide/img8.png",
-];
+import CopyButton from "../components/CopyButton";
+import ImageSlider from "../components/ImageSlider";
+import { contact } from "../lib/content";
 
 export const generateMetadata = async (): Promise<Metadata> => {
   return {
@@ -16,68 +11,143 @@ export const generateMetadata = async (): Promise<Metadata> => {
   };
 };
 
+interface Method {
+  label: string;
+  value: string;
+  icon: string;
+  color: string;
+  href?: string;
+  copy?: boolean;
+}
+
+const banner = [
+  "/misc/mainslide/img5.png",
+  "/misc/mainslide/img6.png",
+  "/misc/mainslide/img7.png",
+  "/misc/mainslide/img8.png",
+];
+
+// Only the methods that are filled in
+const methods = ([
+  contact.email && {
+    label: "Email",
+    value: contact.email,
+    icon: "/misc/contact/email.svg",
+    color: "#0b70f5",
+    href: `mailto:${contact.email}`,
+  },
+  contact.discord && {
+    label: "Discord",
+    value: contact.discord,
+    icon: "/misc/contact/discord.svg",
+    color: "#5865F2",
+    copy: true,
+  },
+  contact.github && {
+    label: "GitHub",
+    value: `github.com/${contact.github}`,
+    icon: "/misc/contact/github.svg",
+    color: "#ffffff",
+    href: `https://github.com/${contact.github}`,
+  },
+] as (Method | "")[]).filter((m): m is Method => Boolean(m));
+
 export default function Contact() {
   return (
     <div className="min-h-screen">
-      {/* Hero with slider - same padding as home */}
-      <section className="relative flex h-screen min-h-[500px] w-full flex-col justify-end">
-        <ImageSlider imgs={images} />
-        <div className="relative z-10 mx-auto w-full max-w-[1600px] px-8 pb-40 pt-28 sm:px-12 sm:pb-44 sm:pt-32 lg:px-20 lg:pb-52 lg:pt-40 pointer-events-none">
-          <div className="max-w-2xl pointer-events-auto">
-            <p className="mb-2 text-sm font-medium uppercase tracking-widest text-accent/90">
-              Get in touch
-            </p>
-            <h1 className="mb-3 text-4xl font-bold leading-tight text-white drop-shadow-lg sm:text-5xl md:text-6xl">
-              Contact
-            </h1>
-            <p className="max-w-lg text-base leading-relaxed text-slate-300 drop-shadow sm:text-lg">
-              I am mainly active on Discord, and I check my email every now and then.
-              Choose whatever way is most convenient for you.
-            </p>
-          </div>
+      {/* Short banner instead of the full-screen hero */}
+      <section className="relative flex h-[40vh] min-h-[280px] w-full flex-col justify-end">
+        <ImageSlider imgs={banner} controls={false} />
+        <div className="relative z-10 mx-auto w-full max-w-2xl px-6 pb-10 sm:px-8">
+          <p className="mb-2 text-sm font-medium uppercase tracking-widest text-accent/90">
+            Get in touch
+          </p>
+          <h1 className="text-4xl font-bold text-white drop-shadow-lg sm:text-5xl">Contact</h1>
         </div>
       </section>
 
-      {/* Content */}
-      <section className="border-t border-slate-800/80 bg-slate-950/50 py-16 sm:py-20 lg:py-24">
-        <div className="mx-auto max-w-[1600px] px-6 sm:px-8 lg:px-10">
-          <div className="mx-auto max-w-2xl space-y-10">
-            <h2 className="text-2xl font-bold text-white sm:text-3xl">
-              Ways to reach me
-            </h2>
-            <div className="space-y-6 rounded-2xl border border-slate-700/80 bg-slate-800/30 p-6 sm:p-8">
-              <p className="text-slate-300">
-                You can reach out via Discord or email. I check both periodically.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <a
-                  href="https://discord.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-xl border border-slate-600 bg-slate-800/50 px-5 py-3 text-sm font-medium text-slate-200 transition hover:border-slate-500 hover:bg-slate-800/80"
-                >
-                  Discord
-                </a>
-                <a
-                  href="mailto:your@email.com"
-                  className="inline-flex items-center gap-2 rounded-xl border border-slate-600 bg-slate-800/50 px-5 py-3 text-sm font-medium text-slate-200 transition hover:border-slate-500 hover:bg-slate-800/80"
-                >
-                  Email
-                </a>
-              </div>
-              <p className="text-sm text-slate-500">
-                Prefer to browse first? Check out my{" "}
-                <Link href="/#projects" className="text-accent underline-offset-2 hover:underline">
-                  projects
-                </Link>{" "}
-                or{" "}
-                <Link href="/about" className="text-accent underline-offset-2 hover:underline">
-                  about
-                </Link>{" "}
-                page.
-              </p>
-            </div>
-          </div>
+      <section className="border-t border-white/[0.06] py-12 sm:py-16">
+        <div className="mx-auto max-w-2xl px-6 sm:px-8">
+          <p className="text-slate-400">
+            Got a project in mind or a question about something I&apos;ve built? Reach out
+            wherever&apos;s easiest.
+          </p>
+
+          <ul className="mt-8 space-y-3">
+            {methods.map((m) => {
+              const row = (
+                <>
+                  {/* Top border in the method's color, curving with the card like the other cards */}
+                  <span
+                    className="pointer-events-none absolute inset-0 rounded-[11px] border-t-[3px] transition-[clip-path] duration-300 [clip-path:inset(0_88%_0_0)] group-hover:[clip-path:inset(0)]"
+                    style={{ borderTopColor: m.color }}
+                    aria-hidden
+                  />
+                  <span
+                    className="block h-7 w-7 shrink-0"
+                    style={{
+                      backgroundColor: m.color,
+                      WebkitMask: `url("${m.icon}") center / contain no-repeat`,
+                      mask: `url("${m.icon}") center / contain no-repeat`,
+                    }}
+                    aria-hidden
+                  />
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm text-slate-500">{m.label}</span>
+                    <span className="block truncate font-medium text-white">{m.value}</span>
+                  </span>
+                </>
+              );
+              const cardClass =
+                "group relative flex items-center gap-4 overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg p-5 transition-colors duration-200 hover:border-white/20";
+
+              return (
+                <li key={m.label}>
+                  {m.href ? (
+                    <a
+                      href={m.href}
+                      target={m.href.startsWith("http") ? "_blank" : undefined}
+                      rel={m.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      className={`${cardClass} focus:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
+                    >
+                      {row}
+                      <svg
+                        className="h-5 w-5 shrink-0 -translate-x-1 text-slate-600 transition-all duration-200 group-hover:translate-x-0 group-hover:text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m-6-6l6 6-6 6" />
+                      </svg>
+                    </a>
+                  ) : (
+                    <div className={cardClass}>
+                      {row}
+                      {m.copy && (
+                        <CopyButton
+                          text={m.value}
+                          className="shrink-0 rounded-lg border border-white/10 px-3 py-1.5 text-sm font-medium text-slate-300 transition-colors hover:border-white/20 hover:text-white"
+                        />
+                      )}
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+
+          <p className="mt-10 text-sm text-slate-500">
+            Want to look around first? Check out my{" "}
+            <Link href="/#projects" className="text-accent underline-offset-2 hover:underline">
+              projects
+            </Link>{" "}
+            or the{" "}
+            <Link href="/about" className="text-accent underline-offset-2 hover:underline">
+              about
+            </Link>{" "}
+            page.
+          </p>
         </div>
       </section>
     </div>
