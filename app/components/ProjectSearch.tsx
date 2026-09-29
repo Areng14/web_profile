@@ -201,10 +201,10 @@ export default function ProjectSearch({
                 onClick={() => selectTech(chip.id)}
                 aria-pressed={active}
                 className={chipClass(active)}
-                style={{ ["--chip" as string]: chip.color }}
+                style={{ ["--chip" as string]: faded ? "rgba(255,255,255,0.35)" : chip.color }}
               >
                 <span
-                  className="block h-3.5 w-3.5"
+                  className={`block h-3.5 w-3.5 ${faded ? "grayscale" : ""}`}
                   style={{
                     backgroundColor: chip.color,
                     WebkitMask: `url("${chip.icon}") center / contain no-repeat`,
@@ -223,26 +223,19 @@ export default function ProjectSearch({
       {filteredProjects.length > 0 ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredProjects.map((project) => (
-            <div
+            <ProjectCard
               key={project.id}
-              className={
-                faded
-                  ? "opacity-60 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0 focus-within:opacity-100 focus-within:grayscale-0"
-                  : undefined
-              }
-            >
-              <ProjectCard
-                id={project.id}
-                name={project.name}
-                description={project.description}
-                gitRepo={project.gitRepo}
-                hasUsers={project.hasUsers}
-                playUrl={project.playUrl}
-                technologies={project.technologies}
-                activeTech={activeChip?.name}
-                onTechClick={handleTagClick}
-              />
-            </div>
+              id={project.id}
+              name={project.name}
+              description={project.description}
+              gitRepo={project.gitRepo}
+              hasUsers={project.hasUsers}
+              playUrl={project.playUrl}
+              technologies={project.technologies}
+              activeTech={activeChip?.name}
+              onTechClick={handleTagClick}
+              faded={faded}
+            />
           ))}
         </div>
       ) : (

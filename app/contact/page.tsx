@@ -21,10 +21,10 @@ interface Method {
 }
 
 const banner = [
-  "/misc/mainslide/img5.png",
-  "/misc/mainslide/img6.png",
-  "/misc/mainslide/img7.png",
-  "/misc/mainslide/img8.png",
+  "/misc/mainslide/img5.webp",
+  "/misc/mainslide/img6.webp",
+  "/misc/mainslide/img7.webp",
+  "/misc/mainslide/img8.webp",
 ];
 
 // Only the methods that are filled in
