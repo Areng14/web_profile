@@ -296,5 +296,6 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "",
     skillId: ["java"],
+    graveyard: true,
   },
 ];
