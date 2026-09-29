@@ -13,10 +13,10 @@ interface HomeProps {
 export default async function Home({ searchParams }: HomeProps) {
   const { tech, search } = await searchParams;
   const images = [
-    "/misc/mainslide/img1.png",
-    "/misc/mainslide/img2.png",
-    "/misc/mainslide/img3.png",
-    "/misc/mainslide/img4.png",
+    "/misc/mainslide/img1.webp",
+    "/misc/mainslide/img2.webp",
+    "/misc/mainslide/img3.webp",
+    "/misc/mainslide/img4.webp",
   ];
 
   // Per skill: projects in the main grid, and retired ones in the graveyard

@@ -40,6 +40,9 @@ interface ProjectCardProps {
     technologies?: string[];
     activeTech?: string;
     onTechClick?: (tech: string) => void;
+    // Greyed out until hovered (cutting room floor). Applied to this element, not a wrapper,
+    // so the view-transition snapshot of the card keeps the fade while it animates.
+    faded?: boolean;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
@@ -52,6 +55,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     technologies = [],
     activeTech,
     onTechClick,
+    faded = false,
 }) => {
     // A playable version wins the card's main link; otherwise the repo
     const primaryLink = playUrl
@@ -68,7 +72,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
     return (
         <div
-            className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg p-6 transition-colors duration-200 hover:border-white/20 has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-accent"
+            className={`group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg p-6 hover:border-white/20 has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-accent ${
+                faded
+                    ? "opacity-60 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0 focus-within:opacity-100 focus-within:grayscale-0"
+                    : "transition-colors duration-200"
+            }`}
             // Unique name lets filter changes animate this card to its new position
             style={{ viewTransitionName: `project-${id}` }}
         >
