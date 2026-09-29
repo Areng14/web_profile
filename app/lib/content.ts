@@ -232,6 +232,7 @@ export const projects: ApiProject[] = [
     gitRepo: "",
     skillId: ["nextjs", "go", "docker"],
     graveyard: true,
+    causeOfDeath: "Made a nice tutorial, and that's all it needed to be.",
   },
   {
     id: "1",
