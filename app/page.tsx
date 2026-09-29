@@ -153,7 +153,7 @@ export default async function Home({ searchParams }: HomeProps) {
                       projectCount={projectCounts[s.id] ?? 0}
                       graveyardCount={graveyardCounts[s.id] ?? 0}
                       techId={projectCounts[s.id] ? s.id : undefined}
-                      href={!projectCounts[s.id] && graveyardCounts[s.id] ? "/cutting-room-floor" : undefined}
+                      href={!projectCounts[s.id] && graveyardCounts[s.id] ? `/cutting-room-floor?tech=${s.id}` : undefined}
                     />
                   ))}
                 </div>
