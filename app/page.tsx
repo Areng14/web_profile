@@ -27,8 +27,9 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchProjects(),
       fetchProjectsForDisplay(),
     ]);
-    projects = displayProjects;
-    allProjects.forEach((p) =>
+    projects = displayProjects.filter((p) => !p.graveyard);
+    // Skill cards filter the main grid, so only count the projects that are in it
+    allProjects.filter((p) => !p.graveyard).forEach((p) =>
       p.skillId.forEach((id) => {
         projectCounts[id] = (projectCounts[id] ?? 0) + 1;
       })
@@ -101,6 +102,18 @@ export default async function Home({ searchParams }: HomeProps) {
             initialTech={tech ?? null}
             initialSearch={search ?? ""}
           />
+
+          <div className="mt-12 text-center">
+            <Link
+              href="/graveyard"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/[0.06] bg-card-bg px-5 py-3 text-sm font-medium text-slate-300 transition-colors hover:border-white/20 hover:text-white"
+            >
+              Look at the graveyard
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m-6-6l6 6-6 6" />
+              </svg>
+            </Link>
+          </div>
         </div>
       </section>
 

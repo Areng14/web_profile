@@ -210,6 +210,7 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "",
     skillId: ["nextjs", "go", "docker"],
+    graveyard: true,
   },
   {
     id: "1",
@@ -220,6 +221,7 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "BeePackageEditor",
     skillId: ["python"],
+    graveyard: true,
   },
   {
     id: "2",
@@ -230,6 +232,7 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "TestRunner",
     skillId: ["python", "javascript", "electron", "nodejs"],
+    graveyard: true,
   },
   {
     id: "3",
@@ -240,6 +243,7 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "blank",
     skillId: ["python"],
+    graveyard: true,
   },
   {
     id: "4",
@@ -260,6 +264,7 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "GraphIMG",
     skillId: ["python"],
+    graveyard: true,
   },
   {
     id: "6",
@@ -280,6 +285,7 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "",
     skillId: ["javascript", "electron", "nodejs"],
+    graveyard: true,
   },
   {
     id: "8",
