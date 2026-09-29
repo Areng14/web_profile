@@ -8,6 +8,13 @@ import { SkillType } from "./types";
 // an absolute URL, or a base64 data URI (e.g. "data:image/svg+xml;base64,...").
 // Use the POST /api/upload route to turn an SVG/image into a base64 data URI.
 
+// Ways to reach me, shown on the contact page. Leave a field empty to hide it.
+export const contact = {
+  email: "",
+  discord: "",
+  github: "Areng14",
+};
+
 export const skills: ApiSkill[] = [
   // Languages
   {
