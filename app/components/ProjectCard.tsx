@@ -60,6 +60,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             ? { href: repoUrl(gitRepo), label: "View repository" }
             : null;
 
+    const tagBase = "inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium";
+
     const barColors = technologies.length > 0
         ? technologies.map((tech) => skillByName[tech.toLowerCase()]?.color ?? "#475569")
         : ["#475569"];
@@ -103,33 +105,41 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     {technologies.map((tech) => {
                         const skill = skillByName[tech.toLowerCase()];
                         const active = tech === activeTech;
+                        const tagIcon = skill && (
+                            <span
+                                className="block h-3.5 w-3.5"
+                                style={{
+                                    backgroundColor: skill.color,
+                                    WebkitMask: `url("${skill.icon}") center / contain no-repeat`,
+                                    mask: `url("${skill.icon}") center / contain no-repeat`,
+                                }}
+                                aria-hidden
+                            />
+                        );
                         return (
                             <li key={tech}>
-                                {/* Sits above the card's stretched repo link so it stays clickable */}
-                                <button
-                                    type="button"
-                                    onClick={() => onTechClick?.(tech)}
-                                    title={`Show ${tech} projects`}
-                                    className={`relative z-10 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset transition-colors ${
-                                        active
-                                            ? "bg-white/[0.08] text-white ring-[var(--tag)]"
-                                            : "bg-white/[0.04] text-slate-300 ring-transparent hover:bg-white/[0.1] hover:text-white"
-                                    }`}
-                                    style={{ ["--tag" as string]: skill?.color }}
-                                >
-                                    {skill && (
-                                        <span
-                                            className="block h-3.5 w-3.5"
-                                            style={{
-                                                backgroundColor: skill.color,
-                                                WebkitMask: `url("${skill.icon}") center / contain no-repeat`,
-                                                mask: `url("${skill.icon}") center / contain no-repeat`,
-                                            }}
-                                            aria-hidden
-                                        />
-                                    )}
-                                    {tech}
-                                </button>
+                                {onTechClick ? (
+                                    // Sits above the card's stretched repo link so it stays clickable
+                                    <button
+                                        type="button"
+                                        onClick={() => onTechClick(tech)}
+                                        title={`Show ${tech} projects`}
+                                        className={`relative z-10 ${tagBase} ring-1 ring-inset transition-colors ${
+                                            active
+                                                ? "bg-white/[0.08] text-white ring-[var(--tag)]"
+                                                : "bg-white/[0.04] text-slate-300 ring-transparent hover:bg-white/[0.1] hover:text-white"
+                                        }`}
+                                        style={{ ["--tag" as string]: skill?.color }}
+                                    >
+                                        {tagIcon}
+                                        {tech}
+                                    </button>
+                                ) : (
+                                    <span className={`${tagBase} bg-white/[0.04] text-slate-300`}>
+                                        {tagIcon}
+                                        {tech}
+                                    </span>
+                                )}
                             </li>
                         );
                     })}
