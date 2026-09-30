@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { preload } from "react-dom";
 
 interface ImageSliderProps {
   imgs: string[];
@@ -16,6 +17,19 @@ export default function ImageSlider({ imgs, autoFadeInterval = 5000, controls = 
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   const getPublicPath = (path: string) => (path?.startsWith("/") ? path : `/${path || ""}`);
+
+  // First slide: high-priority preload in the document head so it's there on first paint
+  if (safeImgs[0]) preload(getPublicPath(safeImgs[0]), { as: "image", fetchPriority: "high" });
+
+  // The rest: fetch and decode after mount, so each slide is ready before it fades in
+  useEffect(() => {
+    safeImgs.slice(1).forEach((src) => {
+      const img = new window.Image();
+      img.src = getPublicPath(src);
+      img.decode?.().catch(() => {});
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [safeImgs.join("|")]);
 
   const transition = useCallback(() => {
     setFade(false);

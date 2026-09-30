@@ -1,5 +1,6 @@
 import ImageSlider from "./components/ImageSlider";
 import ProjectSearch from "./components/ProjectSearch";
+import TombstoneIcon from "./components/TombstoneIcon";
 import SkillCard from "./components/SkillCard";
 import { fetchProjects, fetchProjectsForDisplay, fetchPublicSkills } from "./lib/data";
 import { SkillType } from "./lib/types";
@@ -12,13 +13,15 @@ interface HomeProps {
 export default async function Home({ searchParams }: HomeProps) {
   const { tech, search } = await searchParams;
   const images = [
-    "/misc/mainslide/img1.png",
-    "/misc/mainslide/img2.png",
-    "/misc/mainslide/img3.png",
-    "/misc/mainslide/img4.png",
+    "/misc/mainslide/img1.webp",
+    "/misc/mainslide/img2.webp",
+    "/misc/mainslide/img3.webp",
+    "/misc/mainslide/img4.webp",
   ];
 
+  // Per skill: projects in the main grid, and retired ones in the graveyard
   const projectCounts: Record<string, number> = {};
+  const graveyardCounts: Record<string, number> = {};
   let projects: Awaited<ReturnType<typeof fetchProjectsForDisplay>> = [];
   let skillsByType: { type: SkillType; title: string; skills: Awaited<ReturnType<typeof fetchPublicSkills>> }[] = [];
   try {
@@ -27,12 +30,13 @@ export default async function Home({ searchParams }: HomeProps) {
       fetchProjects(),
       fetchProjectsForDisplay(),
     ]);
-    projects = displayProjects;
-    allProjects.forEach((p) =>
+    projects = displayProjects.filter((p) => !p.graveyard);
+    allProjects.forEach((p) => {
+      const counts = p.graveyard ? graveyardCounts : projectCounts;
       p.skillId.forEach((id) => {
-        projectCounts[id] = (projectCounts[id] ?? 0) + 1;
-      })
-    );
+        counts[id] = (counts[id] ?? 0) + 1;
+      });
+    });
     const order = [SkillType.Lang, SkillType.Framework, SkillType.Tools, SkillType.DesignTools];
     const titles: Record<SkillType, string> = {
       [SkillType.Lang]: "Languages",
@@ -101,6 +105,16 @@ export default async function Home({ searchParams }: HomeProps) {
             initialTech={tech ?? null}
             initialSearch={search ?? ""}
           />
+
+          <div className="mt-12 text-center">
+            <Link
+              href="/cutting-room-floor"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/[0.06] bg-card-bg px-5 py-3 text-sm font-medium text-slate-300 transition-colors hover:border-white/20 hover:text-white"
+            >
+              <TombstoneIcon className="h-4 w-4" />
+              Browse the cutting room floor
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -137,7 +151,9 @@ export default async function Home({ searchParams }: HomeProps) {
                       description={s.description}
                       icon={s.icon}
                       projectCount={projectCounts[s.id] ?? 0}
+                      graveyardCount={graveyardCounts[s.id] ?? 0}
                       techId={projectCounts[s.id] ? s.id : undefined}
+                      href={!projectCounts[s.id] && graveyardCounts[s.id] ? `/cutting-room-floor?tech=${s.id}` : undefined}
                     />
                   ))}
                 </div>
