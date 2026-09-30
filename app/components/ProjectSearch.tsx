@@ -10,6 +10,8 @@ interface ProjectSearchProps {
   projects: Project[];
   initialTech: string | null;
   initialSearch: string;
+  // Fade cards until hovered, for the cutting room floor
+  faded?: boolean;
 }
 
 const skillColor = (s: (typeof skills)[number]) => s.color ?? s.gradientColor?.[0] ?? "#94a3b8";
@@ -54,6 +56,7 @@ export default function ProjectSearch({
   projects,
   initialTech,
   initialSearch,
+  faded = false,
 }: ProjectSearchProps) {
   const [tech, setTech] = useState<string | null>(initialTech);
   // searchTerm drives the input; query is the debounced value used for filtering
@@ -198,10 +201,10 @@ export default function ProjectSearch({
                 onClick={() => selectTech(chip.id)}
                 aria-pressed={active}
                 className={chipClass(active)}
-                style={{ ["--chip" as string]: chip.color }}
+                style={{ ["--chip" as string]: faded ? "rgba(255,255,255,0.35)" : chip.color }}
               >
                 <span
-                  className="block h-3.5 w-3.5"
+                  className={`block h-3.5 w-3.5 ${faded ? "grayscale" : ""}`}
                   style={{
                     backgroundColor: chip.color,
                     WebkitMask: `url("${chip.icon}") center / contain no-repeat`,
@@ -231,6 +234,8 @@ export default function ProjectSearch({
               technologies={project.technologies}
               activeTech={activeChip?.name}
               onTechClick={handleTagClick}
+              faded={faded}
+              causeOfDeath={project.causeOfDeath}
             />
           ))}
         </div>

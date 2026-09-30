@@ -11,6 +11,10 @@ export interface ApiProject {
   hasUsers?: boolean;
   // Link to a playable/live version hosted on this site, e.g. "/games/td"
   playUrl?: string;
+  // Finished, replaced or abandoned; shown in the graveyard instead of the main grid
+  graveyard?: boolean;
+  // Why a graveyard project ended, shown on its card
+  causeOfDeath?: string;
 }
 
 // Matches API skill type
@@ -44,6 +48,8 @@ export interface Project {
   gitRepo?: string;
   hasUsers?: boolean;
   playUrl?: string;
+  graveyard?: boolean;
+  causeOfDeath?: string;
   technologies: string[];
 }
 
@@ -57,6 +63,8 @@ export function apiProjectToProject(api: ApiProject, skillIdToName: Record<strin
     gitRepo: api.gitRepo || undefined,
     hasUsers: api.hasUsers,
     playUrl: api.playUrl,
+    graveyard: api.graveyard,
+    causeOfDeath: api.causeOfDeath,
     technologies: (api.skillId ?? []).map((id) => skillIdToName[id] || id),
   };
 }

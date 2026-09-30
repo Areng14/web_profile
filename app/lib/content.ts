@@ -54,11 +54,22 @@ export const skills: ApiSkill[] = [
     id: "go",
     skillName: "Go",
     description:
-      "Backend services. The bank app's REST API runs on Go Fiber with JWT auth.",
+      "Backend services on Go Fiber: SmartLung's multi-tenant health API and the bank app's REST API.",
     color: "#00ADD8",
     gradientColor: ["#00ADD8", "#007D9C"],
     gradientAngle: 45,
     icon: "/misc/skills/go.svg",
+    skillType: SkillType.Lang,
+  },
+  {
+    id: "cpp",
+    skillName: "C++",
+    description:
+      "Embedded firmware: SmartLung's ESP32-S3 touchscreen UI in LVGL and its I²C sensor drivers.",
+    color: "#659AD2",
+    gradientColor: ["#659AD2", "#00599C"],
+    gradientAngle: 45,
+    icon: "/misc/skills/cplusplus.svg",
     skillType: SkillType.Lang,
   },
   {
@@ -100,7 +111,7 @@ export const skills: ApiSkill[] = [
     id: "nextjs",
     skillName: "Next.js",
     description:
-      "React and TypeScript on the web: this site and the bank app's dashboard.",
+      "React and TypeScript on the web: this site and SmartLung's clinician dashboard.",
     color: "#FFFFFF",
     gradientColor: ["#444444", "#000000"],
     gradientAngle: 45,
@@ -113,7 +124,7 @@ export const skills: ApiSkill[] = [
     id: "docker",
     skillName: "Docker",
     description:
-      "Multi-stage images running as a non-root user, built and shipped to a VPS by GitHub Actions on every push.",
+      "Small multi-stage images, like SmartLung's ~8 MB API, and automated deploys to a VPS with GitHub Actions.",
     color: "#2496ED",
     gradientColor: ["#2496ED", "#1D63ED"],
     gradientAngle: 45,
@@ -157,6 +168,16 @@ export const projects: ApiProject[] = [
     gitRepo: "BeemodTools/BeePEE",
     skillId: ["electron", "javascript", "nodejs", "python", "java"],
     hasUsers: true,
+  },
+  {
+    id: "16",
+    name: "SmartLung",
+    description:
+      "A breathing trainer for elderly patients: an ESP32 touchscreen device reading real pressure and pulse-ox sensors, a Go API that verifies each device by its signature, and a Next.js dashboard for clinicians.",
+    gradientColor: ["#659AD2", "#00ADD8"],
+    gradientAngle: 45,
+    gitRepo: "",
+    skillId: ["cpp", "go", "nextjs", "docker", "claudecode"],
   },
   {
     id: "11",
@@ -210,16 +231,20 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "",
     skillId: ["nextjs", "go", "docker"],
+    graveyard: true,
+    causeOfDeath: "Made a nice tutorial, and that's all it needed to be.",
   },
   {
     id: "1",
     name: "BPE",
     description:
-      "The original Python editor for BEEmod item packages, with plugin support in v3. Now deprecated and replaced by BeePEE.",
+      "The original Python editor for BEEmod item packages, with plugin support in v3.",
     gradientColor: ["rgb(217, 211, 43)", "rgb(216, 141, 94)"],
     gradientAngle: 45,
     gitRepo: "BeePackageEditor",
     skillId: ["python"],
+    graveyard: true,
+    causeOfDeath: "Replaced by BeePEE, a full rewrite.",
   },
   {
     id: "2",
@@ -230,6 +255,8 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "TestRunner",
     skillId: ["python", "javascript", "electron", "nodejs"],
+    graveyard: true,
+    causeOfDeath: "Grading season ended.",
   },
   {
     id: "3",
@@ -240,6 +267,8 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "blank",
     skillId: ["python"],
+    graveyard: true,
+    causeOfDeath: "Turned out to make files larger, not smaller.",
   },
   {
     id: "4",
@@ -260,6 +289,8 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "GraphIMG",
     skillId: ["python"],
+    graveyard: true,
+    causeOfDeath: "Desmos and SVG already do this, and better.",
   },
   {
     id: "6",
@@ -280,6 +311,8 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "",
     skillId: ["javascript", "electron", "nodejs"],
+    graveyard: true,
+    causeOfDeath: "Discord exists, and the motivation didn't.",
   },
   {
     id: "8",
@@ -290,5 +323,31 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "",
     skillId: ["java"],
+    graveyard: true,
+    causeOfDeath: "Ran out of motivation.",
+  },
+  {
+    id: "15",
+    name: "Music Visualizer",
+    description:
+      "Turns an MP3 into a video of a cube bouncing to the beat. Bass sets its size, treble rounds its corners and volume controls how bright it glows.",
+    gradientColor: ["#4B8BBE", "#A855F7"],
+    gradientAngle: 45,
+    gitRepo: "",
+    skillId: ["python"],
+    graveyard: true,
+    causeOfDeath: "Never found a real use for it.",
+  },
+  {
+    id: "17",
+    name: "Chaos Encryptor",
+    description:
+      "A toy cipher that pads a message with random characters at prime positions, then shifts, reverses and XORs it over key-driven rounds before shuffling the result. It decrypts every message before handing it over to prove it round-trips.",
+    gradientColor: ["#4B8BBE", "#10B981"],
+    gradientAngle: 45,
+    gitRepo: "",
+    skillId: ["python"],
+    graveyard: true,
+    causeOfDeath: "Used on one project, then lost its charm.",
   },
 ];

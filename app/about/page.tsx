@@ -3,10 +3,10 @@ import Link from "next/link";
 import ImageSlider from "../components/ImageSlider";
 
 const images: string[] = [
-  "/misc/mainslide/img5.png",
-  "/misc/mainslide/img6.png",
-  "/misc/mainslide/img7.png",
-  "/misc/mainslide/img8.png",
+  "/misc/mainslide/img5.webp",
+  "/misc/mainslide/img6.webp",
+  "/misc/mainslide/img7.webp",
+  "/misc/mainslide/img8.webp",
 ];
 
 export const generateMetadata = async (): Promise<Metadata> => {
