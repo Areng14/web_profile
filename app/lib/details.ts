@@ -9,10 +9,17 @@ export interface ProjectSection {
   body: (string | string[])[];
 }
 
+export interface ProjectImage {
+  src: string;
+  alt: string;
+}
+
 export interface ProjectDetails {
-  // Quick facts shown as a row of stat tiles
+  // Screenshots shown in the right-hand column; the first is the largest
+  images?: ProjectImage[];
+  // Quick facts shown as stat tiles
   stats?: { label: string; value: string }[];
-  sections: ProjectSection[];
+  sections?: ProjectSection[];
   // Full stack, beyond the skill tags
   tech?: string[];
 }
@@ -239,6 +246,11 @@ export const projectDetails: Record<string, ProjectDetails> = {
 
   // Railway Signalling Sim
   "13": {
+    images: [
+      { src: "/misc/projects/signalling-desk.webp", alt: "The Chattanooga desk mid-shift, with routes set and the timetable alongside" },
+      { src: "/games/signalling/guide/network-map.jpg", alt: "Network map of the fictional Chattanooga railway" },
+      { src: "/misc/projects/signalling-shift.webp", alt: "Picking a desk and conditions for a new shift" },
+    ],
     stats: [
       { label: "Zones", value: "8" },
       { label: "Rule book", value: "20 pages" },
@@ -286,6 +298,11 @@ export const projectDetails: Record<string, ProjectDetails> = {
 
   // Tower Defense
   "14": {
+    images: [
+      { src: "/misc/projects/td-wave.webp", alt: "Wave 1 under way on the spiral route" },
+      { src: "/misc/projects/td-towers.webp", alt: "Choosing the ten towers to bring into a run" },
+      { src: "/misc/projects/td-routes.webp", alt: "The route chooser, with board stats and difficulty" },
+    ],
     stats: [
       { label: "Towers", value: "20" },
       { label: "Enemy types", value: "28" },
@@ -341,5 +358,25 @@ export const projectDetails: Record<string, ProjectDetails> = {
       },
     ],
     tech: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Go Fiber", "JWT", "Docker", "GitHub Actions"],
+  },
+
+  // BPE
+  "1": { images: [{ src: "/misc/projects/bpe.webp", alt: "BPE's item select window, item commands and signage picker" }] },
+
+  // TR
+  "2": { images: [{ src: "/misc/projects/tr.webp", alt: "TestRunner grading four student scripts" }] },
+
+  // SCR ATO
+  "4": { images: [{ src: "/misc/projects/scr-ato.webp", alt: "A train in Stepford County Railway" }] },
+
+  // Graph IMG
+  "5": { images: [{ src: "/misc/projects/graph-img.webp", alt: "A Graph IMG source file drawing waves, an island and a palm tree with inequalities" }] },
+
+  // Website
+  "6": {
+    images: [
+      { src: "/misc/projects/website-home.webp", alt: "This site's home page" },
+      { src: "/misc/projects/website-projects.webp", alt: "The projects grid with tech filter chips" },
+    ],
   },
 };
