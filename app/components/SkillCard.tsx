@@ -28,6 +28,8 @@ const SkillCard: React.FC<SkillCardProps> = ({
   href,
 }) => {
   const clickable = Boolean(techId || href);
+  // Only retired projects use this skill: on hover the accent drains to gray
+  const retired = projectCount === 0 && graveyardCount > 0;
   const imageSrc = !icon
     ? null
     : icon.startsWith("http") || icon.startsWith("data:") || icon.startsWith("/")
@@ -47,14 +49,15 @@ const SkillCard: React.FC<SkillCardProps> = ({
   const content = (
     <div
       className={`relative flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg p-5 transition-colors duration-200 ${
-        clickable ? "group hover:border-[var(--skill)]" : ""
+        clickable ? `group ${retired ? "hover:border-slate-500" : "hover:border-[var(--skill)]"}` : ""
       }`}
       style={{ ["--skill" as string]: color }}
     >
       {/* Accent bar drawn as a top border so it curves with the card's corners; revealed on hover */}
       <span
-        className="pointer-events-none absolute inset-0 rounded-[11px] border-t-[3px] transition-[clip-path] duration-300 [clip-path:inset(0_88%_0_0)] group-hover:[clip-path:inset(0)]"
-        style={{ borderTopColor: color }}
+        className={`pointer-events-none absolute inset-0 rounded-[11px] border-t-[3px] border-t-[var(--skill)] transition-[clip-path,border-color] duration-300 [clip-path:inset(0_88%_0_0)] group-hover:[clip-path:inset(0)] ${
+          retired ? "group-hover:border-t-slate-500" : ""
+        }`}
         aria-hidden
       />
 

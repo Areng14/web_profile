@@ -43,7 +43,7 @@ export const skills: ApiSkill[] = [
     id: "java",
     skillName: "Java",
     description:
-      "Game logic for a Minecraft minigames server, plus wiring VMF2OBJ into BeePEE's model pipeline.",
+      "Game logic for a Minecraft minigames server: KitPVP Duels and Extreme Hide and Seek.",
     color: "#E76F00",
     gradientColor: ["#E76F00", "#B07219"],
     gradientAngle: 45,
