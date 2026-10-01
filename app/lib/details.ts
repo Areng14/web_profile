@@ -75,6 +75,11 @@ export const projectDetails: Record<string, ProjectDetails> = {
 
   // SmartLung
   "16": {
+    images: [
+      { src: "/misc/projects/smartlung-device.webp", alt: "The SmartLung device, its touchscreen showing today's training session" },
+      { src: "/misc/projects/smartlung-patients.webp", alt: "Clinician dashboard: the patient caseload with adherence and status" },
+      { src: "/misc/projects/smartlung-devices.webp", alt: "Clinician dashboard: paired devices by hardware UUID" },
+    ],
     sections: [
       {
         body: [
