@@ -67,7 +67,7 @@ export default async function Home({ searchParams }: HomeProps) {
               Areng
             </h1>
             <p className="mb-8 max-w-lg text-base leading-relaxed text-slate-300 drop-shadow sm:text-lg">
-              I build tools and apps in my free time—from the small and quirky to the genuinely useful.
+              I build tools and apps in my free time, from the small and quirky to the genuinely useful.
               Clean code and readable projects matter to me.
             </p>
             <div className="flex flex-wrap gap-3">

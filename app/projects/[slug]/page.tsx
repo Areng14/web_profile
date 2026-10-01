@@ -42,7 +42,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   // The same facts for every project, so pages are easy to compare
   const facts = [
     { label: "Type", value: project.kind ?? "Project" },
-    { label: "Platform", value: project.platform ?? "—" },
+    { label: "Platform", value: project.platform ?? "Unknown" },
     {
       label: "Status",
       value: project.graveyard

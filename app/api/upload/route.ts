@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 // Serverless route handler (runs as a serverless function on Vercel).
 //
 // Turns an uploaded SVG/image into a base64 data URI you can paste straight
-// into app/lib/content.ts as a skill icon. No backend or storage required —
+// into app/lib/content.ts as a skill icon. No backend or storage required:
 // the file is encoded in-memory and returned in the response.
 //
 // Usage:
