@@ -38,9 +38,20 @@ export interface ApiSkill {
   description?: string;
 }
 
+// gitRepo can be a full URL, "owner/repo", or just a repo name under my account
+export const repoUrl = (gitRepo: string) =>
+  gitRepo.startsWith("http")
+    ? gitRepo
+    : `https://github.com/${gitRepo.includes("/") ? gitRepo : `areng14/${gitRepo}`}`;
+
+// URL-safe name for a project's page, e.g. "Railway Signalling Sim" -> "railway-signalling-sim"
+export const projectSlug = (name: string) =>
+  name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
 // Display shape used by frontend components
 export interface Project {
   id: string;
+  slug: string;
   name: string;
   description: string;
   gradientColors: string[];
@@ -56,6 +67,7 @@ export interface Project {
 export function apiProjectToProject(api: ApiProject, skillIdToName: Record<string, string>): Project {
   return {
     id: api.id,
+    slug: projectSlug(api.name),
     name: api.name,
     description: api.description,
     gradientColors: api.gradientColor ?? [],
