@@ -43,7 +43,16 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const facts = [
     { label: "Type", value: project.kind ?? "Project" },
     { label: "Platform", value: project.platform ?? "—" },
-    { label: "Status", value: project.graveyard ? "Retired" : project.hasUsers ? "In use" : "Active" },
+    {
+      label: "Status",
+      value: project.graveyard
+        ? "Retired"
+        : project.prototype
+          ? "Prototype"
+          : project.hasUsers
+            ? "In use"
+            : "Active",
+    },
     { label: "Source", value: project.gitRepo ? "Open source" : "Private" },
   ];
   // Full stack where written up, otherwise the skill tags
