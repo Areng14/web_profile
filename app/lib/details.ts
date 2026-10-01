@@ -45,7 +45,7 @@ export const projectDetails: Record<string, ProjectDetails> = {
       {
         title: "The model pipeline",
         body: [
-          "The hardest part was the custom model pipeline. One \"Make Model\" button takes a level instance (VMF) and turns it into a real game model, chaining Java, Python and Valve's own compiler:",
+          "The hardest part was the custom model pipeline. One \"Make Model\" button takes a level instance (VMF) and turns it into a real game model, chaining Python and Valve's own compiler:",
           [
             "merges the instances and converts them to OBJ",
             "optionally cartoonifies the textures with OpenCV",
@@ -78,7 +78,6 @@ export const projectDetails: Record<string, ProjectDetails> = {
       "Vite",
       "Node.js",
       "Python (OpenCV, PyAssimp, srctools)",
-      "Java (VMF2OBJ)",
       "Source SDK studiomdl",
       "Jest",
     ],
