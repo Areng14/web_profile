@@ -148,7 +148,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         {/* Right column: screenshots, then quick facts. Sticky on wide screens; on phones it
             sits between the header and the writeup. */}
         <aside className="space-y-6 lg:sticky lg:top-24 lg:row-span-2 lg:self-start">
-          {images.length > 0 && (
+          {images.length > 0 ? (
             // First screenshot large, the rest as a two-up grid underneath
             <div className="grid grid-cols-2 gap-3">
               {images.map((img, i) => (
@@ -171,6 +171,16 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   />
                 </a>
               ))}
+            </div>
+          ) : (
+            // Placeholder so the column isn't just empty
+            <div className="flex aspect-video flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-white/10 text-slate-500">
+              <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                <rect x="3" y="4" width="18" height="16" rx="2" strokeWidth={1.5} />
+                <circle cx="8.5" cy="9.5" r="1.5" strokeWidth={1.5} />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="m21 16-5-5-9 9" />
+              </svg>
+              <p className="text-sm">No screenshots yet</p>
             </div>
           )}
 
