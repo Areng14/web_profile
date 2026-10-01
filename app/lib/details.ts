@@ -144,6 +144,11 @@ export const projectDetails: Record<string, ProjectDetails> = {
 
   // BeeBOT
   "11": {
+    images: [
+      { src: "/misc/projects/beebot-auto-blocked.webp", alt: "A crypto scam image auto-blocked at 100% confidence, with a one-time bypass button" },
+      { src: "/misc/projects/beebot-crash-report.webp", alt: "A BeePEE crash report triaged into a forum post: tagged, written up and filed with system info" },
+      { src: "/misc/projects/beebot-scam-confirmed.webp", alt: "A scam confirmed by a moderator, with GPT's reasoning attached" },
+    ],
     sections: [
       {
         body: [
