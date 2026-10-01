@@ -3,6 +3,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { ProjectImage } from "../lib/details";
 
+// How many screenshots show on the page (one large plus a 2x2 grid); the rest are
+// reachable in the viewer, with a "+N" on the last visible thumbnail.
+const MAX_VISIBLE = 5;
+
 // Project screenshots: the first large, the rest two-up underneath. Clicking one
 // opens a full-screen viewer (a modal <dialog>) with arrow keys, Esc and a counter.
 export default function ImageGallery({ images }: { images: ProjectImage[] }) {
@@ -39,33 +43,42 @@ export default function ImageGallery({ images }: { images: ProjectImage[] }) {
   }, [index]);
 
   const current = index === null ? null : images[index];
+  const hidden = images.length - MAX_VISIBLE;
   const navButton =
     "absolute top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur-sm transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60";
 
   return (
     <>
       <div className="grid grid-cols-2 gap-3">
-        {images.map((img, i) => (
-          <button
-            key={img.src}
-            type="button"
-            onClick={() => open(i)}
-            title="View larger"
-            className={`group/img relative block cursor-zoom-in overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg transition-colors hover:border-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
-              i === 0 ? "col-span-2" : ""
-            }`}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={img.src}
-              alt={img.alt}
-              loading={i === 0 ? "eager" : "lazy"}
-              className={`w-full transition-transform duration-300 group-hover/img:scale-[1.02] ${
-                i === 0 ? "h-auto" : "aspect-[16/10] object-cover"
+        {images.slice(0, MAX_VISIBLE).map((img, i) => {
+          const showMore = hidden > 0 && i === MAX_VISIBLE - 1;
+          return (
+            <button
+              key={img.src}
+              type="button"
+              onClick={() => open(i)}
+              title={showMore ? `View all ${images.length} screenshots` : "View larger"}
+              className={`group/img relative block cursor-zoom-in overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg transition-colors hover:border-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                i === 0 ? "col-span-2" : ""
               }`}
-            />
-          </button>
-        ))}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={img.src}
+                alt={img.alt}
+                loading={i === 0 ? "eager" : "lazy"}
+                className={`w-full transition-transform duration-300 group-hover/img:scale-[1.02] ${
+                  i === 0 ? "h-auto" : "aspect-[16/10] object-cover"
+                }`}
+              />
+              {showMore && (
+                <span className="absolute inset-0 flex items-center justify-center bg-black/60 text-2xl font-semibold text-white transition-colors group-hover/img:bg-black/50">
+                  +{hidden}
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
       <dialog
