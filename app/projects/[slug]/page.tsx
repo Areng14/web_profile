@@ -38,16 +38,20 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const colorOf = (s: (typeof skills)[number]) => s.color ?? s.gradientColor?.[0] ?? "#94a3b8";
 
   const images = details?.images ?? [];
-  const hasAside = images.length > 0 || Boolean(details?.stats || details?.tech);
+  // The same facts for every project, so pages are easy to compare
+  const facts = [
+    { label: "Type", value: project.kind ?? "Project" },
+    { label: "Platform", value: project.platform ?? "—" },
+    { label: "Status", value: project.graveyard ? "Retired" : project.hasUsers ? "In use" : "Active" },
+    { label: "Source", value: project.gitRepo ? "Open source" : "Private" },
+  ];
+  // Full stack where written up, otherwise the skill tags
+  const builtWith = details?.tech ?? project.technologies;
 
   return (
     <div className="min-h-screen">
       <article
-        className={`mx-auto px-6 py-16 sm:px-8 sm:py-20 ${
-          hasAside
-            ? "grid max-w-6xl gap-x-12 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:grid-rows-[auto_1fr]"
-            : "max-w-3xl"
-        }`}
+        className="mx-auto grid max-w-6xl gap-x-12 gap-y-10 px-6 py-16 sm:px-8 sm:py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:grid-rows-[auto_1fr]"
       >
         {/* Left column, top: title, summary, links and tags */}
         <header>
@@ -143,62 +147,58 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
         {/* Right column: screenshots, then quick facts. Sticky on wide screens; on phones it
             sits between the header and the writeup. */}
-        {hasAside && (
-          <aside className="space-y-6 lg:sticky lg:top-24 lg:row-span-2 lg:self-start">
-            {images.length > 0 && (
-              // First screenshot large, the rest as a two-up grid underneath
-              <div className="grid grid-cols-2 gap-3">
-                {images.map((img, i) => (
-                  <a
-                    key={img.src}
-                    href={img.src}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Open full size"
-                    className={`block overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg transition-colors hover:border-white/20 ${
-                      i === 0 ? "col-span-2" : ""
-                    }`}
+        <aside className="space-y-6 lg:sticky lg:top-24 lg:row-span-2 lg:self-start">
+          {images.length > 0 && (
+            // First screenshot large, the rest as a two-up grid underneath
+            <div className="grid grid-cols-2 gap-3">
+              {images.map((img, i) => (
+                <a
+                  key={img.src}
+                  href={img.src}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Open full size"
+                  className={`block overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg transition-colors hover:border-white/20 ${
+                    i === 0 ? "col-span-2" : ""
+                  }`}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    loading={i === 0 ? "eager" : "lazy"}
+                    className={`w-full ${i === 0 ? "h-auto" : "aspect-[16/10] object-cover"}`}
+                  />
+                </a>
+              ))}
+            </div>
+          )}
+
+          <dl className="grid grid-cols-2 gap-3">
+            {facts.map((fact) => (
+              <div key={fact.label} className="rounded-xl border border-white/[0.06] bg-card-bg p-4">
+                <dt className="text-xs uppercase tracking-wider text-slate-500">{fact.label}</dt>
+                <dd className="mt-1 font-semibold text-white">{fact.value}</dd>
+              </div>
+            ))}
+          </dl>
+
+          {builtWith.length > 0 && (
+            <div>
+              <h2 className="mb-3 text-sm font-medium uppercase tracking-widest text-slate-400">Built with</h2>
+              <ul className="flex flex-wrap gap-2">
+                {builtWith.map((t) => (
+                  <li
+                    key={t}
+                    className="rounded-md border border-white/[0.06] bg-card-bg px-2.5 py-1 text-sm text-slate-300"
                   >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={img.src}
-                      alt={img.alt}
-                      loading={i === 0 ? "eager" : "lazy"}
-                      className={`w-full ${i === 0 ? "h-auto" : "aspect-[16/10] object-cover"}`}
-                    />
-                  </a>
+                    {t}
+                  </li>
                 ))}
-              </div>
-            )}
-
-            {details?.stats && (
-              <dl className="grid grid-cols-2 gap-3">
-                {details.stats.map((stat) => (
-                  <div key={stat.label} className="rounded-xl border border-white/[0.06] bg-card-bg p-4">
-                    <dt className="text-xs uppercase tracking-wider text-slate-500">{stat.label}</dt>
-                    <dd className="mt-1 font-semibold text-white">{stat.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            )}
-
-            {details?.tech && (
-              <div>
-                <h2 className="mb-3 text-sm font-medium uppercase tracking-widest text-slate-400">Built with</h2>
-                <ul className="flex flex-wrap gap-2">
-                  {details.tech.map((t) => (
-                    <li
-                      key={t}
-                      className="rounded-md border border-white/[0.06] bg-card-bg px-2.5 py-1 text-sm text-slate-300"
-                    >
-                      {t}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </aside>
-        )}
+              </ul>
+            </div>
+          )}
+        </aside>
 
         {/* Left column, below the header: the writeup */}
         {details?.sections && (
