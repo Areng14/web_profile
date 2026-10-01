@@ -94,6 +94,7 @@ export const projectDetails: Record<string, ProjectDetails> = {
       {
         body: [
           "SmartLung is a full-stack IoT health platform for respiratory muscle training in elderly patients, made of three parts: a touchscreen device for the patient, a Go backend, and a dashboard for clinicians.",
+          "I built it for WICO 2026, so it's a proof of concept: a working prototype of the whole system, not something deployed with real patients.",
         ],
       },
       {

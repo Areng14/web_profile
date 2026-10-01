@@ -177,7 +177,7 @@ export const projects: ApiProject[] = [
     kind: "IoT platform",
     platform: "ESP32 · Web",
     description:
-      "A breathing trainer for elderly patients: an ESP32 touchscreen device reading real pressure and pulse-ox sensors, a Go API that verifies each device by its signature, and a Next.js dashboard for clinicians.",
+      "A proof-of-concept breathing trainer for elderly patients, built for WICO 2026: an ESP32 touchscreen device reading real pressure and pulse-ox sensors, a Go API that verifies each device by its signature, and a Next.js dashboard for clinicians.",
     gradientColor: ["#659AD2", "#00ADD8"],
     gradientAngle: 45,
     gitRepo: "",
