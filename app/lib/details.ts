@@ -182,6 +182,12 @@ export const projectDetails: Record<string, ProjectDetails> = {
 
   // AlgebraLoop
   "12": {
+    images: [
+      { src: "/misc/projects/algebraloop-calculator.webp", alt: "A trapezoid area problem with the built-in calculator open beside it" },
+      { src: "/misc/projects/algebraloop-graph.webp", alt: "Reading a system of equations' solution off a generated graph" },
+      { src: "/misc/projects/algebraloop-limit.webp", alt: "A limit problem rendered with KaTeX, with the answer toolbar" },
+      { src: "/misc/projects/algebraloop-courses.webp", alt: "The Algebra 2 course: 14 units plus mixed loop practice" },
+    ],
     sections: [
       {
         body: [
