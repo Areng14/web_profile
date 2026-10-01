@@ -17,8 +17,6 @@ export interface ProjectImage {
 export interface ProjectDetails {
   // Screenshots shown in the right-hand column; the first is the largest
   images?: ProjectImage[];
-  // Quick facts shown as stat tiles
-  stats?: { label: string; value: string }[];
   sections?: ProjectSection[];
   // Full stack, beyond the skill tags
   tech?: string[];
@@ -27,15 +25,10 @@ export interface ProjectDetails {
 export const projectDetails: Record<string, ProjectDetails> = {
   // BeePEE
   "9": {
-    stats: [
-      { label: "Lines of code", value: "~50k" },
-      { label: "Version", value: "1.1" },
-      { label: "Ships on", value: "Windows · Linux" },
-    ],
     sections: [
       {
         body: [
-          "BeePEE is an Electron + React app for making BEEmod packages, which are mods that add new items to Portal 2's Puzzle Maker. It's a full rewrite of the older BPE editor, merged with BeePKG's features.",
+          "BeePEE is an Electron + React app for making BEEmod packages, which are mods that add new items to Portal 2's Puzzle Maker. It's a full rewrite of the older BPE editor, merged with BeePKG's features, at about 50k lines and on v1.1.",
         ],
       },
       {
@@ -82,11 +75,6 @@ export const projectDetails: Record<string, ProjectDetails> = {
 
   // SmartLung
   "16": {
-    stats: [
-      { label: "Parts", value: "Device · API · Dashboard" },
-      { label: "Device auth", value: "ECDSA P-256" },
-      { label: "API image", value: "~8 MB" },
-    ],
     sections: [
       {
         body: [
@@ -140,15 +128,10 @@ export const projectDetails: Record<string, ProjectDetails> = {
 
   // BeeBOT
   "11": {
-    stats: [
-      { label: "Lines of Python", value: "~12k" },
-      { label: "Scam model accuracy", value: "97.9%" },
-      { label: "F1 score", value: "0.979" },
-    ],
     sections: [
       {
         body: [
-          "BeeBOT runs the BeemodTools Discord server and has two main jobs: catching scams and triaging BeePEE's crash reports. It's running on a live server.",
+          "BeeBOT runs the BeemodTools Discord server and has two main jobs: catching scams and triaging BeePEE's crash reports. It's about 12k lines of Python, running on a live server.",
         ],
       },
       {
@@ -194,11 +177,6 @@ export const projectDetails: Record<string, ProjectDetails> = {
 
   // AlgebraLoop
   "12": {
-    stats: [
-      { label: "Courses", value: "9" },
-      { label: "Units", value: "~100" },
-      { label: "Backend", value: "None" },
-    ],
     sections: [
       {
         body: [
@@ -251,11 +229,6 @@ export const projectDetails: Record<string, ProjectDetails> = {
       { src: "/games/signalling/guide/network-map.jpg", alt: "Network map of the fictional Chattanooga railway" },
       { src: "/misc/projects/signalling-shift.webp", alt: "Picking a desk and conditions for a new shift" },
     ],
-    stats: [
-      { label: "Zones", value: "8" },
-      { label: "Rule book", value: "20 pages" },
-      { label: "Game engine", value: "None, plain SVG" },
-    ],
     sections: [
       {
         body: [
@@ -303,12 +276,6 @@ export const projectDetails: Record<string, ProjectDetails> = {
       { src: "/misc/projects/td-towers.webp", alt: "Choosing the ten towers to bring into a run" },
       { src: "/misc/projects/td-routes.webp", alt: "The route chooser, with board stats and difficulty" },
     ],
-    stats: [
-      { label: "Towers", value: "20" },
-      { label: "Enemy types", value: "28" },
-      { label: "Maps", value: "20" },
-      { label: "Campaign", value: "50 waves" },
-    ],
     sections: [
       {
         body: [
@@ -334,14 +301,10 @@ export const projectDetails: Record<string, ProjectDetails> = {
 
   // Bank App
   "10": {
-    stats: [
-      { label: "Lines of code", value: "~2k" },
-      { label: "Deploys", value: "Every push to main" },
-    ],
     sections: [
       {
         body: [
-          "A banking dashboard built with Next.js 16, React 19 and Tailwind, connected to a Go Fiber REST API. Users can register, log in, check their balance, deposit and withdraw, transfer money to other users by username, and search their transaction history. The Cards, Payments and Settings screens are UI only.",
+          "A banking dashboard of about 2k lines, built with Next.js 16, React 19 and Tailwind, connected to a Go Fiber REST API. Users can register, log in, check their balance, deposit and withdraw, transfer money to other users by username, and search their transaction history. The Cards, Payments and Settings screens are UI only.",
         ],
       },
       {

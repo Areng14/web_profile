@@ -7,6 +7,9 @@ export interface ApiProject {
   gradientAngle: number;
   gitRepo: string;
   skillId: string[];
+  // What it is and where it runs, shown as tiles on the project page
+  kind?: string;
+  platform?: string;
   // Marks a project that real people use; shown as an icon next to the name
   hasUsers?: boolean;
   // Link to a playable/live version hosted on this site, e.g. "/games/td"
@@ -57,6 +60,8 @@ export interface Project {
   gradientColors: string[];
   gradientAngle: number;
   gitRepo?: string;
+  kind?: string;
+  platform?: string;
   hasUsers?: boolean;
   playUrl?: string;
   graveyard?: boolean;
@@ -73,6 +78,8 @@ export function apiProjectToProject(api: ApiProject, skillIdToName: Record<strin
     gradientColors: api.gradientColor ?? [],
     gradientAngle: api.gradientAngle ?? 45,
     gitRepo: api.gitRepo || undefined,
+    kind: api.kind,
+    platform: api.platform,
     hasUsers: api.hasUsers,
     playUrl: api.playUrl,
     graveyard: api.graveyard,
