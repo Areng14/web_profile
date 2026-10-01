@@ -68,7 +68,7 @@ export default function ImageGallery({ images }: { images: ProjectImage[] }) {
                 alt={img.alt}
                 loading={i === 0 ? "eager" : "lazy"}
                 className={`w-full transition-transform duration-300 group-hover/img:scale-[1.02] ${
-                  i === 0 ? "h-auto" : "aspect-[16/10] object-cover"
+                  i === 0 ? "h-auto" : "aspect-[16/10] object-cover object-left-top"
                 }`}
               />
               {showMore && (
