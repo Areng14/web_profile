@@ -18,6 +18,8 @@ export interface ApiProject {
   graveyard?: boolean;
   // Why a graveyard project ended, shown on its card
   causeOfDeath?: string;
+  // A proof of concept (e.g. built for a competition) rather than something in real use
+  prototype?: boolean;
 }
 
 // Matches API skill type
@@ -66,6 +68,7 @@ export interface Project {
   playUrl?: string;
   graveyard?: boolean;
   causeOfDeath?: string;
+  prototype?: boolean;
   technologies: string[];
 }
 
@@ -84,6 +87,7 @@ export function apiProjectToProject(api: ApiProject, skillIdToName: Record<strin
     playUrl: api.playUrl,
     graveyard: api.graveyard,
     causeOfDeath: api.causeOfDeath,
+    prototype: api.prototype,
     technologies: (api.skillId ?? []).map((id) => skillIdToName[id] || id),
   };
 }

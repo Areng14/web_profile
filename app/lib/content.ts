@@ -182,6 +182,7 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "",
     skillId: ["cpp", "go", "nextjs", "docker", "claudecode"],
+    prototype: true,
   },
   {
     id: "18",
