@@ -168,7 +168,7 @@ export const projects: ApiProject[] = [
     gradientColor: ["#E3C83A", "#D88D5E"],
     gradientAngle: 45,
     gitRepo: "BeemodTools/BeePEE",
-    skillId: ["electron", "javascript", "nodejs", "python", "java"],
+    skillId: ["electron", "javascript", "nodejs", "python"],
     hasUsers: true,
   },
   {
