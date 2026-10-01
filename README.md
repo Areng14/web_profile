@@ -20,7 +20,7 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 ## Content (serverless)
 
-This site is fully serverless — there is no separate backend to run. All
+This site is fully serverless: there is no separate backend to run. All
 projects and skills live in [`app/lib/content.ts`](app/lib/content.ts). Edit
 that file to add or change content; the public pages read from it directly.
 

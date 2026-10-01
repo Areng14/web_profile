@@ -1618,7 +1618,7 @@ function showRouteCard(i) {
   const stat = (label, value) => "<div><dt>" + label + "</dt><dd>" + value + "</dd></div>";
   const bests = ["easy", "normal", "hard"].map((key) => {
     const best = readBest(bestKey(map, key));
-    return '<span class="' + (best ? "held" : "") + '">' + DIFFICULTIES[key].name + "<b>" + (best ? best : "—") + "</b></span>";
+    return '<span class="' + (best ? "held" : "") + '">' + DIFFICULTIES[key].name + "<b>" + (best ? best : "-") + "</b></span>";
   }).join("");
   card.innerHTML =
     '<div class="nav"><button class="btn btn-secondary step" type="button" data-step="-1" aria-label="Previous route"><svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>' +

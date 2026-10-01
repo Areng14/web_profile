@@ -509,7 +509,7 @@ export function nextUpgrade(kind, tiers, path) {
 }
 
 /**
- * What an upgrade costs at a given upkeep — the difficulty's multiplier on
+ * What an upgrade costs at a given upkeep, the difficulty's multiplier on
  * every listed upgrade price. Everything that charges for a step up or prints
  * one goes through here, so the shop, the codex and the purse never disagree.
  */

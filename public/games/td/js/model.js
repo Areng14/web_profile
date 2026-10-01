@@ -356,7 +356,7 @@ export class Simulation {
       // What the beacons lift. They never lift each other, and they do not
       // simply add up: a beacon lifts one tower by a share of what it would
       // alone, halving for each beacon already over it. One is most of the
-      // gain, a second is worth building, a fourth is worth nothing — which is
+      // gain, a second is worth building, a fourth is worth nothing, which is
       // what stops a huddle of them turning every gun on the board into two.
       if (s.damage && !s.boost) {
         const over = [];
@@ -673,7 +673,7 @@ export class Simulation {
     for (const e of this.enemies) {
       if (e.distance >= this.routeOf(e).leakAt) {
         e.dead = true;
-        // Lives lost scale with the health it still has, never below one —
+        // Lives lost scale with the health it still has, never below one,
         // except for the last boss of the campaign, which is not something a
         // road survives: reaching the door with it costs everything left.
         const lost = e.finale
@@ -874,7 +874,7 @@ export class Simulation {
       // Mints pay out once the road is clear. Yields add up; the dividend
       // does not. Only the best policy on the board pays, as only the best
       // cut of a kill does, and it pays on the gold that was in hand when the
-      // round began — otherwise each mint would earn interest on what the one
+      // round began, otherwise each mint would earn interest on what the one
       // before it had just handed over.
       const purse = this.gold;
       let banker = null;
@@ -1575,7 +1575,7 @@ export class Simulation {
     // A run saved on a board of another size has nowhere to resume: every old
     // cell may still be in bounds, with the road somewhere else entirely. A
     // save from before a snapshot carried its size cannot say which board it
-    // was built on, so it is refused the same way — the call dropOldBests()
+    // was built on, so it is refused the same way, the call dropOldBests()
     // makes for a best kept under no version.
     const { cols, rows } = sizeOf(map);
     if (snap.cols !== cols || snap.rows !== rows) throw new Error("saved on a board of another size");

@@ -2,7 +2,7 @@ import type { ApiProject, ApiSkill } from "./types";
 import { SkillType } from "./types";
 
 // Local, serverless source of truth for the site content.
-// Edit these arrays to add or change projects and skills — no backend required.
+// Edit these arrays to add or change projects and skills with no backend required.
 //
 // Skill icons may be a path under /public (e.g. "/misc/skills/python.svg"),
 // an absolute URL, or a base64 data URI (e.g. "data:image/svg+xml;base64,...").
