@@ -27,9 +27,13 @@ export const projectDetails: Record<string, ProjectDetails> = {
   "9": {
     images: [
       { src: "/misc/projects/beepee-items.webp", alt: "A package's items in BeePEE's main window" },
+      { src: "/misc/projects/beepee-model-preview.webp", alt: "Previewing an item's model in the built-in 3D viewer" },
+      { src: "/misc/projects/beepee-conditions.webp", alt: "The drag-and-drop conditions editor: a switch on cube type changing the instance per case" },
       { src: "/misc/projects/beepee-signage-designer.webp", alt: "The signage designer, layering a scared person over fire" },
       { src: "/misc/projects/beepee-item-info.webp", alt: "Editing an item's info: ID, name, author, icon and description" },
       { src: "/misc/projects/beepee-instances.webp", alt: "An item's VMF instance files" },
+      { src: "/misc/projects/beepee-io.webp", alt: "Inputs and outputs, with a warning for unnamed entities in the instance" },
+      { src: "/misc/projects/beepee-variables.webp", alt: "An item variable, cube type, used by its conditions" },
       { src: "/misc/projects/beepee-signage.webp", alt: "A package's signage" },
     ],
     sections: [
