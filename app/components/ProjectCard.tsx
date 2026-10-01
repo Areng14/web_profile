@@ -1,7 +1,9 @@
 'use client';
 
 import React from "react";
+import Link from "next/link";
 import { skills } from "../lib/content";
+import { projectSlug, repoUrl } from "../lib/types";
 
 // Look up a technology's icon + brand color from the skills list
 const skillByName: Record<string, { icon: string; color: string }> = {};
@@ -11,12 +13,6 @@ skills.forEach((s) => {
         color: s.color ?? s.gradientColor?.[0] ?? "#94a3b8",
     };
 });
-
-// gitRepo can be a full URL, "owner/repo", or just a repo name under my account
-const repoUrl = (gitRepo: string) =>
-    gitRepo.startsWith("http")
-        ? gitRepo
-        : `https://github.com/${gitRepo.includes("/") ? gitRepo : `areng14/${gitRepo}`}`;
 
 // Hard-stop gradient with one equal segment per color and a 2px gap between them
 const languageBarGradient = (colors: string[]) => {
@@ -59,13 +55,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     faded = false,
     causeOfDeath,
 }) => {
-    // A playable version wins the card's main link; otherwise the repo
-    const primaryLink = playUrl
-        ? { href: playUrl, label: "Play in browser" }
-        : gitRepo
-            ? { href: repoUrl(gitRepo), label: "View repository" }
-            : null;
-
     const tagBase = "inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium";
 
     const barColors = technologies.length > 0
@@ -162,39 +151,35 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             )}
 
             <div className={`${technologies.length > 0 ? "" : "mt-auto "}flex items-center justify-between pt-5 text-sm`}>
-                {primaryLink ? (
-                    <>
-                        {/* Stretched link: its ::after covers the whole card */}
-                        <a
-                            href={primaryLink.href}
-                            className="font-medium text-slate-300 transition-colors after:absolute after:inset-0 after:content-[''] focus:outline-none group-hover:text-white"
-                        >
-                            {primaryLink.label}
+                {/* Stretched link to the project page: its ::after covers the whole card */}
+                <Link
+                    href={`/projects/${projectSlug(name)}`}
+                    className="font-medium text-slate-300 transition-colors after:absolute after:inset-0 after:content-[''] focus:outline-none group-hover:text-white"
+                >
+                    View project
+                </Link>
+                <span className="flex items-center gap-3">
+                    {/* Sit above the stretched link so they stay clickable */}
+                    {playUrl && (
+                        <a href={playUrl} className="relative z-10 text-slate-500 transition-colors hover:text-white">
+                            Play
                         </a>
-                        <span className="flex items-center gap-3">
-                            {playUrl && gitRepo && (
-                                // Sits above the stretched link so it stays clickable
-                                <a
-                                    href={repoUrl(gitRepo)}
-                                    className="relative z-10 text-slate-500 transition-colors hover:text-white"
-                                >
-                                    Repo
-                                </a>
-                            )}
-                            <svg
-                                className="h-5 w-5 -translate-x-1 text-slate-600 transition-all duration-200 group-hover:translate-x-0 group-hover:text-white"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                aria-hidden
-                            >
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m-6-6l6 6-6 6" />
-                            </svg>
-                        </span>
-                    </>
-                ) : (
-                    <span className="text-slate-600">No public repo</span>
-                )}
+                    )}
+                    {gitRepo && (
+                        <a href={repoUrl(gitRepo)} className="relative z-10 text-slate-500 transition-colors hover:text-white">
+                            Repo
+                        </a>
+                    )}
+                    <svg
+                        className="h-5 w-5 -translate-x-1 text-slate-600 transition-all duration-200 group-hover:translate-x-0 group-hover:text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden
+                    >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14m-6-6l6 6-6 6" />
+                    </svg>
+                </span>
             </div>
         </div>
     );
