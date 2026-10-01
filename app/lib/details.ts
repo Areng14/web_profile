@@ -25,6 +25,13 @@ export interface ProjectDetails {
 export const projectDetails: Record<string, ProjectDetails> = {
   // BeePEE
   "9": {
+    images: [
+      { src: "/misc/projects/beepee-items.webp", alt: "A package's items in BeePEE's main window" },
+      { src: "/misc/projects/beepee-signage-designer.webp", alt: "The signage designer, layering a scared person over fire" },
+      { src: "/misc/projects/beepee-item-info.webp", alt: "Editing an item's info: ID, name, author, icon and description" },
+      { src: "/misc/projects/beepee-instances.webp", alt: "An item's VMF instance files" },
+      { src: "/misc/projects/beepee-signage.webp", alt: "A package's signage" },
+    ],
     sections: [
       {
         body: [
