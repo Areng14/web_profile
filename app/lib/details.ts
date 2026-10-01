@@ -342,4 +342,14 @@ export const projectDetails: Record<string, ProjectDetails> = {
       { src: "/misc/projects/website-projects.webp", alt: "The projects grid with tech filter chips" },
     ],
   },
+
+  // MC SERVER (the same shots as the home page carousel)
+  "8": {
+    images: [
+      { src: "/misc/mainslide/img2.webp", alt: "A glowing blue hall with the server's generator room" },
+      { src: "/misc/mainslide/img1.webp", alt: "A pink-lit lounge built for the server" },
+      { src: "/misc/mainslide/img3.webp", alt: "A lab corridor with green glass tanks" },
+      { src: "/misc/mainslide/img4.webp", alt: "A long white sci-fi corridor" },
+    ],
+  },
 };
