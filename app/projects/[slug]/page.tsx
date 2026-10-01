@@ -5,6 +5,7 @@ import { skills } from "../../lib/content";
 import { fetchProjectsForDisplay } from "../../lib/data";
 import { projectDetails } from "../../lib/details";
 import { repoUrl } from "../../lib/types";
+import ImageGallery from "../../components/ImageGallery";
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>;
@@ -51,7 +52,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   return (
     <div className="min-h-screen">
       <article
-        className="mx-auto grid max-w-6xl gap-x-12 gap-y-10 px-6 py-16 sm:px-8 sm:py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:grid-rows-[auto_1fr]"
+        className="mx-auto grid max-w-[1400px] gap-x-14 gap-y-10 px-6 py-16 sm:px-8 sm:py-20 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:px-10"
       >
         {/* Left column, top: title, summary, links and tags */}
         <header>
@@ -149,29 +150,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             sits between the header and the writeup. */}
         <aside className="space-y-6 lg:sticky lg:top-24 lg:row-span-2 lg:self-start">
           {images.length > 0 ? (
-            // First screenshot large, the rest as a two-up grid underneath
-            <div className="grid grid-cols-2 gap-3">
-              {images.map((img, i) => (
-                <a
-                  key={img.src}
-                  href={img.src}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title="Open full size"
-                  className={`block overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg transition-colors hover:border-white/20 ${
-                    i === 0 ? "col-span-2" : ""
-                  }`}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={img.src}
-                    alt={img.alt}
-                    loading={i === 0 ? "eager" : "lazy"}
-                    className={`w-full ${i === 0 ? "h-auto" : "aspect-[16/10] object-cover"}`}
-                  />
-                </a>
-              ))}
-            </div>
+            <ImageGallery images={images} />
           ) : (
             // Placeholder so the column isn't just empty
             <div className="flex aspect-video flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-white/10 text-slate-500">
