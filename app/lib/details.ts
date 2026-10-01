@@ -343,13 +343,17 @@ export const projectDetails: Record<string, ProjectDetails> = {
     ],
   },
 
-  // MC SERVER (the same shots as the home page carousel)
+  // MC SERVER (the same shots as the home, About and Contact banners)
   "8": {
     images: [
       { src: "/misc/mainslide/img2.webp", alt: "A glowing blue hall with the server's generator room" },
       { src: "/misc/mainslide/img1.webp", alt: "A pink-lit lounge built for the server" },
       { src: "/misc/mainslide/img3.webp", alt: "A lab corridor with green glass tanks" },
       { src: "/misc/mainslide/img4.webp", alt: "A long white sci-fi corridor" },
+      { src: "/misc/mainslide/img5.webp", alt: "A white atrium around a glowing ore pillar" },
+      { src: "/misc/mainslide/img6.webp", alt: "A neon purple lounge overlooking the map" },
+      { src: "/misc/mainslide/img7.webp", alt: "A player in red armor by a red-lit glass tower" },
+      { src: "/misc/mainslide/img8.webp", alt: "Players on a glowing blue walkway between server racks" },
     ],
   },
 };
