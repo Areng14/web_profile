@@ -141,6 +141,87 @@ export const projectDetails: Record<string, ProjectDetails> = {
     ],
   },
 
+  // Water Monitor
+  "18": {
+    sections: [
+      {
+        body: [
+          "My capstone project. Ban Nong Kae Prachasarn School is a rural school in Kanchanaburi with about 230 students and staff, and its only water comes from a well. I helped get the school a working filter system, moved its pump onto solar, and built a sensor that keeps checking the water afterward.",
+        ],
+      },
+      {
+        title: "The problem",
+        body: [
+          "On a visit I noticed rock-like mineral buildup crusted over one of the faucet pipes. The school's filter was clogged and broken, and students and teachers said the water came out cloudy with an odor. In the dry season the well runs dry and they have to pay other villagers for water.",
+          "I took a sample to Kasetsart University's lab. It came back over the limits:",
+          [
+            "Total hardness: 518 mg/L (max 500)",
+            "TDS: 786 mg/L (recommended under 600)",
+            "Fluoride: 1.0 mg/L, right at the max",
+          ],
+          "Research on rural Thai village water systems found the same pattern: filters get installed, then go unmaintained and stop working. So a new filter alone wasn't enough. The school also needed a way to keep checking its water.",
+        ],
+      },
+      {
+        title: "The fix",
+        body: [
+          "Sponsors covered the big costs: a 48,000 baht filter system, installed by Life Water Purifier, and 43,500 baht of solar panels, installed by BJC volunteers, so the well pump runs off the grid. The filter runs in four stages:",
+          [
+            "carbon for the odor",
+            "anthracite for the cloudiness",
+            "a softener for the hardness",
+            "reverse osmosis",
+          ],
+          "For the monitor itself, I ran a fundraiser selling 3D printed toys and meme shirts. It raised 19,000 baht: 10,000 went into building the monitor, and the other 9,000 became scholarships for 9 students.",
+        ],
+      },
+      {
+        title: "The monitor",
+        body: [
+          "Arduino firmware in C++ that measures pH, TDS and turbidity, and sends regular readings to the school through a Telegram bot.",
+          "Version 1 took 10 Sundays: a 3D printed shell with a probe dropped into the storage tank. It failed. Water seeped in through the print's layer lines, and it only measured the tank, not what came out of the tap.",
+          "Version 2 took another 15 Sundays. I redesigned it so water flows through the sensors continuously.",
+        ],
+      },
+      {
+        title: "Workshops",
+        body: [
+          "We ran workshops to teach 30 students how filtration works, so they could take it home to their parents. The first one flopped: we used the wrong carbon and the water came out murky. We redid it with a clear staircase filter that shows every stage.",
+        ],
+      },
+      {
+        title: "Results",
+        body: [
+          "Before is the October 2025 lab report, after is the monitor's March 2026 readings:",
+          [
+            "pH: 7.6 → 6.85, within the permissible 6.5–9.2",
+            "Turbidity: 0.3 NTU → 0% (the sensor reads a percentage, not NTU)",
+            "TDS: no valid reading from the sensor",
+            "Hardness and fluoride: the monitor doesn't measure them",
+          ],
+          "The filter worked: 230 people have filtered water, and the pump runs on solar. The monitor only partly did. In April the pH sensor read 10, most likely drift, since pH probes need regular recalibration, and the TDS sensor never gave a valid reading.",
+        ],
+      },
+      {
+        title: "What I'd do differently",
+        body: [
+          [
+            "recalibrate the sensors on a schedule",
+            "get a second lab test to properly measure how well the filter works",
+            "run the monitor on a test rig long-term before deploying it",
+          ],
+          "I'm going back in December to check on the sensor and take another lab sample.",
+        ],
+      },
+    ],
+    tech: [
+      "C++ (Arduino)",
+      "pH, TDS and turbidity sensors",
+      "Telegram Bot API",
+      "3D printing",
+    ],
+  },
+
   // BeeBOT
   "11": {
     images: [

@@ -65,7 +65,7 @@ export const skills: ApiSkill[] = [
     id: "cpp",
     skillName: "C++",
     description:
-      "Embedded firmware: SmartLung's ESP32-S3 touchscreen UI in LVGL and its I²C sensor drivers.",
+      "Embedded firmware: SmartLung's ESP32-S3 touchscreen UI and sensor drivers, and an Arduino water quality monitor.",
     color: "#659AD2",
     gradientColor: ["#659AD2", "#00599C"],
     gradientAngle: 45,
@@ -182,6 +182,19 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "",
     skillId: ["cpp", "go", "nextjs", "docker", "claudecode"],
+  },
+  {
+    id: "18",
+    name: "Water Monitor",
+    kind: "IoT device",
+    platform: "Arduino · Telegram",
+    description:
+      "Clean water for a rural school in Thailand: a sponsored filter system with a solar-powered pump, plus an Arduino monitor that reports pH, TDS and turbidity over Telegram.",
+    gradientColor: ["#659AD2", "#26A5E4"],
+    gradientAngle: 45,
+    gitRepo: "",
+    skillId: ["cpp"],
+    hasUsers: true,
   },
   {
     id: "11",
