@@ -7,6 +7,9 @@ export interface ApiProject {
   gradientAngle: number;
   gitRepo: string;
   skillId: string[];
+  // What it is and where it runs, shown as tiles on the project page
+  kind?: string;
+  platform?: string;
   // Marks a project that real people use; shown as an icon next to the name
   hasUsers?: boolean;
   // Link to a playable/live version hosted on this site, e.g. "/games/td"
@@ -15,6 +18,8 @@ export interface ApiProject {
   graveyard?: boolean;
   // Why a graveyard project ended, shown on its card
   causeOfDeath?: string;
+  // A proof of concept (e.g. built for a competition) rather than something in real use
+  prototype?: boolean;
 }
 
 // Matches API skill type
@@ -38,33 +43,51 @@ export interface ApiSkill {
   description?: string;
 }
 
+// gitRepo can be a full URL, "owner/repo", or just a repo name under my account
+export const repoUrl = (gitRepo: string) =>
+  gitRepo.startsWith("http")
+    ? gitRepo
+    : `https://github.com/${gitRepo.includes("/") ? gitRepo : `areng14/${gitRepo}`}`;
+
+// URL-safe name for a project's page, e.g. "Railway Signalling Sim" -> "railway-signalling-sim"
+export const projectSlug = (name: string) =>
+  name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
 // Display shape used by frontend components
 export interface Project {
   id: string;
+  slug: string;
   name: string;
   description: string;
   gradientColors: string[];
   gradientAngle: number;
   gitRepo?: string;
+  kind?: string;
+  platform?: string;
   hasUsers?: boolean;
   playUrl?: string;
   graveyard?: boolean;
   causeOfDeath?: string;
+  prototype?: boolean;
   technologies: string[];
 }
 
 export function apiProjectToProject(api: ApiProject, skillIdToName: Record<string, string>): Project {
   return {
     id: api.id,
+    slug: projectSlug(api.name),
     name: api.name,
     description: api.description,
     gradientColors: api.gradientColor ?? [],
     gradientAngle: api.gradientAngle ?? 45,
     gitRepo: api.gitRepo || undefined,
+    kind: api.kind,
+    platform: api.platform,
     hasUsers: api.hasUsers,
     playUrl: api.playUrl,
     graveyard: api.graveyard,
     causeOfDeath: api.causeOfDeath,
+    prototype: api.prototype,
     technologies: (api.skillId ?? []).map((id) => skillIdToName[id] || id),
   };
 }

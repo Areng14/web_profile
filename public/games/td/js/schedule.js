@@ -52,8 +52,8 @@ export const ENEMIES = {
   devourer: { name: "Devourer", hp: 10000, speed: 0.68, armour: 18, tough: 0.5, reward: 1400, size: 0.78, colour: "#332f2f", leak: 40, shield: 1200, split: 2, splitInto: "titan", resist: { flame: 0, arc: 0.4, prism: 0.5 }, blurb: "The last boss. A vast shield, it eats fire whole, shrugs off lightning and light, and breaks into two titans when it finally falls." },
   // The shell is the puzzle and the split is the price of solving it slowly:
   // nothing hurts the body until the shell gives, and once it does the thing
-  // opens and three runners come out past a tower still turning. Worth hunting —
-  // cracking one pays better for the trouble than anything else its size — which
+  // opens and three runners come out past a tower still turning. Worth hunting,
+  // cracking one pays better for the trouble than anything else its size, which
   // is the whole reason to take it on rather than let it walk.
   geode: { name: "Geode", hp: 170, shield: 430, speed: 1.2, armour: 2, reward: 120, size: 0.38, colour: "#85807f", leak: 3, split: 3, splitInto: "fast", blurb: "Mostly shell, and hollow behind it. Nothing touches the inside until the outside gives, and then it splits open and three runners come out. Worth a great deal to whoever cracks one." },
   // Every other heavy on the road lumbers, so a defence built for them is a
@@ -81,7 +81,7 @@ export const ENEMIES = {
 /**
  * Every mutation, and what it costs to meet one. `weight` is how often it is
  * rolled against the others; `spite` is how much it punishes a board rather
- * than how much it pays for being killed — a gilded cube is fat and worth a
+ * than how much it pays for being killed, a gilded cube is fat and worth a
  * fortune and turns nothing aside, a chrome one turns the three heaviest
  * hitters aside and pays little. A difficulty leans the pool toward spite by
  * its own `lean`, so a hard run meets the ones that hurt rather than the ones
@@ -222,7 +222,7 @@ export function specFor(type, mut) {
   if (had) return had;
   const m = MUTATIONS[mut];
   // A boss already starts enormous, so a mutation only partly takes on it, the
-  // same way the wave's health curve does — and that has to include what it is
+  // same way the wave's health curve does, and that has to include what it is
   // worth. A gilded devourer took a fraction of the health a gilded runner does
   // and the whole seven times the pay, which is one kill for two maxed snipers.
   const soft = (mult) => (base.tough ? 1 + (mult - 1) * base.tough : mult);
@@ -277,7 +277,7 @@ export const KILL_REWARD = 0.7;
 // mint underwriting the run. Easy is the baseline the waves were tuned on.
 //
 // `upkeep` is what an upgrade costs against its listed price. Building is the
-// same price everywhere — a tower is a tower — but climbing one costs a fifth
+// same price everywhere, a tower is a tower, but climbing one costs a fifth
 // less on easy and a third more on hard, so the difference shows up in how deep
 // a board can be taken rather than in how wide it is. Hard gets a little of that
 // back in the purse and in what a cube pays, because the point of it is being
@@ -287,7 +287,7 @@ export const KILL_REWARD = 0.7;
 // multiplier on it, and every one of them was a constant until now:
 //
 //   mutate  when a cube can first walk in changed, how fast that climbs and
-//           how far it goes — `from` is the first wave, `per` the step a wave,
+//           how far it goes, `from` is the first wave, `per` the step a wave,
 //           `cap` the ceiling.
 //   gates   scales every mutation's own `from`, so a difficulty can meet the
 //           whole roster sooner or later than the list says.
@@ -302,12 +302,12 @@ export const KILL_REWARD = 0.7;
 //           Waning it keeps a purse a thing being spent rather than counted.
 //   lean    how far the mutation pool leans toward what punishes a board and
 //           away from what pays for being killed. Every mutation raises what a
-//           cube is worth — a changed cube pays two and a half times a plain
-//           one on easy — so meeting more of them is income as well as trouble.
+//           cube is worth, a changed cube pays two and a half times a plain
+//           one on easy, so meeting more of them is income as well as trouble.
 //   bite    how hard a cube's trick against the board lands: how long a bomber
 //           or a charged cube knocks a tower out for, and how much a molten one
 //           slows what it walks past. It is the one kind of pressure a purse
-//           cannot answer — a stunned tower is stunned however rich you are —
+//           cannot answer, a stunned tower is stunned however rich you are,
 //           and changed cubes grow commoner every wave, so it is felt more and
 //           more as a campaign goes on.
 //   climb   how fast the health curve rises, against easy's. `hp` decides where
@@ -399,7 +399,7 @@ export function levelOf(difficulty, sandbox) {
 /**
  * Health multiplier for wave n: linear early, steepening from wave 20, steeper
  * again past the campaign. `climb` is the difficulty's own scale on how fast
- * that rises — not on where it starts, which is what `hp` is for. A difficulty
+ * that rises, not on where it starts, which is what `hp` is for. A difficulty
  * that only raises `hp` is the same campaign times a constant: hardest on wave
  * one, where the board is a tower and a half, and no harder than it ever was by
  * the time the board is finished.
@@ -472,7 +472,7 @@ export function composeWave(n, difficulty) {
     push("fast", 10 + Math.round(n * 0.5), gap * 0.26);
     if (n >= 21) push("wraith", grow(21, 0.45, 4, 16), gap * 0.5);
     // Counted out by hand, like every other boss: a rush is no reason to thin
-    // them. They come as a pack and close together — one at a time is a boss a
+    // them. They come as a pack and close together, one at a time is a boss a
     // single tower picks off, and three arriving at once is the rush.
     if (n >= courserFrom) push("courser", 3 + Math.floor((n - courserFrom) / 7), gap * 0.9);
     if (n >= 28) push("charger", grow(28, 0.4, 4, 12), gap * 0.6);
@@ -556,7 +556,7 @@ export function killPay(n, difficulty) {
  * A payment that grows with the wave, plus a settling-in bonus over the
  * opening waves. Kill gold is a share of what walks in, so it is worth
  * almost nothing while the waves are small and a fortune once they are
- * enormous — which is backwards. The run is decided in the teens, where the
+ * enormous, which is backwards. The run is decided in the teens, where the
  * cubes first outgrow a board bought out of wave-one runners, and by wave
  * thirty the same gold is a rounding error. The bonus is all but gone by
  * wave twenty, so it pays for the opening without flooding the end.

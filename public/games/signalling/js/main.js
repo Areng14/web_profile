@@ -1013,7 +1013,7 @@ function timetablePane() {
       ["code", s.id],
       ["journey", `${journey(first, last)}`],
       ["", at.entry.arr && at.entry.dep ? `${hhmm(at.entry.arr)}–${hhmm(at.entry.dep).slice(3)}` : hhmm(at.time)],
-      ["", standsAt(net, at.entry) ? at.entry.plat : "—"],
+      ["", standsAt(net, at.entry) ? at.entry.plat : "-"],
       ["now", st.text],
     ];
     for (const [cls, text] of cells) {
@@ -1459,7 +1459,7 @@ $("sideFilter").addEventListener("input", () => { picked = null; panels(true); }
 function hud() {
   $("clock").textContent = hhmm(sim.time, true);
   const sum = sim.summary();
-  $("ppm").textContent = sum.finished ? `${sum.ppm}%` : "—";
+  $("ppm").textContent = sum.finished ? `${sum.ppm}%` : "-";
   $("ppmSub").textContent = `${sum.finished} of ${sum.total} finished`;
   const marks = $("marks");
   marks.textContent = `${sum.marks} of ${MARKS_ALLOWED}`;
@@ -1482,7 +1482,7 @@ function hud() {
   const nxt = nextHere();
   const nextText = nxt ? `${nxt.how} ${placeName(nxt.e.at)}${platOf(nxt.e, nxt.s.kind)} ${nxt.late > 0 ? "~" : ""}${hhmm(nxt.when)}, ${inMinutes(nxt.when)}` : "Nothing due";
   // The headcode is written on its own, since two trains can be due at the same place in the same minute.
-  const nextId = nxt ? nxt.s.id : "—";
+  const nextId = nxt ? nxt.s.id : "-";
   if ($("next").textContent !== nextId) $("next").textContent = nextId;
   if ($("nextSub").textContent !== nextText) $("nextSub").textContent = nextText;
   // New is numbered past the last one chimed for: the list is kept to forty,
@@ -1580,9 +1580,9 @@ function results() {
     if (r.wrongExit) notes.push("sent the wrong way");
     if (r.changes) notes.push(`${r.changes} platform change${r.changes === 1 ? "" : "s"}`);
     if (r.missed) notes.push(`${r.missed} call${r.missed === 1 ? "" : "s"} sent past`);
-    const late = r.late === null ? "—" : `${Math.max(0, wholeMinutes(r.late))} min`;
+    const late = r.late === null ? "-" : `${Math.max(0, wholeMinutes(r.late))} min`;
     const first = s.entries[0], last = s.entries[s.entries.length - 1];
-    for (const [cls, text] of [["code", r.id], ["", `${journey(first, last)}`], [r.late !== null && r.late >= ON_TIME ? "late-bad" : "", late], ["", notes.join(", ") || "—"]]) {
+    for (const [cls, text] of [["code", r.id], ["", `${journey(first, last)}`], [r.late !== null && r.late >= ON_TIME ? "late-bad" : "", late], ["", notes.join(", ") || "-"]]) {
       const td = document.createElement("td");
       if (cls) td.className = cls;
       td.textContent = text;
