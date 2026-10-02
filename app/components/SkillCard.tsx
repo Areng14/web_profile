@@ -17,6 +17,16 @@ interface SkillCardProps {
   href?: string;
 }
 
+// Grayscale version of a hex color, using the same weights as CSS grayscale()
+const toGray = (hex: string) => {
+  const h = hex.replace("#", "");
+  const full = h.length === 3 ? h.split("").map((c) => c + c).join("") : h.slice(0, 6);
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(full.slice(i, i + 2), 16));
+  if ([r, g, b].some(Number.isNaN)) return "#64748b";
+  const y = Math.round(0.2126 * r + 0.7152 * g + 0.0722 * b).toString(16).padStart(2, "0");
+  return `#${y}${y}${y}`;
+};
+
 const SkillCard: React.FC<SkillCardProps> = ({
   skill = "None",
   description,
@@ -28,6 +38,8 @@ const SkillCard: React.FC<SkillCardProps> = ({
   href,
 }) => {
   const clickable = Boolean(techId || href);
+  // Only retired projects use this skill: on hover the icon and accent drain to grayscale
+  const retired = projectCount === 0 && graveyardCount > 0;
   const imageSrc = !icon
     ? null
     : icon.startsWith("http") || icon.startsWith("data:") || icon.startsWith("/")
@@ -47,23 +59,25 @@ const SkillCard: React.FC<SkillCardProps> = ({
   const content = (
     <div
       className={`relative flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.06] bg-card-bg p-5 transition-colors duration-200 ${
-        clickable ? "group hover:border-[var(--skill)]" : ""
+        clickable ? `group ${retired ? "hover:border-[var(--skill-gray)]" : "hover:border-[var(--skill)]"}` : ""
       }`}
-      style={{ ["--skill" as string]: color }}
+      style={{ ["--skill" as string]: color, ["--skill-gray" as string]: toGray(color) }}
     >
       {/* Accent bar drawn as a top border so it curves with the card's corners; revealed on hover */}
       <span
-        className="pointer-events-none absolute inset-0 rounded-[11px] border-t-[3px] transition-[clip-path] duration-300 [clip-path:inset(0_88%_0_0)] group-hover:[clip-path:inset(0)]"
-        style={{ borderTopColor: color }}
+        className={`pointer-events-none absolute inset-0 rounded-[11px] border-t-[3px] border-t-[var(--skill)] transition-[clip-path,border-color] duration-300 [clip-path:inset(0_88%_0_0)] group-hover:[clip-path:inset(0)] ${
+          retired ? "group-hover:border-t-[var(--skill-gray)]" : ""
+        }`}
         aria-hidden
       />
 
       {/* Icon rendered as a flat silhouette in the brand color */}
       {imageSrc ? (
         <span
-          className="block h-10 w-10"
+          className={`block h-10 w-10 bg-[var(--skill)] transition-colors duration-300 ${
+            retired ? "group-hover:bg-[var(--skill-gray)]" : ""
+          }`}
           style={{
-            backgroundColor: color,
             WebkitMask: `url("${imageSrc}") center / contain no-repeat`,
             mask: `url("${imageSrc}") center / contain no-repeat`,
           }}

@@ -447,7 +447,7 @@ kbd { font: inherit; font-weight: 600; color: var(--text); }
 .detail b { color: var(--text); font-weight: 600; }
 .detail .tiers { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--divider); }
 .shop button[aria-pressed="true"] kbd { opacity: 0.8; }
-/* Wide enough for the longest thing it says — "Wave 50 under way" at 178px —
+/* Wide enough for the longest thing it says ("Wave 50 under way" at 178px),
    so counting a wave in does not shuffle the buttons beside it. */
 .start { min-width: 180px; }
 #speed { min-width: 48px; }
