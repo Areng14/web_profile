@@ -8,6 +8,7 @@ const nextConfig = {
     return [
       { source: "/games/td", destination: "/games/td/index.html" },
       { source: "/games/signalling", destination: "/games/signalling/index.html" },
+      { source: "/games/traffic-sim", destination: "/games/traffic-sim/index.html" },
     ];
   },
 };
