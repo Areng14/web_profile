@@ -83,6 +83,17 @@ export const skills: ApiSkill[] = [
     icon: "/misc/skills/swift.svg",
     skillType: SkillType.Lang,
   },
+  {
+    id: "csharp",
+    skillName: "C#",
+    description:
+      "Gameplay code for a Unity traffic sim: car following, right-of-way at junctions, and editor tools that build its scenes and bake its art.",
+    color: "#9B4F96",
+    gradientColor: ["#9B4F96", "#68217A"],
+    gradientAngle: 45,
+    icon: "/misc/skills/csharp.svg",
+    skillType: SkillType.Lang,
+  },
 
   // Frameworks
   {
@@ -116,6 +127,17 @@ export const skills: ApiSkill[] = [
     gradientColor: ["#444444", "#000000"],
     gradientAngle: 45,
     icon: "/misc/skills/nextjs.svg",
+    skillType: SkillType.Framework,
+  },
+  {
+    id: "unity",
+    skillName: "Unity",
+    description:
+      "A 2D city traffic game in Unity 6 with URP, built for desktop and the browser.",
+    color: "#FFFFFF",
+    gradientColor: ["#3A3A3A", "#000000"],
+    gradientAngle: 45,
+    icon: "/misc/skills/unity.svg",
     skillType: SkillType.Framework,
   },
 
@@ -221,6 +243,19 @@ export const projects: ApiProject[] = [
     gradientAngle: 45,
     gitRepo: "",
     skillId: ["nextjs", "claudecode"],
+  },
+  {
+    id: "19",
+    name: "Traffic Sim",
+    kind: "Game",
+    platform: "Browser",
+    description:
+      "A calm city builder about traffic: draw roads, place homes and workplaces, and time the lights while commuters follow real right-of-way rules.",
+    gradientColor: ["#2D6CDF", "#11AD97"],
+    gradientAngle: 45,
+    gitRepo: "",
+    skillId: ["csharp", "unity", "claudecode"],
+    playUrl: "/games/traffic-sim",
   },
   {
     id: "13",
