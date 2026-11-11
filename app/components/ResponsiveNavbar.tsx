@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const pages = [
   {
@@ -24,6 +25,9 @@ const pages = [
 
 function ResponsiveAppBar() {
   const [isOpen, setIsOpen] = React.useState(false);
+  // The admin panel has its own navigation
+  const pathname = usePathname();
+  if (pathname?.startsWith("/admin")) return null;
 
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[var(--background)]/95 backdrop-blur-md">

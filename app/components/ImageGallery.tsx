@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { ProjectImage } from "../lib/details";
+import type { ProjectImage } from "../lib/types";
 
 // How many screenshots show on the page (one large plus a 2x2 grid); the rest are
 // reachable in the viewer, with a "+N" on the last visible thumbnail.

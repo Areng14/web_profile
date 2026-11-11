@@ -1,12 +1,9 @@
 import type { ApiProject, ApiSkill } from "./types";
 import { SkillType } from "./types";
 
-// Local, serverless source of truth for the site content.
-// Edit these arrays to add or change projects and skills with no backend required.
-//
-// Skill icons may be a path under /public (e.g. "/misc/skills/python.svg"),
-// an absolute URL, or a base64 data URI (e.g. "data:image/svg+xml;base64,...").
-// Use the POST /api/upload route to turn an SVG/image into a base64 data URI.
+// Seed data: the projects and skills the site launched with. Copied into the
+// database by app/lib/db/setup.ts on first deploy, and served directly when no
+// DATABASE_URL is set (local dev). Edit content in the admin panel, not here.
 
 // Ways to reach me, shown on the contact page. Leave a field empty to hide it.
 export const contact = {

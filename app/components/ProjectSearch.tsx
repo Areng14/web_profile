@@ -2,19 +2,18 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
-import ProjectCard from "../components/ProjectCard";
-import { skills } from "../lib/content";
+import ProjectCard, { type SkillLookup } from "../components/ProjectCard";
+import type { SkillStyle } from "../lib/data";
 import type { Project } from "../lib/types";
 
 interface ProjectSearchProps {
   projects: Project[];
+  skills: SkillStyle[];
   initialTech: string | null;
   initialSearch: string;
   // Fade cards until hovered, for the cutting room floor
   faded?: boolean;
 }
-
-const skillColor = (s: (typeof skills)[number]) => s.color ?? s.gradientColor?.[0] ?? "#94a3b8";
 
 // Animate a filter change with the View Transitions API so cards slide to their
 // new spots and fade in/out. Falls back to an instant update where unsupported.
@@ -54,6 +53,7 @@ export const selectProjectTech = (id: string) =>
 
 export default function ProjectSearch({
   projects,
+  skills,
   initialTech,
   initialSearch,
   faded = false,
@@ -64,19 +64,24 @@ export default function ProjectSearch({
   const [query, setQuery] = useState<string>(initialSearch);
   const filtersRef = useRef<HTMLDivElement>(null);
 
+  const skillByName = useMemo<SkillLookup>(
+    () => Object.fromEntries(skills.map((s) => [s.name.toLowerCase(), { icon: s.icon, color: s.color }])),
+    [skills],
+  );
+
   // Chips: every skill that at least one project uses, with its project count
   const chips = useMemo(
     () =>
       skills
         .map((s) => ({
           id: s.id,
-          name: s.skillName,
+          name: s.name,
           icon: s.icon,
-          color: skillColor(s),
-          count: projects.filter((p) => p.technologies.includes(s.skillName)).length,
+          color: s.color,
+          count: projects.filter((p) => p.technologies.includes(s.name)).length,
         }))
         .filter((c) => c.count > 0),
-    [projects],
+    [projects, skills],
   );
 
   const activeChip = chips.find((c) => c.id === tech) ?? null;
@@ -226,6 +231,7 @@ export default function ProjectSearch({
             <ProjectCard
               key={project.id}
               id={project.id}
+              slug={project.slug}
               name={project.name}
               description={project.description}
               gitRepo={project.gitRepo}
@@ -236,6 +242,7 @@ export default function ProjectSearch({
               onTechClick={handleTagClick}
               faded={faded}
               causeOfDeath={project.causeOfDeath}
+              skillByName={skillByName}
             />
           ))}
         </div>

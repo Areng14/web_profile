@@ -1,11 +1,10 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { skills } from "../../lib/content";
-import { fetchProjectsForDisplay } from "../../lib/data";
-import { projectDetails } from "../../lib/details";
-import { repoUrl } from "../../lib/types";
+import { fetchProjectRecord, fetchProjectsForDisplay, fetchPublicSkills } from "../../lib/data";
+import { repoUrl, type ApiSkill } from "../../lib/types";
 import ImageGallery from "../../components/ImageGallery";
+import Markdown from "../../components/Markdown";
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>;
@@ -25,20 +24,23 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   return project ? { title: project.name, description: project.description } : {};
 }
 
-const skillByName = Object.fromEntries(skills.map((s) => [s.skillName, s]));
-
 export default async function ProjectPage({ params }: ProjectPageProps) {
-  const project = await findProject((await params).slug);
-  if (!project) notFound();
+  const { slug } = await params;
+  const [project, record, skills] = await Promise.all([
+    findProject(slug),
+    fetchProjectRecord(slug),
+    fetchPublicSkills(),
+  ]);
+  if (!project || !record) notFound();
 
-  const details = projectDetails[project.id];
+  const skillByName = Object.fromEntries(skills.map((s) => [s.skillName, s]));
   const backHref = project.graveyard ? "/cutting-room-floor" : "/#projects";
   const techSkills = project.technologies
     .map((name) => skillByName[name])
-    .filter((s): s is (typeof skills)[number] => Boolean(s));
-  const colorOf = (s: (typeof skills)[number]) => s.color ?? s.gradientColor?.[0] ?? "#94a3b8";
+    .filter((s): s is ApiSkill => Boolean(s));
+  const colorOf = (s: ApiSkill) => s.color ?? s.gradientColor?.[0] ?? "#94a3b8";
 
-  const images = details?.images ?? [];
+  const images = record.images;
   // The same facts for every project, so pages are easy to compare
   const facts = [
     { label: "Type", value: project.kind ?? "Project" },
@@ -56,7 +58,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     { label: "Source", value: project.gitRepo ? "Open source" : "Private" },
   ];
   // Full stack where written up, otherwise the skill tags
-  const builtWith = details?.tech ?? project.technologies;
+  const builtWith = record.stack.length ? record.stack : project.technologies;
 
   return (
     <div className="min-h-screen">
@@ -199,26 +201,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </aside>
 
         {/* Left column, below the header: the writeup */}
-        {details?.sections && (
+        {record.writeup.trim() && (
           <div className="min-w-0">
-            {details.sections.map((section, i) => (
-              <section key={i} className={i === 0 ? "" : "mt-10"}>
-                {section.title && <h2 className="mb-3 text-2xl font-bold text-white">{section.title}</h2>}
-                <div className="space-y-4 leading-relaxed text-slate-300">
-                  {section.body.map((block, j) =>
-                    typeof block === "string" ? (
-                      <p key={j}>{block}</p>
-                    ) : (
-                      <ul key={j} className="list-disc space-y-1.5 pl-5 marker:text-slate-600">
-                        {block.map((item) => (
-                          <li key={item}>{item}</li>
-                        ))}
-                      </ul>
-                    ),
-                  )}
-                </div>
-              </section>
-            ))}
+            <Markdown>{record.writeup}</Markdown>
           </div>
         )}
       </article>

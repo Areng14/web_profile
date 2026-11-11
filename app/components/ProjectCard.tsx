@@ -2,17 +2,10 @@
 
 import React from "react";
 import Link from "next/link";
-import { skills } from "../lib/content";
 import { projectSlug, repoUrl } from "../lib/types";
 
-// Look up a technology's icon + brand color from the skills list
-const skillByName: Record<string, { icon: string; color: string }> = {};
-skills.forEach((s) => {
-    skillByName[s.skillName.toLowerCase()] = {
-        icon: s.icon,
-        color: s.color ?? s.gradientColor?.[0] ?? "#94a3b8",
-    };
-});
+// A technology's icon + brand color, keyed by lowercased skill name
+export type SkillLookup = Record<string, { icon: string; color: string }>;
 
 // Hard-stop gradient with one equal segment per color and a 2px gap between them
 const languageBarGradient = (colors: string[]) => {
@@ -28,6 +21,7 @@ const languageBarGradient = (colors: string[]) => {
 
 interface ProjectCardProps {
     id: string;
+    slug: string;
     name: string;
     description: string;
     gitRepo?: string;
@@ -40,10 +34,12 @@ interface ProjectCardProps {
     // so the view-transition snapshot of the card keeps the fade while it animates.
     faded?: boolean;
     causeOfDeath?: string;
+    skillByName: SkillLookup;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
     id,
+    slug,
     name,
     description,
     gitRepo,
@@ -54,6 +50,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     onTechClick,
     faded = false,
     causeOfDeath,
+    skillByName,
 }) => {
     const tagBase = "inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium";
 
@@ -153,7 +150,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             <div className={`${technologies.length > 0 ? "" : "mt-auto "}flex items-center justify-between pt-5 text-sm`}>
                 {/* Stretched link to the project page: its ::after covers the whole card */}
                 <Link
-                    href={`/projects/${projectSlug(name)}`}
+                    href={`/projects/${slug || projectSlug(name)}`}
                     className="font-medium text-slate-300 transition-colors after:absolute after:inset-0 after:content-[''] focus:outline-none group-hover:text-white"
                 >
                     View project
