@@ -13,7 +13,7 @@ export default async function AdminProjectsPage() {
       key={projects.map((p) => `${p.id}:${p.position}`).join()}
       projects={projects
         .filter((p) => !p.deletedAt)
-        .map(({ id, slug, name, kind, platform, skillIds, hasUsers, prototype, graveyard }) => ({
+        .map(({ id, slug, name, kind, platform, skillIds, hasUsers, prototype, graveyard, draft }) => ({
           id,
           slug,
           name,
@@ -23,6 +23,7 @@ export default async function AdminProjectsPage() {
           hasUsers,
           prototype,
           graveyard,
+          draft,
         }))}
       skills={skills.filter((s) => !s.deletedAt).map(({ id, name, color }) => ({ id, name, color }))}
     />

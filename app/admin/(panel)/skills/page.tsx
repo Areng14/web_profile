@@ -11,7 +11,7 @@ export default async function AdminSkillsPage() {
   const [skills, projects] = await Promise.all([listSkills(), listProjects()]);
 
   const counts: Record<string, { live: number; retired: number }> = {};
-  for (const p of projects.filter((p) => !p.deletedAt)) {
+  for (const p of projects.filter((p) => !p.deletedAt && !p.draft)) {
     for (const id of p.skillIds) {
       counts[id] ??= { live: 0, retired: 0 };
       counts[id][p.graveyard ? "retired" : "live"] += 1;

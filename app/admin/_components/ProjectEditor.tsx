@@ -60,18 +60,20 @@ export default function ProjectEditor({ id, initial, skills }: EditorProps) {
   const skillById = useMemo(() => Object.fromEntries(skills.map((s) => [s.id, s])), [skills]);
   const addable = skills.filter((s) => !form.skillIds.includes(s.id));
 
-  const save = async () => {
+  // Publishing is a save that also takes the project out of drafts
+  const save = async (overrides: Partial<EditableProject> = {}) => {
     setSaving(true);
     setError(null);
+    const payload = { ...current, ...overrides };
     try {
       if (id) {
-        const saved = await api<EditableProject>(`/api/admin/projects/${id}`, { method: "PUT", json: current });
+        const saved = await api<EditableProject>(`/api/admin/projects/${id}`, { method: "PUT", json: payload });
         setBaseline(pickEditable(saved));
         setForm(pickEditable(saved));
         router.refresh();
       } else {
-        const created = await api<{ id: string }>("/api/admin/projects", { method: "POST", json: current });
-        setBaseline(current); // so the unsaved-changes guard doesn't fire on the redirect
+        const created = await api<{ id: string }>("/api/admin/projects", { method: "POST", json: payload });
+        setBaseline(payload); // so the unsaved-changes guard doesn't fire on the redirect
         router.replace(`/admin/projects/${created.id}`);
         router.refresh();
       }
@@ -133,6 +135,9 @@ export default function ProjectEditor({ id, initial, skills }: EditorProps) {
             /
           </span>
           <span className="font-semibold text-white">{form.name || "New project"}</span>
+          {baseline.draft && id && (
+            <span className="rounded-full bg-violet-400/10 px-2.5 py-0.5 text-xs font-semibold text-violet-300">Draft</span>
+          )}
         </div>
         <div className="flex flex-wrap items-center gap-3">
           {dirty && (
@@ -141,7 +146,7 @@ export default function ProjectEditor({ id, initial, skills }: EditorProps) {
               Unsaved changes
             </span>
           )}
-          {id && !dirty && (
+          {id && !dirty && !baseline.draft && (
             <a href={`/projects/${baseline.slug}`} target="_blank" rel="noopener noreferrer" className={ghostButton}>
               View live
             </a>
@@ -149,9 +154,20 @@ export default function ProjectEditor({ id, initial, skills }: EditorProps) {
           <button type="button" onClick={discard} disabled={!dirty || saving} className={ghostButton}>
             Discard
           </button>
-          <button type="button" onClick={save} disabled={!dirty || saving || Boolean(uploading)} className={primaryButton}>
-            {saving ? "Saving…" : id ? "Save" : "Create project"}
-          </button>
+          {form.draft ? (
+            <>
+              <button type="button" onClick={() => save()} disabled={(!dirty && Boolean(id)) || saving || Boolean(uploading)} className={ghostButton}>
+                {saving ? "Saving…" : "Save draft"}
+              </button>
+              <button type="button" onClick={() => save({ draft: false })} disabled={saving || Boolean(uploading)} className={primaryButton}>
+                Publish
+              </button>
+            </>
+          ) : (
+            <button type="button" onClick={() => save()} disabled={!dirty || saving || Boolean(uploading)} className={primaryButton}>
+              {saving ? "Saving…" : id ? "Save" : "Create and publish"}
+            </button>
+          )}
         </div>
       </div>
       <ErrorNote message={error} />
@@ -208,6 +224,7 @@ export default function ProjectEditor({ id, initial, skills }: EditorProps) {
               Status and links
             </h2>
             <div className="divide-y divide-white/[0.06] rounded-[10px] border border-white/[0.06]">
+              <Toggle label="Draft" description="Hidden from the site until you publish it" checked={form.draft} onChange={(v) => set("draft", v)} />
               <Toggle label="Used by real people" description="Shows the people icon next to the name" checked={form.hasUsers} onChange={(v) => set("hasUsers", v)} />
               <Toggle label="Prototype" description="A proof of concept, like a competition build" checked={form.prototype} onChange={(v) => set("prototype", v)} />
               <Toggle label="On the cutting room floor" description="Moves it off the home page" checked={form.graveyard} onChange={(v) => set("graveyard", v)} />

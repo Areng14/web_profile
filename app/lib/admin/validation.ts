@@ -59,6 +59,7 @@ export const projectInput = z.object({
   hasUsers: z.boolean(),
   prototype: z.boolean(),
   graveyard: z.boolean(),
+  draft: z.boolean(),
   causeOfDeath: text(300),
   skillIds: z.array(z.string().max(60)).max(20),
   stack: z.array(text(80).min(1)).max(40),

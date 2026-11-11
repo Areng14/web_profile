@@ -13,6 +13,8 @@ export interface EditableProject {
   hasUsers: boolean;
   prototype: boolean;
   graveyard: boolean;
+  // Hidden from the site until published
+  draft: boolean;
   causeOfDeath: string;
   skillIds: string[];
   stack: string[];
@@ -31,6 +33,8 @@ export const emptyProject: EditableProject = {
   hasUsers: false,
   prototype: false,
   graveyard: false,
+  // New projects start hidden
+  draft: true,
   causeOfDeath: "",
   skillIds: [],
   stack: [],

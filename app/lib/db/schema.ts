@@ -32,6 +32,8 @@ export const projects = pgTable("projects", {
   hasUsers: boolean("has_users").notNull().default(false),
   prototype: boolean("prototype").notNull().default(false),
   graveyard: boolean("graveyard").notNull().default(false),
+  // Drafts exist only in the admin panel until published
+  draft: boolean("draft").notNull().default(false),
   causeOfDeath: text("cause_of_death").notNull().default(""),
   skillIds: text("skill_ids").array().notNull().default(sql`'{}'::text[]`),
   stack: text("stack").array().notNull().default(sql`'{}'::text[]`),
