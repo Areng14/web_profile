@@ -153,17 +153,6 @@ export const skills: ApiSkill[] = [
     icon: "/misc/skills/docker.svg",
     skillType: SkillType.Tools,
   },
-  {
-    id: "claudecode",
-    skillName: "Claude Code",
-    description:
-      "AI pair programmer for planning changes, refactors and reviews. It writes a lot of the code; I still read every diff.",
-    color: "#D97757",
-    gradientColor: ["#D97757", "#B85C3E"],
-    gradientAngle: 45,
-    icon: "/misc/skills/claudecode.svg",
-    skillType: SkillType.Tools,
-  },
 
   // Design Tools
   {
@@ -203,7 +192,7 @@ export const projects: ApiProject[] = [
     gradientColor: ["#659AD2", "#00ADD8"],
     gradientAngle: 45,
     gitRepo: "",
-    skillId: ["cpp", "go", "nextjs", "docker", "claudecode"],
+    skillId: ["cpp", "go", "nextjs", "docker"],
     prototype: true,
   },
   {
@@ -242,7 +231,7 @@ export const projects: ApiProject[] = [
     gradientColor: ["#6366F1", "#8B5CF6"],
     gradientAngle: 45,
     gitRepo: "",
-    skillId: ["nextjs", "claudecode"],
+    skillId: ["nextjs"],
   },
   {
     id: "19",
@@ -254,7 +243,7 @@ export const projects: ApiProject[] = [
     gradientColor: ["#2D6CDF", "#11AD97"],
     gradientAngle: 45,
     gitRepo: "",
-    skillId: ["csharp", "unity", "claudecode"],
+    skillId: ["csharp", "unity"],
     playUrl: "/games/traffic-sim",
   },
   {
@@ -267,7 +256,7 @@ export const projects: ApiProject[] = [
     gradientColor: ["#F59E0B", "#DC2626"],
     gradientAngle: 45,
     gitRepo: "",
-    skillId: ["javascript", "claudecode"],
+    skillId: ["javascript"],
     playUrl: "/games/signalling",
   },
   {
@@ -280,7 +269,7 @@ export const projects: ApiProject[] = [
     gradientColor: ["#10B981", "#0EA5E9"],
     gradientAngle: 45,
     gitRepo: "",
-    skillId: ["javascript", "claudecode"],
+    skillId: ["javascript"],
     playUrl: "/games/td",
   },
   {
@@ -375,7 +364,7 @@ export const projects: ApiProject[] = [
     gradientColor: ["rgb(182, 37, 88)", "rgb(140, 49, 185)"],
     gradientAngle: 45,
     gitRepo: "web_profile",
-    skillId: ["nextjs", "nodejs", "claudecode"],
+    skillId: ["nextjs", "nodejs"],
   },
   {
     id: "7",
