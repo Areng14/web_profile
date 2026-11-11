@@ -2,19 +2,16 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { flushSync } from "react-dom";
-import ProjectCard from "../components/ProjectCard";
-import { skills } from "../lib/content";
+import ProjectCard, { type SkillLookup } from "../components/ProjectCard";
+import type { SkillStyle } from "../lib/data";
 import type { Project } from "../lib/types";
 
 interface ProjectSearchProps {
   projects: Project[];
-  initialTech: string | null;
-  initialSearch: string;
+  skills: SkillStyle[];
   // Fade cards until hovered, for the cutting room floor
   faded?: boolean;
 }
-
-const skillColor = (s: (typeof skills)[number]) => s.color ?? s.gradientColor?.[0] ?? "#94a3b8";
 
 // Animate a filter change with the View Transitions API so cards slide to their
 // new spots and fade in/out. Falls back to an instant update where unsupported.
@@ -52,17 +49,19 @@ const SELECT_TECH_EVENT = "projects:select-tech";
 export const selectProjectTech = (id: string) =>
   window.dispatchEvent(new CustomEvent<string>(SELECT_TECH_EVENT, { detail: id }));
 
-export default function ProjectSearch({
-  projects,
-  initialTech,
-  initialSearch,
-  faded = false,
-}: ProjectSearchProps) {
-  const [tech, setTech] = useState<string | null>(initialTech);
+export default function ProjectSearch({ projects, skills, faded = false }: ProjectSearchProps) {
+  const [tech, setTech] = useState<string | null>(null);
   // searchTerm drives the input; query is the debounced value used for filtering
-  const [searchTerm, setSearchTerm] = useState<string>(initialSearch);
-  const [query, setQuery] = useState<string>(initialSearch);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [query, setQuery] = useState<string>("");
   const filtersRef = useRef<HTMLDivElement>(null);
+  // The URL's filters are read once on load; until then, don't overwrite them
+  const urlRead = useRef(false);
+
+  const skillByName = useMemo<SkillLookup>(
+    () => Object.fromEntries(skills.map((s) => [s.name.toLowerCase(), { icon: s.icon, color: s.color }])),
+    [skills],
+  );
 
   // Chips: every skill that at least one project uses, with its project count
   const chips = useMemo(
@@ -70,23 +69,30 @@ export default function ProjectSearch({
       skills
         .map((s) => ({
           id: s.id,
-          name: s.skillName,
+          name: s.name,
           icon: s.icon,
-          color: skillColor(s),
-          count: projects.filter((p) => p.technologies.includes(s.skillName)).length,
+          color: s.color,
+          count: projects.filter((p) => p.technologies.includes(s.name)).length,
         }))
         .filter((c) => c.count > 0),
-    [projects],
+    [projects, skills],
   );
 
   const activeChip = chips.find((c) => c.id === tech) ?? null;
 
-  // Arriving with a filter in the URL: bring the filters into view
+  // Filters come from the URL (?tech=…&search=…). They're read in the browser so the
+  // page itself can be static and served from the CDN.
   useEffect(() => {
-    if (initialTech || initialSearch) {
-      filtersRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const params = new URLSearchParams(window.location.search);
+    const urlTech = params.get("tech");
+    const urlSearch = params.get("search") ?? "";
+    urlRead.current = true;
+    if (!urlTech && !urlSearch) return;
+    setTech(urlTech);
+    setSearchTerm(urlSearch);
+    setQuery(urlSearch);
+    // Arriving with a filter: bring the filters into view
+    filtersRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
   // Skill cards elsewhere on the page ask to show a technology's projects
@@ -108,11 +114,12 @@ export default function ProjectSearch({
 
   // Keep the URL shareable without stacking history entries
   useEffect(() => {
+    if (!urlRead.current) return;
     const params = new URLSearchParams();
     if (tech) params.set("tech", tech);
     if (query) params.set("search", query);
     const qs = params.toString();
-    window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
+    window.history.replaceState(null, "", (qs ? `?${qs}` : window.location.pathname) + window.location.hash);
   }, [tech, query]);
 
   const filteredProjects = useMemo(() => {
@@ -226,6 +233,7 @@ export default function ProjectSearch({
             <ProjectCard
               key={project.id}
               id={project.id}
+              slug={project.slug}
               name={project.name}
               description={project.description}
               gitRepo={project.gitRepo}
@@ -236,6 +244,7 @@ export default function ProjectSearch({
               onTechClick={handleTagClick}
               faded={faded}
               causeOfDeath={project.causeOfDeath}
+              skillByName={skillByName}
             />
           ))}
         </div>

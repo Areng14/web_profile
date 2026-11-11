@@ -2,16 +2,11 @@ import ImageSlider from "./components/ImageSlider";
 import ProjectSearch from "./components/ProjectSearch";
 import TombstoneIcon from "./components/TombstoneIcon";
 import SkillCard from "./components/SkillCard";
-import { fetchProjects, fetchProjectsForDisplay, fetchPublicSkills } from "./lib/data";
+import { fetchProjects, fetchProjectsForDisplay, fetchPublicSkills, fetchSkillStyles, type SkillStyle } from "./lib/data";
 import { SkillType } from "./lib/types";
 import Link from "next/link";
 
-interface HomeProps {
-  searchParams: Promise<{ tech?: string; search?: string }>;
-}
-
-export default async function Home({ searchParams }: HomeProps) {
-  const { tech, search } = await searchParams;
+export default async function Home() {
   const images = [
     "/misc/mainslide/img1.webp",
     "/misc/mainslide/img2.webp",
@@ -23,13 +18,16 @@ export default async function Home({ searchParams }: HomeProps) {
   const projectCounts: Record<string, number> = {};
   const graveyardCounts: Record<string, number> = {};
   let projects: Awaited<ReturnType<typeof fetchProjectsForDisplay>> = [];
+  let skillStyles: SkillStyle[] = [];
   let skillsByType: { type: SkillType; title: string; skills: Awaited<ReturnType<typeof fetchPublicSkills>> }[] = [];
   try {
-    const [allSkills, allProjects, displayProjects] = await Promise.all([
+    const [allSkills, allProjects, displayProjects, styles] = await Promise.all([
       fetchPublicSkills(),
       fetchProjects(),
       fetchProjectsForDisplay(),
+      fetchSkillStyles(),
     ]);
+    skillStyles = styles;
     projects = displayProjects.filter((p) => !p.graveyard);
     allProjects.forEach((p) => {
       const counts = p.graveyard ? graveyardCounts : projectCounts;
@@ -102,8 +100,7 @@ export default async function Home({ searchParams }: HomeProps) {
 
           <ProjectSearch
             projects={projects}
-            initialTech={tech ?? null}
-            initialSearch={search ?? ""}
+            skills={skillStyles}
           />
 
           <div className="mt-12 text-center">

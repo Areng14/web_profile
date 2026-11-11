@@ -2,20 +2,16 @@ import { Metadata } from "next";
 import Link from "next/link";
 import ProjectSearch from "../components/ProjectSearch";
 import TombstoneIcon from "../components/TombstoneIcon";
-import { fetchProjectsForDisplay } from "../lib/data";
+import { fetchProjectsForDisplay, fetchSkillStyles } from "../lib/data";
 
 export const metadata: Metadata = {
   title: "Cutting Room Floor",
   description: "Older projects that were finished, replaced or left behind",
 };
 
-interface CuttingRoomFloorProps {
-  searchParams: Promise<{ tech?: string; search?: string }>;
-}
-
-export default async function CuttingRoomFloor({ searchParams }: CuttingRoomFloorProps) {
-  const { tech, search } = await searchParams;
-  const projects = (await fetchProjectsForDisplay()).filter((p) => p.graveyard);
+export default async function CuttingRoomFloor() {
+  const [allProjects, skillStyles] = await Promise.all([fetchProjectsForDisplay(), fetchSkillStyles()]);
+  const projects = allProjects.filter((p) => p.graveyard);
 
   return (
     <div className="min-h-screen">
@@ -43,8 +39,7 @@ export default async function CuttingRoomFloor({ searchParams }: CuttingRoomFloo
           {/* Same search and filter chips as the home page, with the cards faded until hovered */}
           <ProjectSearch
             projects={projects}
-            initialTech={tech ?? null}
-            initialSearch={search ?? ""}
+            skills={skillStyles}
             faded
           />
         </div>

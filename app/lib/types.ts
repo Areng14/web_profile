@@ -1,6 +1,45 @@
+export interface ProjectImage {
+  src: string;
+  alt: string;
+}
+
+// A skill as stored in the database
+export interface SkillRecord {
+  id: string;
+  name: string;
+  description: string;
+  color: string;
+  icon: string;
+  type: SkillType;
+  position: number;
+}
+
+// A project as stored in the database
+export interface ProjectRecord {
+  id: string;
+  slug: string;
+  name: string;
+  kind: string;
+  platform: string;
+  description: string;
+  repo: string;
+  playUrl: string;
+  hasUsers: boolean;
+  prototype: boolean;
+  graveyard: boolean;
+  causeOfDeath: string;
+  skillIds: string[];
+  stack: string[];
+  // Markdown
+  writeup: string;
+  images: ProjectImage[];
+  position: number;
+}
+
 // Matches API project type
 export interface ApiProject {
   id: string;
+  slug?: string;
   name: string;
   description: string;
   gradientColor: string[];
@@ -75,7 +114,7 @@ export interface Project {
 export function apiProjectToProject(api: ApiProject, skillIdToName: Record<string, string>): Project {
   return {
     id: api.id,
-    slug: projectSlug(api.name),
+    slug: api.slug ?? projectSlug(api.name),
     name: api.name,
     description: api.description,
     gradientColors: api.gradientColor ?? [],

@@ -1,5 +1,6 @@
-// Long-form writeups for project pages, keyed by project id (see content.ts).
-// Projects without an entry still get a page built from their card info.
+// Seed data: the long-form writeups the site launched with, keyed by project id
+// (see content.ts). Copied into the database by app/lib/db/setup.ts on first deploy;
+// after that the admin panel is the source of truth.
 //
 // A section's body is a list of blocks: a string is a paragraph, an array of
 // strings is a bullet list.
@@ -9,10 +10,7 @@ export interface ProjectSection {
   body: (string | string[])[];
 }
 
-export interface ProjectImage {
-  src: string;
-  alt: string;
-}
+import type { ProjectImage } from "./types";
 
 export interface ProjectDetails {
   // Screenshots shown in the right-hand column; the first is the largest
