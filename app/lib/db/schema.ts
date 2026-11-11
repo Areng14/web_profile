@@ -2,7 +2,8 @@ import { sql } from "drizzle-orm";
 import { boolean, integer, jsonb, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import type { ProjectImage } from "../types";
 
-// The site's content lives in two tables. A third, tiny one backs the rate limiter.
+// The site's content lives in two tables. Two tiny ones back the rate limiter and
+// admin bookkeeping.
 // The matching CREATE TABLE statements are in ./setup.ts.
 
 export const skills = pgTable("skills", {
@@ -46,4 +47,11 @@ export const rateLimits = pgTable("rate_limits", {
   key: text("key").primaryKey(),
   count: integer("count").notNull(),
   resetAt: timestamp("reset_at", { withTimezone: true }).notNull(),
+});
+
+// Key/value bookkeeping: "seeded" (launch content was copied in once) and
+// "sessions_valid_after" (signing out ends every session issued before it)
+export const adminSettings = pgTable("admin_settings", {
+  key: text("key").primaryKey(),
+  value: text("value").notNull(),
 });

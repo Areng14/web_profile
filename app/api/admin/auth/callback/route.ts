@@ -23,21 +23,23 @@ function sameString(a: string, b: string) {
 }
 
 export async function GET(req: NextRequest) {
-  const fail = (error: string) => {
+  const fail = (error: string, retryMinutes?: number) => {
     const url = new URL("/admin/login", req.url);
     url.searchParams.set("error", error);
+    if (retryMinutes) url.searchParams.set("retry", String(retryMinutes));
     const res = NextResponse.redirect(url);
     res.cookies.delete({ name: STATE_COOKIE, ...cookieOptions });
     return res;
   };
 
-  const limit = await rateLimit("login", clientIp(req.headers));
-  if (!limit.ok) return fail("rate_limited");
-
+  // Requests without a sign-in in progress are dropped before touching the database
   const code = req.nextUrl.searchParams.get("code");
   const state = req.nextUrl.searchParams.get("state");
   const expectedState = req.cookies.get(STATE_COOKIE)?.value;
   if (!code || !state || !expectedState || !sameString(state, expectedState)) return fail("expired");
+
+  const limit = await rateLimit("login", clientIp(req.headers));
+  if (!limit.ok) return fail("rate_limited", Math.ceil(limit.retryAfterSeconds / 60));
 
   const clientId = process.env.GITHUB_CLIENT_ID;
   const clientSecret = process.env.GITHUB_CLIENT_SECRET;
@@ -66,7 +68,7 @@ export async function GET(req: NextRequest) {
       },
       cache: "no-store",
     });
-    const user = (await userRes.json()) as { id?: number; login?: string };
+    const user = userRes.ok ? ((await userRes.json()) as { id?: number; login?: string }) : {};
 
     // The token was only needed for that one lookup; revoke it so it can't be reused
     await fetch(`https://api.github.com/applications/${clientId}/token`, {

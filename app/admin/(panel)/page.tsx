@@ -1,9 +1,12 @@
+import { requireOwner } from "../../lib/admin/owner";
 import { listProjects, listSkills } from "../../lib/admin/store";
 import ProjectsList from "../_components/ProjectsList";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminProjectsPage() {
+  // Each page checks for itself; the layout and middleware are extra locks, not the only one
+  await requireOwner();
   const [projects, skills] = await Promise.all([listProjects(), listSkills()]);
   return (
     <ProjectsList

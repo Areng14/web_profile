@@ -1,7 +1,9 @@
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { isSessionCurrent } from "../../lib/admin/owner";
 import { readSession, SESSION_COOKIE } from "../../lib/admin/session";
+import { hasDatabase } from "../../lib/db/client";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +20,9 @@ interface LoginProps {
 }
 
 export default async function AdminLogin({ searchParams }: LoginProps) {
-  if (await readSession((await cookies()).get(SESSION_COOKIE)?.value)) redirect("/admin");
+  // Already signed in: straight to the panel. A signed-out (revoked) cookie stays here.
+  const session = await readSession((await cookies()).get(SESSION_COOKIE)?.value);
+  if (session && hasDatabase() && (await isSessionCurrent(session))) redirect("/admin");
 
   const { error, retry } = await searchParams;
   const message = error && ERRORS[error] ? ERRORS[error].replace("{retry}", /^\d{1,3}$/.test(retry ?? "") ? retry! : "15") : null;

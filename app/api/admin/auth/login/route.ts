@@ -1,21 +1,19 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { clientIp, rateLimit } from "../../../../lib/admin/rateLimit";
+import { crossSite } from "../../../../lib/admin/guard";
 import { cookieOptions, STATE_COOKIE } from "../../../../lib/admin/session";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-// Step 1 of sign-in: send the browser to GitHub with a one-time state value
+// Step 1 of sign-in: send the browser to GitHub with a one-time state value. This step
+// touches nothing server-side; the rate limit applies when GitHub sends the browser back.
 
 export async function GET(req: NextRequest) {
   const loginPage = new URL("/admin/login", req.url);
 
-  const limit = await rateLimit("login", clientIp(req.headers));
-  if (!limit.ok) {
-    loginPage.searchParams.set("error", "rate_limited");
-    loginPage.searchParams.set("retry", String(Math.ceil(limit.retryAfterSeconds / 60)));
-    return NextResponse.redirect(loginPage);
-  }
+  // Only from the sign-in page (or typed in), so another site can't restart a sign-in
+  // in progress by embedding this URL
+  if (crossSite(req)) return NextResponse.redirect(loginPage);
 
   const clientId = process.env.GITHUB_CLIENT_ID;
   if (!clientId || !process.env.GITHUB_CLIENT_SECRET) {

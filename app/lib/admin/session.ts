@@ -1,7 +1,8 @@
 import { jwtVerify, SignJWT } from "jose";
 
 // Admin sessions: a signed JWT in an httpOnly cookie. Runs in middleware (edge) and in
-// route handlers (node), so it only uses Web Crypto.
+// route handlers (node), so it only uses Web Crypto. Revocation (sign out ends every
+// session) needs the database, so it's checked in owner.ts, not here.
 
 // Only this GitHub account can sign in (Areng14)
 export const ADMIN_GITHUB_ID = 97821562;
@@ -39,6 +40,7 @@ async function signingKey(): Promise<Uint8Array | null> {
 export interface AdminSession {
   githubId: number;
   login: string;
+  issuedAt: number; // seconds
   expiresAt: number; // ms
 }
 
@@ -60,10 +62,11 @@ export async function readSession(token: string | undefined): Promise<AdminSessi
   if (!key) return null;
   try {
     const { payload } = await jwtVerify(token, key, { issuer: ISSUER, algorithms: ["HS256"] });
-    if (payload.sub !== String(ADMIN_GITHUB_ID) || !payload.exp) return null;
+    if (payload.sub !== String(ADMIN_GITHUB_ID) || !payload.exp || !payload.iat) return null;
     return {
       githubId: ADMIN_GITHUB_ID,
       login: typeof payload.login === "string" ? payload.login : "",
+      issuedAt: payload.iat,
       expiresAt: payload.exp * 1000,
     };
   } catch {

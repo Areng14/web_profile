@@ -1,8 +1,9 @@
 import postgres from "postgres";
 import { seedProjectRecords, seedSkillRecords } from "../seed";
 
-// Creates the tables if they don't exist and fills them with the launch content the
-// first time. Safe to run on every deploy: it never touches existing rows.
+// Creates the tables if they don't exist and fills them with the launch content once.
+// Safe to run on every deploy: it never touches existing rows, and a "seeded" marker
+// means deleting everything in the panel doesn't bring the launch content back.
 
 const DDL = `
 CREATE TABLE IF NOT EXISTS skills (
@@ -44,6 +45,11 @@ CREATE TABLE IF NOT EXISTS rate_limits (
   count integer NOT NULL,
   reset_at timestamptz NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS admin_settings (
+  key text PRIMARY KEY,
+  value text NOT NULL
+);
 `;
 
 export async function setupDatabase(url: string, log: (msg: string) => void = console.log) {
@@ -52,28 +58,31 @@ export async function setupDatabase(url: string, log: (msg: string) => void = co
   try {
     await sql.unsafe(DDL);
 
-    const [{ count: skillCount }] = await sql<{ count: number }[]>`SELECT count(*)::int AS count FROM skills`;
-    if (skillCount === 0) {
-      const rows = seedSkillRecords();
-      await sql`INSERT INTO skills ${sql(rows, "id", "name", "description", "color", "icon", "type", "position")}`;
-      log(`Seeded ${rows.length} skills`);
-    }
-
-    const [{ count: projectCount }] = await sql<{ count: number }[]>`SELECT count(*)::int AS count FROM projects`;
-    if (projectCount === 0) {
-      for (const p of seedProjectRecords()) {
-        await sql`
-          INSERT INTO projects (id, slug, name, kind, platform, description, repo, play_url, has_users,
-            prototype, graveyard, cause_of_death, skill_ids, stack, writeup, images, position)
-          VALUES (${p.id}, ${p.slug}, ${p.name}, ${p.kind}, ${p.platform}, ${p.description}, ${p.repo},
-            ${p.playUrl}, ${p.hasUsers}, ${p.prototype}, ${p.graveyard}, ${p.causeOfDeath},
-            ${sql.array(p.skillIds)}, ${sql.array(p.stack)}, ${p.writeup}, ${sql.json(p.images as unknown as postgres.JSONValue)}, ${p.position})`;
+    const [seeded] = await sql`SELECT 1 FROM admin_settings WHERE key = 'seeded'`;
+    if (!seeded) {
+      const [{ count: skillCount }] = await sql<{ count: number }[]>`SELECT count(*)::int AS count FROM skills`;
+      if (skillCount === 0) {
+        const rows = seedSkillRecords();
+        await sql`INSERT INTO skills ${sql(rows, "id", "name", "description", "color", "icon", "type", "position")}`;
+        log(`Seeded ${rows.length} skills`);
       }
-      log("Seeded projects");
-    }
 
-    // Old rate-limit windows are useless; keep the table small
-    await sql`DELETE FROM rate_limits WHERE reset_at < now() - interval '1 day'`;
+      const [{ count: projectCount }] = await sql<{ count: number }[]>`SELECT count(*)::int AS count FROM projects`;
+      if (projectCount === 0) {
+        for (const p of seedProjectRecords()) {
+          await sql`
+            INSERT INTO projects (id, slug, name, kind, platform, description, repo, play_url, has_users,
+              prototype, graveyard, cause_of_death, skill_ids, stack, writeup, images, position)
+            VALUES (${p.id}, ${p.slug}, ${p.name}, ${p.kind}, ${p.platform}, ${p.description}, ${p.repo},
+              ${p.playUrl}, ${p.hasUsers}, ${p.prototype}, ${p.graveyard}, ${p.causeOfDeath},
+              ${sql.array(p.skillIds)}, ${sql.array(p.stack)}, ${p.writeup},
+              ${sql.json(p.images as unknown as postgres.JSONValue)}, ${p.position})`;
+        }
+        log("Seeded projects");
+      }
+
+      await sql`INSERT INTO admin_settings (key, value) VALUES ('seeded', now()::text) ON CONFLICT (key) DO NOTHING`;
+    }
   } finally {
     await sql.end();
   }

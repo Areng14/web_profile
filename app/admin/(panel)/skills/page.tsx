@@ -1,3 +1,4 @@
+import { requireOwner } from "../../../lib/admin/owner";
 import { listProjects, listSkills } from "../../../lib/admin/store";
 import type { SkillType } from "../../../lib/types";
 import SkillsManager from "../../_components/SkillsManager";
@@ -5,6 +6,8 @@ import SkillsManager from "../../_components/SkillsManager";
 export const dynamic = "force-dynamic";
 
 export default async function AdminSkillsPage() {
+  // Each page checks for itself; the layout and middleware are extra locks, not the only one
+  await requireOwner();
   const [skills, projects] = await Promise.all([listSkills(), listProjects()]);
 
   const counts: Record<string, { live: number; retired: number }> = {};

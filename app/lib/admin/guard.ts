@@ -1,9 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { isSessionCurrent } from "./owner";
 import { rateLimit, type LimitName } from "./rateLimit";
 import { readSession, SESSION_COOKIE, type AdminSession } from "./session";
 
 // Every admin API handler starts with adminGuard: it checks the session, blocks
-// cross-site writes and applies the rate limit. Middleware also checks the session;
+// cross-site requests and applies the rate limit. Middleware also checks the session;
 // this is the second lock on the same door.
 
 export function jsonError(message: string, status: number, headers?: HeadersInit) {
@@ -14,7 +15,7 @@ export function jsonError(message: string, status: number, headers?: HeadersInit
 // cross-site POSTs; this also covers same-site subdomains and old browsers.
 function sameOrigin(req: NextRequest): boolean {
   const origin = req.headers.get("origin");
-  const host = req.headers.get("x-forwarded-host") ?? req.headers.get("host");
+  const host = req.headers.get("host");
   if (!origin || !host) return false;
   try {
     return new URL(origin).host === host;
@@ -23,16 +24,24 @@ function sameOrigin(req: NextRequest): boolean {
   }
 }
 
+// The panel only ever calls its API from its own pages. Browsers label requests made
+// from other sites (including links and <img> tags), so those are turned away even on GET.
+export function crossSite(req: NextRequest): boolean {
+  const site = req.headers.get("sec-fetch-site");
+  return site === "cross-site" || site === "same-site";
+}
+
 export async function adminGuard(
   req: NextRequest,
   bucket: LimitName,
 ): Promise<{ session: AdminSession } | { response: NextResponse }> {
-  const session = await readSession(req.cookies.get(SESSION_COOKIE)?.value);
-  if (!session) return { response: jsonError("Not signed in", 401) };
-
+  if (crossSite(req)) return { response: jsonError("Cross-site request blocked", 403) };
   if (req.method !== "GET" && req.method !== "HEAD" && !sameOrigin(req)) {
     return { response: jsonError("Cross-site request blocked", 403) };
   }
+
+  const session = await readSession(req.cookies.get(SESSION_COOKIE)?.value);
+  if (!session || !(await isSessionCurrent(session))) return { response: jsonError("Not signed in", 401) };
 
   const limit = await rateLimit(bucket, String(session.githubId));
   if (!limit.ok) {

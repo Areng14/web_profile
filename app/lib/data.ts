@@ -1,4 +1,4 @@
-import { asc, isNull } from "drizzle-orm";
+import { and, asc, eq, isNull } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 import { getDb, hasDatabase } from "./db/client";
 import { projects as projectsTable, skills as skillsTable } from "./db/schema";
@@ -12,15 +12,25 @@ import type { ApiProject, ApiSkill, Project, ProjectRecord, SkillRecord } from "
 
 export const CONTENT_TAG = "content";
 
+// The shared list leaves writeups out so this cache entry stays small (Next skips caching
+// entries over 2 MB); each project page caches its own record
+type ProjectSummary = Omit<ProjectRecord, "writeup">;
+
+function withoutWriteup(p: ProjectRecord): ProjectSummary {
+  const copy: Partial<ProjectRecord> = { ...p };
+  delete copy.writeup;
+  return copy as ProjectSummary;
+}
+
 interface SiteContent {
   skills: SkillRecord[];
-  projects: ProjectRecord[];
+  projects: ProjectSummary[];
 }
 
 const loadContent = unstable_cache(
   async (): Promise<SiteContent> => {
     if (!hasDatabase()) {
-      return { skills: seedSkillRecords(), projects: seedProjectRecords() };
+      return { skills: seedSkillRecords(), projects: seedProjectRecords().map(withoutWriteup) };
     }
     const db = getDb();
     const [skills, projects] = await Promise.all([
@@ -53,7 +63,6 @@ const loadContent = unstable_cache(
           causeOfDeath: projectsTable.causeOfDeath,
           skillIds: projectsTable.skillIds,
           stack: projectsTable.stack,
-          writeup: projectsTable.writeup,
           images: projectsTable.images,
           position: projectsTable.position,
         })
@@ -129,7 +138,23 @@ export async function fetchProjectsForDisplay(): Promise<Project[]> {
     .map((p) => ({ ...p, technologies: p.technologies.filter((t) => apiSkills.some((s) => s.skillName === t)) }));
 }
 
+const loadProjectRecord = unstable_cache(
+  async (slug: string): Promise<ProjectRecord | null> => {
+    if (!hasDatabase()) return seedProjectRecords().find((p) => p.slug === slug) ?? null;
+    const [row] = await getDb()
+      .select()
+      .from(projectsTable)
+      .where(and(eq(projectsTable.slug, slug), isNull(projectsTable.deletedAt)));
+    if (!row) return null;
+    const record: Partial<typeof row> = { ...row };
+    delete record.deletedAt;
+    delete record.updatedAt;
+    return record as ProjectRecord;
+  },
+  ["project-record"],
+  { tags: [CONTENT_TAG] },
+);
+
 export async function fetchProjectRecord(slug: string): Promise<ProjectRecord | undefined> {
-  const { projects } = await loadContent();
-  return projects.find((p) => p.slug === slug);
+  return (await loadProjectRecord(slug)) ?? undefined;
 }

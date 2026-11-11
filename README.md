@@ -18,34 +18,26 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Content (serverless)
+## Content and the admin panel
 
-This site is fully serverless: there is no separate backend to run. All
-projects and skills live in [`app/lib/content.ts`](app/lib/content.ts). Edit
-that file to add or change content; the public pages read from it directly.
+Projects and skills live in Postgres (Neon) and are edited at `/admin`. Public
+pages read through Next's data cache and refresh when you save in the panel.
 
-Skill icons can be a path under `/public` (e.g. `/misc/skills/python.svg`), an
-absolute URL, or a base64 data URI. To turn an SVG/image into a base64 data
-URI, POST it to the serverless route at `/api/upload`.
+`npm run build` runs `scripts/db-setup.ts` first: it creates the tables if they
+don't exist and copies in the launch content from `app/lib/content.ts` and
+`app/lib/details.ts` once. Without `DATABASE_URL` (local dev) the site serves
+that seed content directly and the admin panel is unavailable.
 
-The route is protected by a shared secret. Set `UPLOAD_SECRET` in your
-environment (e.g. an `.env.local` file locally, or project env vars on Vercel)
-and pass it as a `Bearer` token. If `UPLOAD_SECRET` is unset the route is
-disabled and returns `503`.
+Environment variables (keep the GitHub ones Production-only, so preview builds can't sign anyone in):
 
-```bash
-# multipart upload
-curl -H "Authorization: Bearer $UPLOAD_SECRET" \
-  -F "file=@icon.svg" http://localhost:3000/api/upload
+| Variable | What it's for |
+| --- | --- |
+| `DATABASE_URL` | Neon, added by the Vercel integration |
+| `BLOB_READ_WRITE_TOKEN` | Vercel Blob, for screenshot uploads |
+| `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` | GitHub OAuth app, callback `https://arengdev.com/api/admin/auth/callback` |
+| `SESSION_SECRET` | Optional. Signs admin sessions; derived from the OAuth secret if unset |
 
-# or JSON
-curl -H "Authorization: Bearer $UPLOAD_SECRET" \
-  -H "Content-Type: application/json" \
-  -d '{"name":"icon.svg","data":"<base64>"}' \
-  http://localhost:3000/api/upload
-```
-
-The response includes a `dataUri` you can paste straight into `content.ts`.
+Only one GitHub account (id in `app/lib/admin/session.ts`) can sign in.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
