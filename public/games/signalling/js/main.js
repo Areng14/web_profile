@@ -8,6 +8,10 @@ import { compile, Simulation, MARKS_ALLOWED, ON_TIME, wholeMinutes, PHONE_WORDS,
 import { KINDS, LEVELS, OPERATORS, SERVICES, TRAINING, CLOCK_INS, DEPOTS, CALLS, LIMP, FALSE_CALL, isDepotRoad, foldJourney, planFor, shiftAt, shiftName, dayName, forecastFor } from "./schedule.js";
 import { Tutor, actWords, actSpot } from "./tutor.js";
 import { KEYS, PHONE_KEYS, keyFor, keyLabel, leftToControl } from "./keys.js";
+
+// Train descriptions and ids can come back from a saved run in localStorage, so they're
+// escaped before going into innerHTML
+const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 import { Screen } from "./view.js";
 import { NetworkMap, SCHOOL } from "./map.js";
 import * as store from "./storage.js";
@@ -1145,7 +1149,7 @@ function trainRow(t, extra = "") {
   const service = sim.serviceOf(t);
   const first = service.entries[0], last = service.entries[service.entries.length - 1];
   const late = wholeMinutes(lateNow(t));
-  row.innerHTML = `<span class="code">${t.desc ?? "????"}</span> ${t.desc ? "" : "<b>no description</b> "}<span class="when">${OPERATORS[service.operator]?.name ?? ""} · ${zone}</span>${late > 0 ? `<span class="late">+${late}</span>` : ""}<br>${t.desc === t.service || !t.desc ? `${journey(first, last)}` : `described as ${t.desc}`}, ${whereIs(t)}${extra}${t.failedUntil !== null && sim.time < t.failedUntil ? ` · ${HELD[t.held] ?? "fault"}, ${Math.ceil((t.failedUntil - sim.time) / 60)} min` : t.limp ? ` · fault isolated, ${LIMP.mph} mph` : ""}`;
+  row.innerHTML = `<span class="code">${esc(t.desc ?? "????")}</span> ${t.desc ? "" : "<b>no description</b> "}<span class="when">${OPERATORS[service.operator]?.name ?? ""} · ${zone}</span>${late > 0 ? `<span class="late">+${late}</span>` : ""}<br>${t.desc === t.service || !t.desc ? `${journey(first, last)}` : `described as ${esc(t.desc)}`}, ${whereIs(t)}${extra}${t.failedUntil !== null && sim.time < t.failedUntil ? ` · ${HELD[t.held] ?? "fault"}, ${Math.ceil((t.failedUntil - sim.time) / 60)} min` : t.limp ? ` · fault isolated, ${LIMP.mph} mph` : ""}`;
   row.addEventListener("click", () => pick(t.service));
   return row;
 }
@@ -1172,7 +1176,7 @@ function dueRows(host, q = "") {
     const first = s.entries[0], last = s.entries[s.entries.length - 1];
     const how = at.entry.at === first.at ? "leaves" : at.entry.call ? "calls at" : "passes";
     const delay = expectedDelay(s);
-    row.innerHTML = `<span class="code">${s.id}</span> <span class="when">${OPERATORS[s.operator]?.name ?? ""}</span>${delay >= 60 ? `<span class="late">+${wholeMinutes(delay)}</span>` : ""}<br>${journey(first, last)}, ${how} ${placeName(at.entry.at)}${platOf(at.entry, s.kind)} ${hhmm(at.time)}${delay >= 60 ? `, expect ~${hhmm(at.time + delay)}` : ""}, ${inMinutes(at.time + delay)}`;
+    row.innerHTML = `<span class="code">${esc(s.id)}</span> <span class="when">${OPERATORS[s.operator]?.name ?? ""}</span>${delay >= 60 ? `<span class="late">+${wholeMinutes(delay)}</span>` : ""}<br>${journey(first, last)}, ${how} ${placeName(at.entry.at)}${platOf(at.entry, s.kind)} ${hhmm(at.time)}${delay >= 60 ? `, expect ~${hhmm(at.time + delay)}` : ""}, ${inMinutes(at.time + delay)}`;
     row.addEventListener("click", () => pick(s.id));
     host.appendChild(row);
   }
@@ -1325,8 +1329,8 @@ function trainCard(id, head, body) {
   const behind = train ? lateNow(train) : expectedDelay(s);
   const first = s.entries[0], last = s.entries[s.entries.length - 1];
   const formedBy = [...sim.plan.values()].find((o) => o.then === s.id);
-  head.innerHTML = `<div class="trainTitle"><span class="code">${s.id}</span> <span class="muted">${OPERATORS[s.operator]?.name ?? ""} · ${kind.name}</span></div>
-    <div>${journey(first, last)}${formedBy ? ` · formed by ${formedBy.id}` : ""}${s.then ? ` · forms ${s.then}` : ""}</div>
+  head.innerHTML = `<div class="trainTitle"><span class="code">${esc(s.id)}</span> <span class="muted">${OPERATORS[s.operator]?.name ?? ""} · ${kind.name}</span></div>
+    <div>${journey(first, last)}${formedBy ? ` · formed by ${esc(formedBy.id)}` : ""}${s.then ? ` · forms ${esc(s.then)}` : ""}</div>
     <div class="muted">${nowText(s, train, r)}</div>`;
   // Where the train is along its timetable, counted in rows: on a row while
   // it stands there, halfway between two while it is on its way, before the

@@ -1262,7 +1262,17 @@ function buildPresets() {
     option.setAttribute("role", "option");
     option.dataset.preset = preset.name;
     option.title = preset.kinds.map((k) => (TOWERS[k] ? TOWERS[k].name : k)).join(", ");
-    option.innerHTML = "<span>" + preset.name + "</span>" + (preset.builtin ? "" : '<i title="Remove this preset" aria-label="Remove this preset">\u00d7</i>');
+    // The name is player-typed, so it goes in as text, never as markup
+    const label = document.createElement("span");
+    label.textContent = preset.name;
+    option.append(label);
+    if (!preset.builtin) {
+      const remove = document.createElement("i");
+      remove.title = "Remove this preset";
+      remove.setAttribute("aria-label", "Remove this preset");
+      remove.textContent = "\u00d7";
+      option.append(remove);
+    }
     option.addEventListener("click", (e) => {
       // The cross removes a saved preset rather than loading it.
       if (e.target.tagName === "I") { closePresetMenu(false); removePreset(preset.name); return; }

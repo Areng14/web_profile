@@ -6,12 +6,7 @@ import { fetchProjects, fetchProjectsForDisplay, fetchPublicSkills, fetchSkillSt
 import { SkillType } from "./lib/types";
 import Link from "next/link";
 
-interface HomeProps {
-  searchParams: Promise<{ tech?: string; search?: string }>;
-}
-
-export default async function Home({ searchParams }: HomeProps) {
-  const { tech, search } = await searchParams;
+export default async function Home() {
   const images = [
     "/misc/mainslide/img1.webp",
     "/misc/mainslide/img2.webp",
@@ -106,8 +101,6 @@ export default async function Home({ searchParams }: HomeProps) {
           <ProjectSearch
             projects={projects}
             skills={skillStyles}
-            initialTech={tech ?? null}
-            initialSearch={search ?? ""}
           />
 
           <div className="mt-12 text-center">

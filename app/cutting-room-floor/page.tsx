@@ -9,12 +9,7 @@ export const metadata: Metadata = {
   description: "Older projects that were finished, replaced or left behind",
 };
 
-interface CuttingRoomFloorProps {
-  searchParams: Promise<{ tech?: string; search?: string }>;
-}
-
-export default async function CuttingRoomFloor({ searchParams }: CuttingRoomFloorProps) {
-  const { tech, search } = await searchParams;
+export default async function CuttingRoomFloor() {
   const [allProjects, skillStyles] = await Promise.all([fetchProjectsForDisplay(), fetchSkillStyles()]);
   const projects = allProjects.filter((p) => p.graveyard);
 
@@ -45,8 +40,6 @@ export default async function CuttingRoomFloor({ searchParams }: CuttingRoomFloo
           <ProjectSearch
             projects={projects}
             skills={skillStyles}
-            initialTech={tech ?? null}
-            initialSearch={search ?? ""}
             faded
           />
         </div>

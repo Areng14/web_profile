@@ -26,12 +26,11 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
-  const [project, record, skills] = await Promise.all([
-    findProject(slug),
-    fetchProjectRecord(slug),
-    fetchPublicSkills(),
-  ]);
-  if (!project || !record) notFound();
+  // Check the cached list first, so made-up URLs never reach the database
+  const project = await findProject(slug);
+  if (!project) notFound();
+  const [record, skills] = await Promise.all([fetchProjectRecord(slug), fetchPublicSkills()]);
+  if (!record) notFound();
 
   const skillByName = Object.fromEntries(skills.map((s) => [s.skillName, s]));
   const backHref = project.graveyard ? "/cutting-room-floor" : "/#projects";

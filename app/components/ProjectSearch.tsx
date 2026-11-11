@@ -9,8 +9,6 @@ import type { Project } from "../lib/types";
 interface ProjectSearchProps {
   projects: Project[];
   skills: SkillStyle[];
-  initialTech: string | null;
-  initialSearch: string;
   // Fade cards until hovered, for the cutting room floor
   faded?: boolean;
 }
@@ -51,18 +49,14 @@ const SELECT_TECH_EVENT = "projects:select-tech";
 export const selectProjectTech = (id: string) =>
   window.dispatchEvent(new CustomEvent<string>(SELECT_TECH_EVENT, { detail: id }));
 
-export default function ProjectSearch({
-  projects,
-  skills,
-  initialTech,
-  initialSearch,
-  faded = false,
-}: ProjectSearchProps) {
-  const [tech, setTech] = useState<string | null>(initialTech);
+export default function ProjectSearch({ projects, skills, faded = false }: ProjectSearchProps) {
+  const [tech, setTech] = useState<string | null>(null);
   // searchTerm drives the input; query is the debounced value used for filtering
-  const [searchTerm, setSearchTerm] = useState<string>(initialSearch);
-  const [query, setQuery] = useState<string>(initialSearch);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [query, setQuery] = useState<string>("");
   const filtersRef = useRef<HTMLDivElement>(null);
+  // The URL's filters are read once on load; until then, don't overwrite them
+  const urlRead = useRef(false);
 
   const skillByName = useMemo<SkillLookup>(
     () => Object.fromEntries(skills.map((s) => [s.name.toLowerCase(), { icon: s.icon, color: s.color }])),
@@ -86,12 +80,19 @@ export default function ProjectSearch({
 
   const activeChip = chips.find((c) => c.id === tech) ?? null;
 
-  // Arriving with a filter in the URL: bring the filters into view
+  // Filters come from the URL (?tech=…&search=…). They're read in the browser so the
+  // page itself can be static and served from the CDN.
   useEffect(() => {
-    if (initialTech || initialSearch) {
-      filtersRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const params = new URLSearchParams(window.location.search);
+    const urlTech = params.get("tech");
+    const urlSearch = params.get("search") ?? "";
+    urlRead.current = true;
+    if (!urlTech && !urlSearch) return;
+    setTech(urlTech);
+    setSearchTerm(urlSearch);
+    setQuery(urlSearch);
+    // Arriving with a filter: bring the filters into view
+    filtersRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
   // Skill cards elsewhere on the page ask to show a technology's projects
@@ -113,11 +114,12 @@ export default function ProjectSearch({
 
   // Keep the URL shareable without stacking history entries
   useEffect(() => {
+    if (!urlRead.current) return;
     const params = new URLSearchParams();
     if (tech) params.set("tech", tech);
     if (query) params.set("search", query);
     const qs = params.toString();
-    window.history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname);
+    window.history.replaceState(null, "", (qs ? `?${qs}` : window.location.pathname) + window.location.hash);
   }, [tech, query]);
 
   const filteredProjects = useMemo(() => {
