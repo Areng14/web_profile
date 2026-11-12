@@ -71,9 +71,58 @@ export default function AdminShell({ login, expiresAt, counts, children }: Shell
 
   return (
     <div className="flex min-h-screen flex-wrap text-sm">
+      {/* Phones: a compact top bar instead of the sidebar, so the page starts on screen one */}
+      <header className="sticky top-0 z-30 w-full border-b border-white/[0.06] bg-[#0d0e10]/95 backdrop-blur md:hidden">
+        <div className="flex items-center justify-between gap-3 px-4 pt-3">
+          <div className="flex items-center gap-2.5">
+            <span className="text-sm font-semibold tracking-[0.3em] text-white">ARENG</span>
+            <span className="h-3.5 w-px bg-white/15" aria-hidden />
+            <span className="text-sm font-medium text-slate-400">Admin</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <a href="/api/admin/export" aria-label="Export backup" title="Export backup" className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-400 hover:text-white">
+              <Icon>
+                <path d="M12 3v12" />
+                <path d="m7 10 5 5 5-5" />
+                <path d="M5 21h14" />
+              </Icon>
+            </a>
+            <Link href="/" aria-label="View site" title="View site" className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-400 hover:text-white">
+              <Icon>
+                <path d="M14 4h6v6" />
+                <path d="M20 4 10 14" />
+                <path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5" />
+              </Icon>
+            </Link>
+            <button type="button" onClick={signOut} aria-label="Sign out" title="Sign out" className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-400 hover:text-white">
+              <Icon>
+                <path d="M9 21H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4" />
+                <path d="m16 17 5-5-5-5" />
+                <path d="M21 12H9" />
+              </Icon>
+            </button>
+          </div>
+        </div>
+        <nav aria-label="Admin" className="flex gap-1 overflow-x-auto px-3 py-2">
+          {nav.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              aria-current={item.active ? "page" : undefined}
+              className={`flex shrink-0 items-center gap-2 rounded-lg px-3 py-2 ${
+                item.active ? "bg-white/[0.06] font-medium text-white" : "text-slate-400"
+              }`}
+            >
+              {item.label}
+              <span className="text-xs text-slate-500">{item.count}</span>
+            </Link>
+          ))}
+        </nav>
+      </header>
+
       <nav
         aria-label="Admin"
-        className="flex max-w-full flex-[1_1_220px] flex-col gap-7 border-r border-white/[0.06] bg-[#0d0e10] px-4 py-6 md:sticky md:top-0 md:h-screen md:max-w-[260px]"
+        className="hidden max-w-full flex-[1_1_220px] flex-col gap-7 border-r border-white/[0.06] bg-[#0d0e10] px-4 py-6 md:sticky md:top-0 md:flex md:h-screen md:max-w-[260px]"
       >
         <div className="flex items-center gap-3 px-2">
           <span className="text-[15px] font-semibold tracking-[0.3em] text-white">ARENG</span>
@@ -139,7 +188,7 @@ export default function AdminShell({ login, expiresAt, counts, children }: Shell
         </div>
       </nav>
 
-      <main className="min-w-0 flex-[999_1_560px] px-5 pb-16 pt-8 sm:px-12 sm:pt-10">{children}</main>
+      <main className="min-w-0 flex-[999_1_560px] px-4 pb-16 pt-6 sm:px-12 sm:pt-10">{children}</main>
     </div>
   );
 }

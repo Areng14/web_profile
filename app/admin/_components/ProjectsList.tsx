@@ -144,11 +144,11 @@ export default function ProjectsList({ projects, skills }: { projects: ListProje
       </div>
 
       <div className="overflow-x-auto rounded-xl border border-white/[0.06] bg-card-bg">
-        <div className="min-w-[760px]">
-          <div className="grid grid-cols-[40px_minmax(0,1.5fr)_minmax(0,2fr)_110px_40px] items-center gap-4 border-b border-white/[0.06] px-5 py-3 text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
+        <div className="md:min-w-[760px]">
+          <div className="grid grid-cols-[32px_minmax(0,1fr)_auto_36px] md:grid-cols-[40px_minmax(0,1.5fr)_minmax(0,2fr)_110px_40px] items-center gap-3 border-b border-white/[0.06] px-3 py-3 text-xs md:gap-4 md:px-5 font-semibold uppercase tracking-[0.08em] text-slate-500">
             <span />
             <span>Project</span>
-            <span>Built with</span>
+            <span className="hidden md:block">Built with</span>
             <span>Status</span>
             <span />
           </div>
@@ -170,7 +170,7 @@ export default function ProjectsList({ projects, skills }: { projects: ListProje
                   moveTo(dragId.current, id);
                 }}
                 onDragEnd={() => (dragId.current = null)}
-                className="grid grid-cols-[40px_minmax(0,1.5fr)_minmax(0,2fr)_110px_40px] items-center gap-4 border-b border-white/[0.04] px-5 py-3.5 last:border-0"
+                className="grid grid-cols-[32px_minmax(0,1fr)_auto_36px] md:grid-cols-[40px_minmax(0,1.5fr)_minmax(0,2fr)_110px_40px] items-center gap-3 border-b border-white/[0.04] px-3 py-3.5 last:border-0 md:gap-4 md:px-5"
               >
                 {canReorder ? (
                   <DragHandle
@@ -191,7 +191,8 @@ export default function ProjectsList({ projects, skills }: { projects: ListProje
                   </Link>
                   <span className="truncate text-[13px] text-slate-400">{[p.kind, p.platform].filter(Boolean).join(" · ")}</span>
                 </div>
-                <div className="flex flex-wrap gap-1.5">
+                {/* Phones skip the tags so a row fits without scrolling sideways */}
+                <div className="hidden flex-wrap gap-1.5 md:flex">
                   {p.skillIds.map((sid) => {
                     const skill = skillById[sid];
                     if (!skill) return null;
