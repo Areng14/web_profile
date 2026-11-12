@@ -114,7 +114,7 @@ export default function ImageSlider({ imgs, autoFadeInterval = 5000, controls = 
 
       {/* Nav arrows - above hero content so they're clickable */}
       {controls && safeImgs.length > 1 && (
-        <div className="pointer-events-none absolute inset-0 z-20">
+        <div className="pointer-events-none absolute inset-0 z-20 hidden md:block">
           <button
             type="button"
             onClick={handlePrev}
@@ -142,11 +142,11 @@ export default function ImageSlider({ imgs, autoFadeInterval = 5000, controls = 
       {controls && (
         <button
           type="button"
-          className="absolute bottom-14 left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-4 px-8 py-6 text-white/80 transition hover:text-white sm:bottom-16 sm:gap-5 sm:px-10 sm:py-7"
+          className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-4 px-8 py-3 text-white/80 transition hover:text-white sm:bottom-16 sm:gap-5 sm:px-10 sm:py-7"
           onClick={() => window.scrollTo({ top: window.innerHeight, behavior: "smooth" })}
           aria-label="Scroll to content"
         >
-          <span className="text-sm font-medium uppercase tracking-widest sm:text-base">Explore</span>
+          <span className="hidden text-sm font-medium uppercase tracking-widest sm:inline sm:text-base">Explore</span>
           <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/5 backdrop-blur-sm sm:h-14 sm:w-14">
             <svg className="h-5 w-5 sm:h-6 sm:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />

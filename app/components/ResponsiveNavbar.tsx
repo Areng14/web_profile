@@ -78,8 +78,9 @@ function ResponsiveAppBar() {
         {/* Mobile menu toggle */}
         <button
           type="button"
-          className="inline-flex items-center justify-center rounded-md p-2 text-slate-100 hover:bg-slate-800 md:hidden"
+          className="inline-flex flex-col items-center justify-center rounded-md p-2 text-slate-100 hover:bg-slate-800 md:hidden"
           aria-label="Toggle navigation menu"
+          aria-expanded={isOpen}
           onClick={() => setIsOpen((prev) => !prev)}
         >
           <span className="block h-0.5 w-5 bg-current" />
