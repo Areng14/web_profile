@@ -18,9 +18,10 @@ const LOCAL_PATH = /^\/(?![\/\\])[A-Za-z0-9\-._~/%?#=&+]*$/;
 const isLocalPath = (v: string) => LOCAL_PATH.test(v) && !v.includes("..");
 
 // Only this site's own Blob store, whose public host is <storeId>.public.blob.vercel-storage.com.
-// The store id is BLOB_STORE_ID, or the 4th part of the token (vercel_blob_rw_<storeId>_<secret>).
+// The store id is BLOB_STORE_ID minus its "store_" prefix (as @vercel/blob normalizes it), or
+// the 4th part of a read-write token (vercel_blob_rw_<storeId>_<secret>).
 function isOwnBlobUrl(v: string): boolean {
-  const storeId = (process.env.BLOB_STORE_ID || process.env.BLOB_READ_WRITE_TOKEN?.split("_")[3])?.toLowerCase();
+  const storeId = (process.env.BLOB_STORE_ID?.trim().replace(/^store_/, "") || process.env.BLOB_READ_WRITE_TOKEN?.split("_")[3])?.toLowerCase();
   if (!storeId) return false;
   try {
     const url = new URL(v);
@@ -58,6 +59,7 @@ export const projectInput = z.object({
   hasUsers: z.boolean(),
   prototype: z.boolean(),
   graveyard: z.boolean(),
+  draft: z.boolean(),
   causeOfDeath: text(300),
   skillIds: z.array(z.string().max(60)).max(20),
   stack: z.array(text(80).min(1)).max(40),

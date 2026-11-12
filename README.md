@@ -34,7 +34,7 @@ Environment variables (keep the GitHub ones Production-only, so preview builds c
 | --- | --- |
 | `DATABASE_URL` | Neon, added by the Vercel integration |
 | `BLOB_READ_WRITE_TOKEN` | Vercel Blob, for screenshot uploads |
-| `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` | GitHub OAuth app, callback `https://arengdev.com/api/admin/auth/callback` |
+| `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` | GitHub OAuth app, callback `https://www.arengdev.com/api/admin/auth/callback` (the site is served on www) |
 | `SESSION_SECRET` | Optional. Signs admin sessions; derived from the OAuth secret if unset |
 
 Only one GitHub account (id in `app/lib/admin/session.ts`) can sign in.

@@ -16,6 +16,7 @@ export interface ListProject {
   hasUsers: boolean;
   prototype: boolean;
   graveyard: boolean;
+  draft: boolean;
 }
 
 export interface ListSkill {
@@ -25,13 +26,20 @@ export interface ListSkill {
 }
 
 const statusOf = (p: ListProject) =>
-  p.graveyard
+  p.draft
+    ? { label: "Draft", className: "bg-violet-400/10 text-violet-300" }
+    : p.graveyard
     ? { label: "Retired", className: "bg-slate-400/10 text-slate-400" }
     : p.prototype
       ? { label: "Prototype", className: "bg-amber-400/10 text-amber-400" }
       : p.hasUsers
         ? { label: "In use", className: "bg-emerald-400/10 text-emerald-400" }
         : { label: "Active", className: "bg-blue-400/10 text-blue-400" };
+
+type Tab = "live" | "drafts" | "floor";
+
+// Drafts get their own tab whether or not they're headed for the cutting room floor
+const tabOf = (p: ListProject | undefined): Tab | null => (!p ? null : p.draft ? "drafts" : p.graveyard ? "floor" : "live");
 
 export default function ProjectsList({ projects, skills }: { projects: ListProject[]; skills: ListSkill[] }) {
   const router = useRouter();
@@ -40,20 +48,20 @@ export default function ProjectsList({ projects, skills }: { projects: ListProje
 
   const initialOrder = useMemo(() => projects.map((p) => p.id), [projects]);
   const [order, setOrder] = useState(initialOrder);
-  const [tab, setTab] = useState<"live" | "floor">("live");
+  const [tab, setTab] = useState<Tab>("live");
   const [query, setQuery] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const dragId = useRef<string | null>(null);
 
   const dirty = order.join() !== initialOrder.join();
-  const inTab = (id: string) => (tab === "floor") === byId[id]?.graveyard;
+  const inTab = (id: string) => tabOf(byId[id]) === tab;
   const q = query.trim().toLowerCase();
   const visible = order.filter(
     (id) => byId[id] && inTab(id) && (!q || byId[id].name.toLowerCase().includes(q) || byId[id].kind.toLowerCase().includes(q)),
   );
   const canReorder = !q;
-  const liveCount = projects.filter((p) => !p.graveyard).length;
+  const countOf = (t: Tab) => projects.filter((p) => tabOf(p) === t).length;
 
   // Moving within a tab: swap places in the full list, leaving the other tab's order alone
   const moveTo = (id: string, targetId: string) => {
@@ -106,10 +114,11 @@ export default function ProjectsList({ projects, skills }: { projects: ListProje
         <div role="tablist" aria-label="Project list" className="flex gap-1 rounded-[10px] border border-white/[0.06] bg-card-bg p-1">
           {(
             [
-              ["live", "Live", liveCount],
-              ["floor", "Cutting room floor", projects.length - liveCount],
+              ["live", "Live"],
+              ["drafts", "Drafts"],
+              ["floor", "Cutting room floor"],
             ] as const
-          ).map(([key, label, count]) => (
+          ).map(([key, label]) => [key, label, countOf(key)] as const).map(([key, label, count]) => (
             <button
               key={key}
               type="button"

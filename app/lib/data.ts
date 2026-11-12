@@ -67,7 +67,8 @@ const loadContent = unstable_cache(
           position: projectsTable.position,
         })
         .from(projectsTable)
-        .where(isNull(projectsTable.deletedAt))
+        // Trashed projects and drafts never reach the public site
+        .where(and(isNull(projectsTable.deletedAt), eq(projectsTable.draft, false)))
         .orderBy(asc(projectsTable.position)),
     ]);
     return { skills: skills as SkillRecord[], projects };
@@ -144,11 +145,12 @@ const loadProjectRecord = unstable_cache(
     const [row] = await getDb()
       .select()
       .from(projectsTable)
-      .where(and(eq(projectsTable.slug, slug), isNull(projectsTable.deletedAt)));
+      .where(and(eq(projectsTable.slug, slug), isNull(projectsTable.deletedAt), eq(projectsTable.draft, false)));
     if (!row) return null;
     const record: Partial<typeof row> = { ...row };
     delete record.deletedAt;
     delete record.updatedAt;
+    delete record.draft;
     return record as ProjectRecord;
   },
   ["project-record"],

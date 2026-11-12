@@ -40,6 +40,9 @@ CREATE TABLE IF NOT EXISTS projects (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
+-- Added after launch: databases created earlier get the column here
+ALTER TABLE projects ADD COLUMN IF NOT EXISTS draft boolean NOT NULL DEFAULT false;
+
 CREATE TABLE IF NOT EXISTS rate_limits (
   key text PRIMARY KEY,
   count integer NOT NULL,
